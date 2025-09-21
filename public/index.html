@@ -8,6 +8,7 @@
 <script src="/uv/uv.bundle.js" charset="UTF-8"></script>
 <script src="/uv/uv.config.js"></script>
 <script src="./js/preload.js"></script>
+<link rel="stylesheet" href="https://a-riceeater.github.io/tabcloaker/cdn/tabcloaker-styles.css">
 <style>
 /* Reset and Base Styles */
 * {
@@ -693,11 +694,8 @@ input:checked + .slider:before {
       </div>
       <div class="setting-group">
         <h2>Tab Cloaker</h2>
-        <label class="switch">
-          <input type="checkbox" id="cloaker-toggle">
-          <span class="slider"></span>
-        </label>
-        <p style="margin-top: 1rem; color: var(--text-secondary);">Enable about:blank tab cloaker</p>
+        <button id="open-cloaker-menu" class="theme-btn">Configure and Open Cloaked Tab</button>
+        <p style="margin-top: 1rem; color: var(--text-secondary);">Open this page in a cloaked about:blank tab</p>
       </div>
     </div>
   </section>
@@ -737,7 +735,6 @@ const sfxVolumeValue = document.querySelector('#settings .slider-value');
 const searchInput = document.getElementById('search-input');
 const gamesSearchInput = document.getElementById('games-search-input');
 const appsSearchInput = document.getElementById('apps-search-input');
-const cloakerToggle = document.getElementById('cloaker-toggle');
 // Games and Apps data
 const games = [
   { title: "Basket Random", src: "/clbasketrandom.html", img: "/img/basketrandom.png", description: "Basketball game" },
@@ -895,12 +892,6 @@ function setupEventListeners() {
       playSound('click');
     }
   });
-  cloakerToggle.addEventListener('change', (e) => {
-    const enabled = e.target.checked;
-    toggleCloaker(enabled);
-    localStorage.setItem('viper-cloaker', enabled);
-    showNotification(enabled ? 'Tab cloaker enabled' : 'Tab cloaker disabled', '', 'success');
-  });
   closeModalBtn.addEventListener('click', closeModal);
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && fullscreenModal.classList.contains('active')) {
@@ -1041,23 +1032,11 @@ function switchTheme(theme) {
   };
   showNotification(`Theme: ${themeNames[theme]}`, '', 'success');
 }
-function toggleCloaker(enabled) {
-  const favicon = document.querySelector('link[rel="shortcut icon"]');
-  if (enabled) {
-    document.title = '';
-    favicon.href = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
-  } else {
-    document.title = originalTitle;
-    favicon.href = originalFavicon;
-  }
-}
 function openInModal(url, title) {
   fullscreenIframe.src = url;
   fullscreenModal.classList.add('active');
   document.body.style.overflow = 'hidden';
-  if (!cloakerToggle.checked) {
-    document.title = `${title} - Viper`;
-  }
+  document.title = `${title} - Viper`;
   if (soundEnabled) {
     initAudioContext();
     resumeAudioContext();
@@ -1068,9 +1047,7 @@ function closeModal() {
   fullscreenModal.classList.remove('active');
   fullscreenIframe.src = '';
   document.body.style.overflow = '';
-  if (!cloakerToggle.checked) {
-    document.title = 'Viper';
-  }
+  document.title = 'Viper';
   if (soundEnabled) {
     initAudioContext();
     resumeAudioContext();
@@ -1156,24 +1133,145 @@ function loadSettings() {
     sfxVolumeSlider.value = sfxVolume;
     sfxVolumeValue.textContent = `${sfxVolume}%`;
   }
-  const savedCloaker = localStorage.getItem('viper-cloaker');
-  if (savedCloaker === 'true') {
-    cloakerToggle.checked = true;
-    toggleCloaker(true);
-  }
 }
 function saveSettings() {
   localStorage.setItem('viper-theme', currentTheme);
   localStorage.setItem('viper-sound', soundEnabled);
   localStorage.setItem('viper-sfx-volume', sfxVolume);
-  localStorage.setItem('viper-cloaker', cloakerToggle.checked);
 }
 themeButtons.forEach(btn => {
   btn.addEventListener('click', saveSettings);
 });
 soundToggle.addEventListener('change', saveSettings);
 sfxVolumeSlider.addEventListener('input', saveSettings);
-cloakerToggle.addEventListener('change', saveSettings);
+
+// TABCLOAKER JS INJECTION VERSION
+// MADE BY GHOSTY/DARTHVADER1925
+// ALL IMAGES GO TO THEIR RESPECTIVE OWNERS
+
+console.warn("Tabcloaker initializing...")
+var favcions = [];
+favcions["Google"] = "https://a-riceeater.github.io/tabcloaker/assets/google-favicon.png"
+favcions["Google Classroom"] = "https://a-riceeater.github.io/tabcloaker/assets/google-classroom-favicon.png"
+favcions["Gmail"] = "https://a-riceeater.github.io/tabcloaker/assets/gmail-favicon.ico"
+favcions["Google Docs"] = "https://a-riceeater.github.io/tabcloaker/assets/google-docs-favicon.ico"
+
+const menu = document.createElement("div");
+menu.setAttribute("id", "tabclaoker-gui-main")
+menu.innerHTML = `  
+<br><br><br>
+<h1>TabCloaker</h1>
+<input id="tabcloakertitle" placeholder="Website title" class="tabcloaker-input">
+<br><br>
+<input id="tabcloakerfavicon" placeholder="Favicon (website icon, img link)" class="tabcloaker-input">
+<h1>Presets</h1>
+<ul style="text-align: left;">
+  <li class="tabcloaker-presetOption" data="Google">Google</li>
+  <li class="tabcloaker-presetOption" data="Classes">Google Classroom</li>
+  <li class="tabcloaker-presetOption" data="Inbox">Gmail</li>
+  <li class="tabcloaker-presetOption" data="Google Docs">Google Docs</li>
+</ul>
+<button id="tabcloaker-apply-btn" class="tabcloaker-main-btn">Apply</button>
+<button id="tabcloaker-reset-btn" class="tabcloaker-main-btn">Cancel</button>
+`
+menu.style.display = "none";
+document.body.appendChild(menu);
+
+const shade = document.createElement("div")
+shade.setAttribute("id", "tabcloaker-shade-main")
+shade.style.display = "none"
+document.body.appendChild(shade);
+
+document.querySelectorAll(".tabcloaker-presetOption").forEach(ele => {
+    ele.addEventListener("click", setPreset);
+})
+
+function setPreset(e) {
+    const presetTitle = e.target.getAttribute("data");
+    const presetFavicon = favcions[e.target.innerHTML];
+    const newWin = window.open('about:blank', '_blank');
+    if (newWin) {
+        newWin.document.write(`
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${presetTitle}</title>
+            <link rel="shortcut icon" href="${presetFavicon}" type="image/x-icon">
+          </head>
+          <body style="margin: 0; padding: 0; overflow: hidden;">
+            <iframe src="${window.location.href}" style="width: 100vw; height: 100vh; border: none;"></iframe>
+          </body>
+          </html>
+        `);
+        newWin.document.close();
+        alert("Cloaked tab opened!");
+        menu.style.display = "none"
+        shade.style.display = "none"
+    } else {
+        alert("Popup blocked! Please allow popups for this site.");
+    }
+}
+
+function tabcloaker_apply() {
+    const customTitle = document.getElementById("tabcloakertitle").value.trim();
+    const customFavicon = document.getElementById("tabcloakerfavicon").value.trim();
+    if (customTitle === "") {
+        alert("Title must be filled!");
+        return;
+    }
+    let faviconHtml = '';
+    let changeIcon = true;
+    if (customFavicon === "") {
+        if (!confirm("Website icon will not change. Ok?")) {
+            return;
+        }
+        changeIcon = false;
+    } else {
+        faviconHtml = `<link rel="shortcut icon" href="${customFavicon}" type="image/x-icon">`;
+    }
+    const newWin = window.open('about:blank', '_blank');
+    if (newWin) {
+        newWin.document.write(`
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${customTitle}</title>
+            ${faviconHtml}
+          </head>
+          <body style="margin: 0; padding: 0; overflow: hidden;">
+            <iframe src="${window.location.href}" style="width: 100vw; height: 100vh; border: none;"></iframe>
+          </body>
+          </html>
+        `);
+        newWin.document.close();
+        alert("Cloaked tab opened!");
+        menu.style.display = "none"
+        shade.style.display = "none"
+    } else {
+        alert("Popup blocked! Please allow popups for this site.");
+    }
+}
+
+function tabcloaker_reset() {
+    menu.style.display = "none"
+    shade.style.display = "none"
+}
+
+document.querySelector("#tabcloaker-apply-btn").addEventListener("click", tabcloaker_apply)
+document.querySelector("#tabcloaker-reset-btn").addEventListener("click", tabcloaker_reset)
+
+// Integrate button to open menu
+document.getElementById('open-cloaker-menu').addEventListener('click', () => {
+  menu.style.display = 'block';
+  shade.style.display = 'block';
+});
+
+console.log("Tabcloaker initialized.")
+
 document.addEventListener('DOMContentLoaded', () => {
   loadSettings();
   init();
