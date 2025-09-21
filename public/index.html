@@ -1,32 +1,308 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="./assets/images/icon.png" type="image/png" />
-  <title>Art Class</title>
+  <title>Viper</title>
   <script src="/uv/uv.bundle.js" charset="UTF-8"></script>
   <script src="/uv/uv.config.js"></script>
   <script src="./js/preload.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #e0e6ed;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(15, 15, 35, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      filter: drop-shadow(0 2px 8px rgba(0, 255, 255, 0.3));
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #00d4ff, #5a67d8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    #time {
+      font-size: 0.9rem;
+      color: #a0aec0;
+      font-weight: 500;
+    }
+
+    .center-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      gap: 24px;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 500;
+    }
+
+    .center-container h1 {
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: #e0e6ed;
+      text-align: center;
+      letter-spacing: -1px;
+      opacity: 0.9;
+    }
+
+    .pxyinput {
+      width: 100%;
+      max-width: 500px;
+      padding: 16px 20px;
+      font-size: 1.1rem;
+      background: rgba(30, 30, 50, 0.8);
+      border: 2px solid rgba(0, 212, 255, 0.2);
+      border-radius: 50px;
+      color: #e0e6ed;
+      outline: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .pxyinput::placeholder {
+      color: #718096;
+    }
+
+    .pxyinput:focus {
+      border-color: #00d4ff;
+      box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .frame {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      border: none;
+      background: #000;
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.8);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: none;
+    }
+
+    .frame.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+      display: block;
+    }
+
+    .close-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 48px;
+      height: 48px;
+      background: rgba(15, 15, 35, 0.9);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      color: #e0e6ed;
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .close-btn:hover {
+      background: rgba(255, 0, 0, 0.1);
+      border-color: #ff4757;
+      transform: scale(1.1);
+      box-shadow: 0 12px 40px rgba(255, 71, 87, 0.3);
+    }
+
+    .close-btn.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .close-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Hide center container when iframe is active */
+    .center-container.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem;
+      }
+
+      .logo h1 {
+        font-size: 1.3rem;
+      }
+
+      .center-container h1 {
+        font-size: 2.5rem;
+      }
+
+      .pxyinput {
+        padding: 14px 18px;
+        font-size: 1rem;
+      }
+
+      .close-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 1.3rem;
+        top: 15px;
+        right: 15px;
+      }
+    }
+  </style>
 </head>
 
-<body theme="main">
+<body>
   <nav>
     <div class="logo">
-      <img src="./assets/images/icon.png" alt="Logo" draggable="false" />
-      <h1>Art Class</h1>
+      <img src="./assets/images/icon.png" alt="Viper Logo" draggable="false" />
+      <h1>Viper</h1>
     </div>
-
     <p id="time"></p>
   </nav>
 
-  <div class="center-container">
+  <div class="center-container" id="searchContainer">
     <h1>Search</h1>
-    <input class="pxyinput" type="text" placeholder="Search..." />
+    <input class="pxyinput" type="text" placeholder="Search..." id="searchInput" />
   </div>
-  <iframe class="frame"></iframe>
+
+  <iframe class="frame" id="searchFrame"></iframe>
+  <button class="close-btn" id="closeBtn" title="Close">×</button>
 </body>
 
 <script src="./js/index.js"></script>
 <script src="./js/search.js"></script>
+<script>
+  // Time display functionality
+  function updateTime() {
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+    document.getElementById('time').textContent = timeString;
+  }
+
+  // Update time every second
+  updateTime();
+  setInterval(updateTime, 1000);
+
+  // Search functionality
+  const searchInput = document.getElementById('searchInput');
+  const searchFrame = document.getElementById('searchFrame');
+  const searchContainer = document.getElementById('searchContainer');
+  const closeBtn = document.getElementById('closeBtn');
+
+  searchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && this.value.trim()) {
+      e.preventDefault();
+      const searchTerm = encodeURIComponent(this.value.trim());
+      const searchUrl = `https://www.google.com/search?q=${searchTerm}`;
+      
+      searchFrame.src = searchUrl;
+      searchFrame.classList.add('active');
+      searchContainer.classList.add('hidden');
+      closeBtn.classList.add('active');
+      
+      // Focus on iframe
+      searchFrame.focus();
+    }
+  });
+
+  // Close button functionality
+  closeBtn.addEventListener('click', function() {
+    searchFrame.classList.remove('active');
+    searchContainer.classList.remove('hidden');
+    closeBtn.classList.remove('active');
+    searchFrame.src = '';
+    searchInput.value = '';
+    searchInput.focus();
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && searchFrame.classList.contains('active')) {
+      closeBtn.click();
+    }
+  });
+
+  // Handle iframe load
+  searchFrame.addEventListener('load', function() {
+    if (searchFrame.classList.contains('active')) {
+      // Add subtle loading animation
+      closeBtn.style.transform = 'rotate(90deg)';
+      setTimeout(() => {
+        closeBtn.style.transform = 'rotate(0deg)';
+      }, 200);
+    }
+  });
+
+  // Prevent iframe context menu
+  searchFrame.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+  });
+</script>
 
 </html>
