@@ -1,265 +1,1328 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="./assets/images/icon.png" type="image/png" />
-  <title>Art Class</title>
-  <script src="/uv/uv.bundle.js" charset="UTF-8"></script>
-  <script src="/uv/uv.config.js"></script>
-  <script src="./js/preload.js"></script>
-  <style id="theme-styles">
-    :root {
-      --bg-primary: #0a1f0a;
-      --bg-secondary: #1a2b1a;
-      --bg-tertiary: #0f1a0f;
-      --text-primary: #e0f2e9;
-      --text-secondary: #a8e6cf;
-      --text-muted: #81c784;
-      --accent-primary: #00ff41;
-      --accent-secondary: #39ff14;
-      --border-color: rgba(0, 255, 0, 0.2);
-      --shadow-color: rgba(0, 255, 0, 0.1);
-      --glass-bg: rgba(10, 31, 10, 0.95);
-    }
-
+  <title>Viper</title>
+  <style>
+    /* Reset and Base Styles */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      user-select: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
+    }
+
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #1a1a1a;
+      --bg-tertiary: #2a2a2a;
+      --text-primary: #ffffff;
+      --text-secondary: #b0b0b0;
+      --accent-primary: #00ff88;
+      --accent-secondary: #00cc6a;
+      --border-color: #333333;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.theme-light {
+      --bg-primary: #f8f9fa;
+      --bg-secondary: #e9ecef;
+      --bg-tertiary: #dee2e6;
+      --text-primary: #212529;
+      --text-secondary: #6c757d;
+      --accent-primary: #007bff;
+      --accent-secondary: #0056b3;
+      --border-color: #ced4da;
+      --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    body.theme-violet {
+      --bg-primary: #1a0033;
+      --bg-secondary: #2d0059;
+      --bg-tertiary: #4a0080;
+      --text-primary: #e6ccff;
+      --text-secondary: #b894ff;
+      --accent-primary: #ff00ff;
+      --accent-secondary: #cc00cc;
+      --border-color: #6600cc;
+      --shadow: 0 8px 32px rgba(255, 0, 255, 0.2);
+    }
+
+    body.theme-matrix {
+      --bg-primary: #000000;
+      --bg-secondary: #001100;
+      --bg-tertiary: #002200;
+      --text-primary: #00ff00;
+      --text-secondary: #00cc00;
+      --accent-primary: #00ff41;
+      --accent-secondary: #00cc33;
+      --border-color: #004400;
+      --shadow: 0 8px 32px rgba(0, 255, 0, 0.1);
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(0, 255, 0, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(0, 255, 0, 0.05) 0%, transparent 50%);
     }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
-      min-height: 100vh;
-      overflow: hidden;
-      position: relative;
-      transition: background-color 0.3s ease;
+      overflow-x: hidden;
+      transition: var(--transition);
     }
 
-    /* Simplified background */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        radial-gradient(circle at 20% 80%, rgba(0, 255, 0, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(0, 255, 0, 0.02) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    nav {
+    /* Search Bar */
+    .center-container {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      padding: 1rem 2rem;
-      background: var(--glass-bg);
-      border-bottom: 1px solid var(--border-color);
+      justify-content: center;
+      padding: 3rem 2rem;
+      background: var(--bg-primary);
+      position: relative;
+      min-height: 70vh;
+    }
+
+    .viper-title {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: titleGlow 2s ease-in-out infinite alternate;
+      text-align: center;
+    }
+
+    @keyframes titleGlow {
+      from { 
+        filter: drop-shadow(0 0 10px var(--accent-primary));
+        transform: scale(1);
+      }
+      to { 
+        filter: drop-shadow(0 0 20px var(--accent-primary));
+        transform: scale(1.02);
+      }
+    }
+
+    .pxyinput {
+      width: 100%;
+      max-width: 500px;
+      padding: 1rem 1.5rem;
+      background: var(--bg-secondary);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      transition: var(--transition);
+      outline: none;
+      text-align: center;
+    }
+
+    .pxyinput:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+      transform: scale(1.02);
+    }
+
+    .pxyinput::placeholder {
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    /* Notification System */
+    #notification-container {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
+      top: 100px;
+      right: 20px;
+      z-index: 10000;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .notification {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 1rem 1.5rem;
+      max-width: 350px;
+      box-shadow: var(--shadow);
+      transform: translateX(400px);
+      opacity: 0;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .notification.success {
+      border-left: 4px solid var(--accent-primary);
+    }
+
+    .notification.error {
+      border-left: 4px solid #ff4757;
+    }
+
+    .notification.info {
+      border-left: 4px solid #3742fa;
+    }
+
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .notification-message {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .notification-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: var(--transition);
+    }
+
+    .notification-close:hover {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    /* Tab Bar */
+    .tab-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: var(--shadow);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .logo img {
       width: 32px;
       height: 32px;
-      border-radius: 8px;
-      filter: drop-shadow(0 2px 4px var(--shadow-color));
+      border-radius: 50%;
+      background: var(--accent-primary);
+      padding: 4px;
+      transition: var(--transition);
+      animation: pulse 2s infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
     }
 
-    .logo h1 {
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .logo:hover {
+      transform: scale(1.1) rotate(360deg);
+      box-shadow: 0 0 20px var(--accent-primary);
+    }
+
+    .logo-text {
       font-size: 1.5rem;
       font-weight: 700;
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      margin: 0;
+      animation: textGlow 3s ease-in-out infinite alternate;
     }
 
-    #time {
-      font-size: 0.9rem;
+    @keyframes textGlow {
+      from { filter: drop-shadow(0 0 5px var(--accent-primary)); }
+      to { filter: drop-shadow(0 0 15px var(--accent-primary)); }
+    }
+
+    .tabs-container {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .tab-btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      background: transparent;
       color: var(--text-secondary);
       font-weight: 500;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
     }
 
-    /* Home Tab - Simplified Search */
-    .center-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      gap: 24px;
-      padding: 2rem;
-      margin-top: 80px;
-    }
-
-    .center-container h1 {
-      font-size: 3rem;
-      font-weight: 300;
-      color: var(--text-primary);
-      text-align: center;
-      letter-spacing: -1px;
-      opacity: 0.9;
-    }
-
-    .pxyinput {
-      width: 100%;
-      max-width: 500px;
-      padding: 16px 20px;
-      font-size: 1.1rem;
-      background: rgba(10, 31, 10, 0.8);
-      border: 2px solid var(--border-color);
-      border-radius: 50px;
-      color: var(--text-primary);
-      outline: none;
-      transition: all 0.2s ease;
-      backdrop-filter: blur(10px);
-    }
-
-    .pxyinput::placeholder {
-      color: var(--text-muted);
-    }
-
-    .pxyinput:focus {
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 3px rgba(0, 255, 65, 0.2);
-      transform: translateY(-1px);
-    }
-
-    /* Simplified Fullscreen Frame */
-    .frame {
-      position: fixed;
+    .tab-btn::before {
+      content: '';
+      position: absolute;
       top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      border: none;
-      background: #000;
-      z-index: 2000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      display: none;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
     }
 
-    .frame.active {
-      opacity: 1;
-      visibility: visible;
+    .tab-btn:hover::before {
+      left: 100%;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .tab-btn.active {
+      color: var(--accent-primary);
+      background: rgba(0, 255, 136, 0.1);
+      box-shadow: inset 0 0 0 2px var(--accent-primary);
+      animation: activeTab 0.6s ease-out;
+    }
+
+    @keyframes activeTab {
+      0% { transform: scale(0.95); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .time-container {
+      text-align: right;
+    }
+
+    .time-display {
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      letter-spacing: 1px;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.3; }
+    }
+
+    /* Main Content */
+    .main-content {
+      min-height: calc(100vh - 80px);
+      padding: 2rem;
+      position: relative;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    .tab-content.active {
       display: block;
     }
 
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Games Grid */
+    .games-grid, .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 1rem 0;
+    }
+
+    .game-card, .app-card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-card::before, .app-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, transparent, rgba(0, 255, 136, 0.1));
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .game-card:hover::before, .app-card:hover::before {
+      opacity: 1;
+    }
+
+    .game-card:hover, .app-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      border-color: var(--accent-primary);
+    }
+
+    .game-icon, .app-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-tertiary);
+      border-radius: 16px;
+      transition: var(--transition);
+      overflow: hidden;
+    }
+
+    .game-icon img, .app-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .game-card:hover .game-icon, .app-card:hover .app-icon {
+      filter: brightness(1.2);
+      transform: scale(1.1) rotateY(180deg);
+      background: var(--accent-primary);
+      animation: iconPulse 0.6s ease-out;
+    }
+
+    @keyframes iconPulse {
+      0% { transform: scale(0.8) rotateY(0deg); }
+      50% { transform: scale(1.2) rotateY(90deg); }
+      100% { transform: scale(1.1) rotateY(180deg); }
+    }
+
+    .game-info, .app-info {
+      text-align: center;
+    }
+
+    .game-info h3, .app-info h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .game-info p, .app-info p {
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Settings */
+    .settings-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .setting-group {
+      background: var(--bg-secondary);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      transition: var(--transition);
+    }
+
+    .setting-group:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      transform: translateX(5px);
+    }
+
+    .setting-group h2 {
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+      font-size: 1.5rem;
+    }
+
+    .theme-selector {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .theme-btn {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid var(--border-color);
+      background: transparent;
+      color: var(--text-secondary);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--accent-primary);
+      color: var(--accent-primary);
+      transform: scale(1.05);
+    }
+
+    .theme-btn.active {
+      background: var(--accent-primary);
+      color: white;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--bg-tertiary);
+      transition: var(--transition);
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: var(--transition);
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-primary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .slider-container input[type="range"] {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--bg-tertiary);
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .slider-container input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .slider-value {
+      min-width: 60px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    /* Fullscreen Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal.active {
+      display: block;
+      animation: modalFadeIn 0.3s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-content {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 10;
+    }
+
+    .close-btn {
+      background: var(--bg-secondary);
+      border: none;
+      color: var(--text-primary);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .close-btn:hover {
+      background: var(--accent-primary);
+      color: white;
+      transform: rotate(90deg) scale(1.1);
+      box-shadow: 0 0 20px var(--accent-primary);
+    }
+
+    .fullscreen-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: white;
+    }
+
+    /* Responsive */
     @media (max-width: 768px) {
-      nav {
-        padding: 0.8rem 1rem;
+      .tab-bar {
+        padding: 1rem;
         flex-wrap: wrap;
       }
 
-      .logo h1 {
-        font-size: 1.2rem;
+      .tabs-container {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
       }
 
-      .center-container h1 {
-        font-size: 2.2rem;
+      .games-grid, .apps-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      #notification-container {
+        top: 80px;
+        right: 10px;
+        left: 10px;
+      }
+
+      .notification {
+        max-width: none;
       }
 
       .center-container {
-        margin-top: 80px;
-        padding: 1rem;
+        padding: 2rem 1rem;
       }
+
+      .viper-title {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .pxyinput {
+        max-width: 90%;
+        padding: 0.9rem 1.2rem;
+        font-size: 1rem;
+      }
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent-primary);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-secondary);
     }
   </style>
 </head>
 
-<body>
-  <nav>
-    <div class="logo">
-      <img src="./assets/images/icon.png" alt="Art Class Logo" draggable="false" />
-      <h1>Art Class</h1>
+<body class="theme-dark">
+  <!-- Notification Container -->
+  <div id="notification-container"></div>
+
+  <!-- Tab Bar -->
+  <nav class="tab-bar">
+    <div class="logo-container">
+      <div class="logo">🐍</div>
+      <h1 class="logo-text">Viper</h1>
+    </div>
+    
+    <div class="tabs-container">
+      <button class="tab-btn active" data-tab="home">🏠 Home</button>
+      <button class="tab-btn" data-tab="games">🎮 Games</button>
+      <button class="tab-btn" data-tab="apps">💻 Apps</button>
+      <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
     </div>
 
-    <p id="time"></p>
+    <div class="time-container">
+      <span id="time" class="time-display"></span>
+    </div>
   </nav>
 
-  <div class="center-container">
-    <h1>Search</h1>
-    <input class="pxyinput" type="text" placeholder="Search..." id="searchInput" />
-    <div style="font-size: 0.9rem; color: var(--text-muted); text-align: center; opacity: 0.7;">
-      Powered by Art Class
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    <!-- Home Tab -->
+    <section id="home" class="tab-content active">
+      <div class="center-container">
+        <h1 class="viper-title">Viper</h1>
+        <input class="pxyinput" type="text" placeholder="Search the web, games, and apps..." id="search-input" />
+      </div>
+    </section>
+
+    <!-- Games Tab -->
+    <section id="games" class="tab-content">
+      <h2 style="margin-bottom: 2rem; text-align: center; color: var(--text-primary);">Featured Games</h2>
+      <div class="games-grid">
+        <div class="game-card" data-game="tetris">
+          <div class="game-icon">
+            <img src="https://img.icons8.com/color/96/000000/tetris.png" alt="Tetris" loading="lazy" />
+          </div>
+          <div class="game-info">
+            <h3>Tetris</h3>
+            <p>Classic block-stacking puzzle game</p>
+          </div>
+        </div>
+
+        <div class="game-card" data-game="minesweeper">
+          <div class="game-icon">
+            <img src="https://img.icons8.com/color/96/000000/mine.png" alt="Minesweeper" loading="lazy" />
+          </div>
+          <div class="game-info">
+            <h3>Minesweeper</h3>
+            <p>Navigate the minefield strategically</p>
+          </div>
+        </div>
+
+        <div class="game-card" data-game="snake">
+          <div class="game-icon">
+            <img src="https://img.icons8.com/color/96/000000/snake.png" alt="Snake" loading="lazy" />
+          </div>
+          <div class="game-info">
+            <h3>Snake</h3>
+            <p>Grow your snake by eating food</p>
+          </div>
+        </div>
+
+        <div class="game-card" data-game="2048">
+          <div class="game-icon">
+            <img src="https://img.icons8.com/color/96/000000/2048.png" alt="2048" loading="lazy" />
+          </div>
+          <div class="game-info">
+            <h3>2048</h3>
+            <p>Slide tiles to reach 2048</p>
+          </div>
+        </div>
+
+        <div class="game-card" data-game="memory">
+          <div class="game-icon">
+            <img src="https://img.icons8.com/color/96/000000/memory-card.png" alt="Memory" loading="lazy" />
+          </div>
+          <div class="game-info">
+            <h3>Memory</h3>
+            <p>Match pairs of cards</p>
+          </div>
+        </div>
+
+        <div class="game-card" data-game="tic-tac-toe">
+          <div class="game-icon">
+            <img src="https://img.icons8.com/color/96/000000/tic-tac-toe.png" alt="Tic Tac Toe" loading="lazy" />
+          </div>
+          <div class="game-info">
+            <h3>Tic Tac Toe</h3>
+            <p>Classic 3x3 strategy game</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Apps Tab -->
+    <section id="apps" class="tab-content">
+      <h2 style="margin-bottom: 2rem; text-align: center; color: var(--text-primary);">Web Applications</h2>
+      <div class="apps-grid">
+        <div class="app-card" data-url="https://www.youtube.com">
+          <div class="app-icon">
+            <img src="https://img.icons8.com/color/96/000000/youtube-play.png" alt="YouTube" loading="lazy" />
+          </div>
+          <div class="app-info">
+            <h3>YouTube</h3>
+            <p>Watch videos and music</p>
+          </div>
+        </div>
+
+        <div class="app-card" data-url="https://www.google.com">
+          <div class="app-icon">
+            <img src="https://img.icons8.com/color/96/000000/google-logo.png" alt="Google" loading="lazy" />
+          </div>
+          <div class="app-info">
+            <h3>Google</h3>
+            <p>Search the web</p>
+          </div>
+        </div>
+
+        <div class="app-card" data-url="https://chat.openai.com">
+          <div class="app-icon">
+            <img src="https://img.icons8.com/color/96/000000/openai.png" alt="ChatGPT" loading="lazy" />
+          </div>
+          <div class="app-info">
+            <h3>ChatGPT</h3>
+            <p>AI conversation assistant</p>
+          </div>
+        </div>
+
+        <div class="app-card" data-url="https://github.com">
+          <div class="app-icon">
+            <img src="https://img.icons8.com/color/96/000000/github.png" alt="GitHub" loading="lazy" />
+          </div>
+          <div class="app-info">
+            <h3>GitHub</h3>
+            <p>Code collaboration platform</p>
+          </div>
+        </div>
+
+        <div class="app-card" data-url="https://www.notion.so">
+          <div class="app-icon">
+            <img src="https://img.icons8.com/color/96/000000/notion.png" alt="Notion" loading="lazy" />
+          </div>
+          <div class="app-info">
+            <h3>Notion</h3>
+            <p>All-in-one workspace</p>
+          </div>
+        </div>
+
+        <div class="app-card" data-url="https://www.spotify.com">
+          <div class="app-icon">
+            <img src="https://img.icons8.com/color/96/000000/spotify.png" alt="Spotify" loading="lazy" />
+          </div>
+          <div class="app-info">
+            <h3>Spotify</h3>
+            <p>Music streaming service</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings Tab -->
+    <section id="settings" class="tab-content">
+      <div class="settings-container">
+        <div class="setting-group">
+          <h2>🎨 Theme</h2>
+          <div class="theme-selector">
+            <button class="theme-btn active" data-theme="dark">Dark</button>
+            <button class="theme-btn" data-theme="light">Light</button>
+            <button class="theme-btn" data-theme="violet">Violet</button>
+            <button class="theme-btn" data-theme="matrix">Matrix</button>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <h2>🔔 Notifications</h2>
+          <label class="switch">
+            <input type="checkbox" id="notifications-toggle" checked>
+            <span class="slider"></span>
+          </label>
+          <p style="margin-top: 1rem; color: var(--text-secondary);">Enable desktop notifications</p>
+        </div>
+
+        <div class="setting-group">
+          <h2>🔊 Sound Effects</h2>
+          <label class="switch">
+            <input type="checkbox" id="sound-toggle">
+            <span class="slider"></span>
+          </label>
+          <p style="margin-top: 1rem; color: var(--text-secondary);">Enable UI sound effects</p>
+          
+          <div class="slider-container" style="margin-top: 1.5rem;">
+            <label style="color: var(--text-secondary); font-size: 0.9rem;">SFX Volume:</label>
+            <input type="range" id="sfx-volume" min="0" max="100" value="50">
+            <span class="slider-value" style="min-width: 30px;">50%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Fullscreen Iframe Modal -->
+  <div id="fullscreen-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="close-modal" class="close-btn">×</button>
+      </div>
+      <iframe id="fullscreen-iframe" class="fullscreen-iframe" src=""></iframe>
     </div>
   </div>
-  
-  <iframe class="frame" id="mainFrame"></iframe>
-</body>
 
-<script src="./js/index.js"></script>
-<script src="./js/search.js"></script>
-<script>
-  // Simple Time Display
-  function updateTime() {
-    const now = new Date();
-    const timeString = now.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    });
-    document.getElementById('time').textContent = timeString;
-  }
+  <script>
+    // Global Variables
+    let currentTheme = 'dark';
+    let soundEnabled = false;
+    let sfxVolume = 50;
+    
+    // AudioContext management
+    let audioContext = null;
+    let audioContextInitialized = false;
 
-  updateTime();
-  setInterval(updateTime, 1000);
+    // DOM Elements
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const timeDisplay = document.getElementById('time');
+    const notificationContainer = document.getElementById('notification-container');
+    const fullscreenModal = document.getElementById('fullscreen-modal');
+    const fullscreenIframe = document.getElementById('fullscreen-iframe');
+    const closeModalBtn = document.getElementById('close-modal');
+    const themeButtons = document.querySelectorAll('.theme-btn');
+    const notificationsToggle = document.getElementById('notifications-toggle');
+    const soundToggle = document.getElementById('sound-toggle');
+    const sfxVolumeSlider = document.getElementById('sfx-volume');
+    const sfxVolumeValue = document.querySelector('#settings .slider-value');
+    const searchInput = document.getElementById('search-input');
 
-  // Simple Search Functionality
-  const searchInput = document.getElementById('searchInput');
-  const mainFrame = document.getElementById('mainFrame');
+    // Games and their URLs
+    const games = {
+      tetris: 'https://tetris.com/play-tetris',
+      minesweeper: 'https://minesweeper.online/',
+      snake: 'https://playsnake.org/',
+      '2048': 'https://play2048.co/',
+      memory: 'https://www.memory-improvement-tips.com/online-memory-games.html',
+      'tic-tac-toe': 'https://tictactoe.paper-games.com/'
+    };
 
-  searchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && this.value.trim()) {
-      e.preventDefault();
-      const searchTerm = this.value.trim();
-      
-      // Simple proxy search (same as the original second code would use)
-      const searchUrl = `http://www.google.com/search?q=${encodeURIComponent(searchTerm)}`;
-      
-      // Use UV proxy if available
-      try {
-        const proxyUrl = `/uv/proxy/${btoa(unescape(encodeURIComponent(searchUrl)))}`;
-        mainFrame.src = proxyUrl;
-      } catch (error) {
-        // Fallback to direct URL
-        mainFrame.src = searchUrl;
+    // Initialize AudioContext
+    function initAudioContext() {
+      if (!audioContextInitialized) {
+        try {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          audioContextInitialized = true;
+          console.log('AudioContext initialized');
+        } catch (error) {
+          console.error('Failed to initialize AudioContext:', error);
+        }
       }
-      
-      mainFrame.classList.add('active');
-      this.value = '';
     }
-  });
 
-  // Auto-focus search
-  setTimeout(() => {
-    searchInput.focus();
-  }, 300);
-</script>
+    // Resume AudioContext if suspended
+    async function resumeAudioContext() {
+      if (audioContext && audioContext.state === 'suspended') {
+        try {
+          await audioContext.resume();
+          console.log('AudioContext resumed');
+        } catch (error) {
+          console.error('Failed to resume AudioContext:', error);
+        }
+      }
+    }
 
+    // Initialize the app
+    function init() {
+      updateTime();
+      setupEventListeners();
+      setupSearch();
+      setInterval(updateTime, 1000);
+    }
+
+    // Update time display
+    function updateTime() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString([], { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        second: '2-digit'
+      });
+      timeDisplay.textContent = timeString;
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+      // Tab switching
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => switchTab(button.dataset.tab));
+      });
+
+      // Theme switching
+      themeButtons.forEach(button => {
+        button.addEventListener('click', () => switchTheme(button.dataset.theme));
+      });
+
+      // Settings
+      notificationsToggle.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          showNotification('Notifications enabled', '', 'success');
+        } else {
+          showNotification('Notifications disabled', '', 'info');
+        }
+      });
+
+      soundToggle.addEventListener('change', async (e) => {
+        soundEnabled = e.target.checked;
+        if (soundEnabled) {
+          // Initialize and resume audio context when sound is enabled
+          initAudioContext();
+          await resumeAudioContext();
+          playSound('click');
+          showNotification('Sound enabled', '', 'success');
+        } else {
+          showNotification('Sound disabled', '', 'info');
+        }
+      });
+
+      sfxVolumeSlider.addEventListener('input', async (e) => {
+        sfxVolume = e.target.value;
+        sfxVolumeValue.textContent = `${sfxVolume}%`;
+        
+        // Only test sound if sound is enabled
+        if (soundEnabled) {
+          initAudioContext();
+          await resumeAudioContext();
+          playSound('click');
+        }
+      });
+
+      // Modal controls
+      closeModalBtn.addEventListener('click', closeModal);
+      
+      // Close modal on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && fullscreenModal.classList.contains('active')) {
+          closeModal();
+        }
+      });
+
+      // Close modal on outside click
+      fullscreenModal.addEventListener('click', (e) => {
+        if (e.target === fullscreenModal) {
+          closeModal();
+        }
+      });
+
+      // Game and app cards
+      document.querySelectorAll('.game-card, .app-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const url = card.dataset.url || games[card.dataset.game];
+          if (url) {
+            openInModal(url, card.querySelector('h3').textContent);
+          }
+        });
+      });
+
+      // Initialize audio context on first user interaction
+      document.addEventListener('click', () => {
+        if (soundEnabled) {
+          initAudioContext();
+          resumeAudioContext();
+        }
+      }, { once: true });
+    }
+
+    // Setup search functionality
+    function setupSearch() {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        if (query.length > 2) {
+          // Only show notification for longer searches to reduce spam
+          showNotification('Searching...', '', 'info');
+        }
+      });
+
+      searchInput.addEventListener('keypress', async (e) => {
+        if (e.key === 'Enter') {
+          const query = e.target.value.trim();
+          if (query) {
+            openInModal(`https://www.google.com/search?q=${encodeURIComponent(query)}`, `Search: ${query}`);
+            searchInput.value = '';
+            if (soundEnabled) {
+              initAudioContext();
+              await resumeAudioContext();
+              playSound('open');
+            }
+          }
+        }
+      });
+    }
+
+    // Switch between tabs
+    function switchTab(tabName) {
+      // Update active tab button
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+      // Update active tab content
+      tabContents.forEach(content => content.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+
+      // Play sound if enabled
+      if (soundEnabled) {
+        initAudioContext();
+        resumeAudioContext();
+        playSound('click');
+      }
+    }
+
+    // Switch themes
+    function switchTheme(theme) {
+      // Update active theme button
+      themeButtons.forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
+
+      // Apply theme
+      document.body.className = `theme-${theme}`;
+      currentTheme = theme;
+
+      // Store in localStorage
+      localStorage.setItem('viper-theme', theme);
+
+      // Play sound if enabled
+      if (soundEnabled) {
+        initAudioContext();
+        resumeAudioContext();
+        playSound('switch');
+      }
+
+      // Show notification only for theme changes
+      const themeNames = {
+        dark: 'Dark Mode',
+        light: 'Light Mode',
+        violet: 'Violet Mode',
+        matrix: 'Matrix Mode'
+      };
+      showNotification(`Theme: ${themeNames[theme]}`, '', 'success');
+    }
+
+    // Open URL in fullscreen modal
+    function openInModal(url, title) {
+      fullscreenIframe.src = url;
+      fullscreenModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      
+      // Update document title
+      document.title = `${title} - Viper`;
+      
+      if (soundEnabled) {
+        initAudioContext();
+        resumeAudioContext();
+        playSound('open');
+      }
+    }
+
+    // Close fullscreen modal
+    function closeModal() {
+      fullscreenModal.classList.remove('active');
+      fullscreenIframe.src = '';
+      document.body.style.overflow = '';
+      document.title = 'Viper';
+      
+      if (soundEnabled) {
+        initAudioContext();
+        resumeAudioContext();
+        playSound('close');
+      }
+    }
+
+    // Notification system - simplified
+    function showNotification(title, message = '', type = 'info') {
+      if (!notificationsToggle.checked) return;
+
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.innerHTML = `
+        <button class="notification-close">&times;</button>
+        <div class="notification-title">${title}</div>
+        ${message ? `<div class="notification-message">${message}</div>` : ''}
+      `;
+
+      notificationContainer.appendChild(notification);
+
+      // Show notification
+      setTimeout(() => notification.classList.add('show'), 100);
+
+      // Auto-remove after 3 seconds
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.classList.remove('show');
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.parentNode.removeChild(notification);
+            }
+          }, 300);
+        }
+      }, 3000);
+
+      // Close on click
+      notification.querySelector('.notification-close').addEventListener('click', () => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      });
+    }
+
+    // Sound effects (using Web Audio API) with volume control - FIXED
+    function playSound(type) {
+      if (!soundEnabled || !audioContextInitialized) return;
+
+      // Ensure AudioContext is running
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+
+      try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+
+        const frequencies = {
+          click: 800,
+          switch: 600,
+          open: 400,
+          close: 300
+        };
+
+        const duration = type === 'open' || type === 'close' ? 0.3 : 0.1;
+
+        oscillator.frequency.setValueAtTime(frequencies[type] || 440, audioContext.currentTime);
+        oscillator.type = 'sine';
+
+        // Apply volume control
+        const volume = sfxVolume / 100;
+        gainNode.gain.setValueAtTime(0.3 * volume, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01 * volume, audioContext.currentTime + duration);
+
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + duration);
+
+        // Clean up nodes
+        oscillator.onended = () => {
+          oscillator.disconnect();
+          gainNode.disconnect();
+        };
+
+      } catch (error) {
+        console.error('Error playing sound:', error);
+      }
+    }
+
+    // Load saved settings
+    function loadSettings() {
+      const savedTheme = localStorage.getItem('viper-theme');
+      if (savedTheme) {
+        switchTheme(savedTheme);
+      }
+
+      const savedSound = localStorage.getItem('viper-sound');
+      if (savedSound === 'true') {
+        soundEnabled = true;
+        soundToggle.checked = true;
+      }
+
+      const savedVolume = localStorage.getItem('viper-sfx-volume');
+      if (savedVolume) {
+        sfxVolume = parseInt(savedVolume);
+        sfxVolumeSlider.value = sfxVolume;
+        sfxVolumeValue.textContent = `${sfxVolume}%`;
+      }
+    }
+
+    // Save settings
+    function saveSettings() {
+      localStorage.setItem('viper-theme', currentTheme);
+      localStorage.setItem('viper-sound', soundEnabled);
+      localStorage.setItem('viper-sfx-volume', sfxVolume);
+    }
+
+    // Save settings on change
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', saveSettings);
+    });
+
+    soundToggle.addEventListener('change', saveSettings);
+    sfxVolumeSlider.addEventListener('input', saveSettings);
+
+    // Initialize everything when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      loadSettings();
+      init();
+    });
+  </script>
+</body>
 </html>
