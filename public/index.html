@@ -925,11 +925,11 @@ function setupSearch() {
             rawUrl = 'https://' + rawUrl;
           }
         } else {
-          // Treat as Google search query
-          rawUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+          // Treat as Bing search query
+          rawUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
         }
         const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
-        const displayQuery = rawUrl.includes('google.com/search') ? `Google search for "${query}"` : query;
+        const displayQuery = rawUrl.includes('bing.com/search') ? `Bing search for "${query}"` : query;
         openInModal(prefixedUrl, displayQuery);
         searchInput.value = '';
         showNotification(`Loading ${displayQuery} via proxy...`, '', 'info');
