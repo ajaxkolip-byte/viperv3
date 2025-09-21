@@ -901,7 +901,7 @@ function setupEventListeners() {
         const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
         const title = card.querySelector('h3').textContent;
         openInModal(prefixedUrl, title);
-        showNotification(`Loading ${title} via proxy...`, '', 'info');
+        showNotification(`Loading ${title}  `, '', 'info');
       }
     });
   });
@@ -932,7 +932,7 @@ function setupSearch() {
         const displayQuery = rawUrl.includes('bing.com/search') ? `Bing search for "${query}"` : query;
         openInModal(prefixedUrl, displayQuery);
         searchInput.value = '';
-        showNotification(`Loading ${displayQuery} via proxy...`, '', 'info');
+        showNotification(`Loading ${displayQuery}  `, '', 'info');
         if (soundEnabled) {
           initAudioContext();
           await resumeAudioContext();
