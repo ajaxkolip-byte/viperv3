@@ -25,7 +25,7 @@
       position: relative;
     }
 
-    /* Animated background particles */
+    /* Static background particles */
     body::before {
       content: '';
       position: fixed;
@@ -39,12 +39,6 @@
         radial-gradient(circle at 40% 40%, rgba(0, 255, 0, 0.02) 0%, transparent 50%);
       pointer-events: none;
       z-index: -1;
-      animation: float 20s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-20px) rotate(180deg); }
     }
 
     nav {
@@ -127,7 +121,7 @@
       flex-direction: column;
       align-items: center;
       gap: 20px;
-      max-width: 600px;
+      max-width: 500px;
       width: 100%;
     }
 
@@ -155,58 +149,6 @@
       box-shadow: 0 0 0 4px rgba(0, 255, 65, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(0, 255, 0, 0.2);
       transform: translateY(-2px);
       text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-    }
-
-    .quick-search {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .quick-search-btn {
-      width: 56px;
-      height: 56px;
-      border-radius: 12px;
-      background: rgba(10, 31, 10, 0.8);
-      border: 2px solid rgba(0, 255, 0, 0.2);
-      color: #e0f2e9;
-      font-size: 1.4rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .quick-search-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
-      transition: left 0.5s;
-    }
-
-    .quick-search-btn:hover::before {
-      left: 100%;
-    }
-
-    .quick-search-btn:hover {
-      background: rgba(0, 255, 0, 0.1);
-      border-color: rgba(0, 255, 0, 0.4);
-      transform: translateY(-2px) scale(1.05);
-      box-shadow: 0 8px 30px rgba(0, 255, 0, 0.2), 0 0 20px rgba(0, 255, 0, 0.1);
-    }
-
-    .quick-search-btn:active {
-      transform: translateY(0) scale(0.98);
     }
 
     .frame {
@@ -480,16 +422,6 @@
         font-size: 1rem;
       }
 
-      .quick-search {
-        gap: 12px;
-      }
-
-      .quick-search-btn {
-        width: 48px;
-        height: 48px;
-        font-size: 1.2rem;
-      }
-
       .close-btn {
         width: 44px;
         height: 44px;
@@ -533,26 +465,6 @@
     <h1>Search</h1>
     <div class="search-section">
       <input class="pxyinput" type="text" placeholder="Search..." id="searchInput" />
-      <div class="quick-search">
-        <button class="quick-search-btn" data-url="https://www.google.com/search?q=" title="Google">
-          🔍
-        </button>
-        <button class="quick-search-btn" data-url="https://www.youtube.com/results?search_query=" title="YouTube">
-          🎥
-        </button>
-        <button class="quick-search-btn" data-url="https://twitter.com/search?q=" title="Twitter/X">
-          🐦
-        </button>
-        <button class="quick-search-btn" data-url="https://www.wikipedia.org/w/index.php?search=" title="Wikipedia">
-          📚
-        </button>
-        <button class="quick-search-btn" data-url="https://www.reddit.com/search/?q=" title="Reddit">
-          📝
-        </button>
-        <button class="quick-search-btn" data-url="https://duckduckgo.com/?q=" title="DuckDuckGo">
-          🦆
-        </button>
-      </div>
     </div>
   </div>
 
@@ -668,22 +580,6 @@
   const popupSearchInput = document.getElementById('popupSearchInput');
   const popupSearchBtn = document.getElementById('popupSearchBtn');
   const popupCloseBtn = document.getElementById('popupCloseBtn');
-
-  // Quick search buttons functionality
-  document.querySelectorAll('.quick-search-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const searchTerm = searchInput.value.trim();
-      if (searchTerm) {
-        const baseUrl = this.dataset.url;
-        const searchUrl = `${baseUrl}${encodeURIComponent(searchTerm)}`;
-        
-        performSearch(searchUrl);
-        notificationSystem.success('Quick Search', `Searching ${this.title} for "${searchTerm}"`, 2500);
-      } else {
-        notificationSystem.error('Empty Search', 'Please enter a search term first');
-      }
-    });
-  });
 
   // Search input functionality
   searchInput.addEventListener('keypress', function(e) {
@@ -802,13 +698,13 @@
 
   // Welcome notification on load
   setTimeout(() => {
-    notificationSystem.info('Viper Ready', 'Type to search or click a quick search button', 4000);
+    notificationSystem.info('Viper Ready', 'Press Enter to search Google', 4000);
   }, 1000);
 
   // Input focus effects
   searchInput.addEventListener('focus', function() {
     if (!searchFrame.classList.contains('active')) {
-      notificationSystem.info('Search Ready', 'Press Enter to search or use quick buttons', 2000);
+      notificationSystem.info('Search Ready', 'Type your query and press Enter', 2000);
     }
   });
 
