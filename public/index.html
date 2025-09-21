@@ -103,77 +103,16 @@
       font-weight: 500;
     }
 
-    /* Simplified Tab Navigation */
-    .tab-nav {
-      display: flex;
-      gap: 2px;
-      background: rgba(10, 31, 10, 0.8);
-      border-radius: 20px;
-      padding: 4px;
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border-color);
-    }
-
-    .tab-btn {
-      padding: 8px 16px;
-      border: none;
-      background: transparent;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      font-weight: 500;
-      border-radius: 16px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .tab-btn:hover {
-      color: var(--text-primary);
-      background: rgba(0, 255, 0, 0.1);
-    }
-
-    .tab-btn.active {
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: var(--bg-primary);
-      box-shadow: 0 2px 8px var(--shadow-color);
-    }
-
-    /* Simplified Tab Content */
-    .tab-content {
-      position: absolute;
-      top: 80px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.2s ease;
-      z-index: 600;
-      padding: 2rem;
-      overflow-y: auto;
-    }
-
-    .tab-content.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .tab-content h2 {
-      color: var(--accent-primary);
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      font-weight: 300;
-    }
-
     /* Home Tab - Simplified Search */
     .center-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100%;
+      height: 100vh;
       gap: 24px;
       padding: 2rem;
+      margin-top: 80px;
     }
 
     .center-container h1 {
@@ -231,164 +170,10 @@
       display: block;
     }
 
-    .close-btn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 44px;
-      height: 44px;
-      background: var(--glass-bg);
-      border: 2px solid var(--border-color);
-      border-radius: 50%;
-      color: var(--text-primary);
-      font-size: 1.4rem;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2100;
-      transition: all 0.2s ease;
-      backdrop-filter: blur(10px);
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    .close-btn:hover {
-      background: rgba(0, 255, 65, 0.2);
-      transform: scale(1.1);
-    }
-
-    .close-btn.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* Placeholder Styles */
-    .tab-placeholder {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-      color: var(--text-muted);
-      text-align: center;
-      justify-content: center;
-      height: 100%;
-    }
-
-    .tab-placeholder .icon {
-      font-size: 3rem;
-      opacity: 0.7;
-    }
-
-    .tab-placeholder h3 {
-      color: var(--text-primary);
-      font-size: 1.3rem;
-      margin-bottom: 6px;
-    }
-
-    .tab-placeholder p {
-      color: var(--text-secondary);
-      font-size: 1rem;
-      line-height: 1.5;
-      opacity: 0.9;
-      max-width: 500px;
-    }
-
-    /* Simplified Notification */
-    .notification-container {
-      position: fixed;
-      top: 100px;
-      right: 20px;
-      z-index: 2000;
-      pointer-events: none;
-    }
-
-    .notification {
-      background: var(--glass-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 12px 16px;
-      color: var(--text-primary);
-      font-size: 0.9rem;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(10px);
-      transform: translateX(300px);
-      opacity: 0;
-      transition: all 0.3s ease;
-      pointer-events: auto;
-      margin-bottom: 8px;
-    }
-
-    .notification.show {
-      transform: translateX(0);
-      opacity: 1;
-    }
-
-    .notification.success {
-      border-left: 3px solid var(--accent-primary);
-    }
-
-    .notification-title {
-      font-weight: 600;
-      margin-bottom: 2px;
-      color: var(--accent-primary);
-    }
-
-    .loading-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 2500;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .loading-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .loading-spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(0, 255, 65, 0.3);
-      border-top: 3px solid var(--accent-primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin-bottom: 16px;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .loading-text {
-      color: var(--text-primary);
-      font-size: 1.1rem;
-      font-weight: 500;
-    }
-
     @media (max-width: 768px) {
       nav {
         padding: 0.8rem 1rem;
         flex-wrap: wrap;
-      }
-
-      .tab-nav {
-        margin-top: 8px;
-        order: 3;
-        width: 100%;
-        justify-content: center;
       }
 
       .logo h1 {
@@ -399,22 +184,9 @@
         font-size: 2.2rem;
       }
 
-      .tab-content {
-        top: 110px;
+      .center-container {
+        margin-top: 80px;
         padding: 1rem;
-      }
-
-      .close-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-        top: 15px;
-        right: 15px;
-      }
-
-      .notification-container {
-        top: 90px;
-        right: 10px;
       }
     }
   </style>
@@ -426,234 +198,25 @@
       <img src="./assets/images/icon.png" alt="Art Class Logo" draggable="false" />
       <h1>Art Class</h1>
     </div>
-    
-    <div class="tab-nav">
-      <button class="tab-btn active" data-tab="home">🏠 Home</button>
-      <button class="tab-btn" data-tab="gallery">🎨 Gallery</button>
-      <button class="tab-btn" data-tab="tools">🖌️ Tools</button>
-      <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
-    </div>
 
     <p id="time"></p>
   </nav>
 
-  <!-- Home Tab - Search Interface -->
-  <div class="tab-content active" id="homeTab">
-    <div class="center-container">
-      <h1>Search</h1>
-      <input class="pxyinput" type="text" placeholder="Search the web..." id="searchInput" />
-      <div style="font-size: 0.9rem; color: var(--text-muted); text-align: center; opacity: 0.7;">
-        Powered by Art Class
-      </div>
+  <div class="center-container">
+    <h1>Search</h1>
+    <input class="pxyinput" type="text" placeholder="Search..." id="searchInput" />
+    <div style="font-size: 0.9rem; color: var(--text-muted); text-align: center; opacity: 0.7;">
+      Powered by Art Class
     </div>
   </div>
-
-  <!-- Gallery Tab -->
-  <div class="tab-content" id="galleryTab">
-    <h2>🎨 Gallery</h2>
-    <div class="tab-placeholder">
-      <span class="icon">🎨</span>
-      <h3>Art Gallery</h3>
-      <p>Coming soon: Browse and discover amazing artwork from talented artists around the world.</p>
-    </div>
-  </div>
-
-  <!-- Tools Tab -->
-  <div class="tab-content" id="toolsTab">
-    <h2>🖌️ Tools</h2>
-    <div class="tab-placeholder">
-      <span class="icon">🖌️</span>
-      <h3>Creative Tools</h3>
-      <p>Coming soon: Essential digital art tools and creative applications integrated into your Art Class experience.</p>
-    </div>
-  </div>
-
-  <!-- Settings Tab -->
-  <div class="tab-content" id="settingsTab">
-    <h2>⚙️ Settings</h2>
-    <div class="tab-placeholder">
-      <span class="icon">⚙️</span>
-      <h3>Settings</h3>
-      <p>Coming soon: Customize your Art Class experience with themes, preferences, and more.</p>
-    </div>
-  </div>
-
-  <!-- Single Frame for Both Search and Content -->
+  
   <iframe class="frame" id="mainFrame"></iframe>
-  <button class="close-btn" id="closeBtn" title="Close">×</button>
-
-  <!-- Loading Overlay -->
-  <div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">Loading...</div>
-  </div>
-
-  <!-- Notification Container -->
-  <div class="notification-container" id="notificationContainer"></div>
 </body>
 
 <script src="./js/index.js"></script>
 <script src="./js/search.js"></script>
 <script>
-  // Simplified Theme System
-  const themes = {
-    dark: {
-      '--bg-primary': '#1a1a2e',
-      '--bg-secondary': '#16213e',
-      '--bg-tertiary': '#0f0f23',
-      '--text-primary': '#e0e6ed',
-      '--text-secondary': '#a0aec0',
-      '--text-muted': '#718096',
-      '--accent-primary': '#00d4ff',
-      '--accent-secondary': '#5a67d8',
-      '--border-color': 'rgba(0, 212, 255, 0.2)',
-      '--shadow-color': 'rgba(0, 212, 255, 0.1)',
-      '--glass-bg': 'rgba(26, 26, 46, 0.95)'
-    },
-    green: {
-      '--bg-primary': '#0a1f0a',
-      '--bg-secondary': '#1a2b1a',
-      '--bg-tertiary': '#0f1a0f',
-      '--text-primary': '#e0f2e9',
-      '--text-secondary': '#a8e6cf',
-      '--text-muted': '#81c784',
-      '--accent-primary': '#00ff41',
-      '--accent-secondary': '#39ff14',
-      '--border-color': 'rgba(0, 255, 0, 0.2)',
-      '--shadow-color': 'rgba(0, 255, 0, 0.1)',
-      '--glass-bg': 'rgba(10, 31, 10, 0.95)'
-    },
-    red: {
-      '--bg-primary': '#2c1810',
-      '--bg-secondary': '#3d1b13',
-      '--bg-tertiary': '#4a0f0a',
-      '--text-primary': '#f7d4c8',
-      '--text-secondary': '#e6b8a2',
-      '--text-muted': '#d6895a',
-      '--accent-primary': '#ff6b35',
-      '--accent-secondary': '#e55a2b',
-      '--border-color': 'rgba(255, 107, 53, 0.2)',
-      '--shadow-color': 'rgba(255, 107, 53, 0.1)',
-      '--glass-bg': 'rgba(44, 24, 16, 0.95)'
-    },
-    purple: {
-      '--bg-primary': '#1a0f2e',
-      '--bg-secondary': '#2a1a3e',
-      '--bg-tertiary': '#3a2a4e',
-      '--text-primary': '#e0d4f7',
-      '--text-secondary': '#c3b1e1',
-      '--text-muted': '#a78bfa',
-      '--accent-primary': '#8b5cf6',
-      '--accent-secondary': '#7c3aed',
-      '--border-color': 'rgba(139, 92, 246, 0.2)',
-      '--shadow-color': 'rgba(139, 92, 246, 0.1)',
-      '--glass-bg': 'rgba(26, 15, 46, 0.95)'
-    }
-  };
-
-  let currentTheme = 'green';
-
-  // Proxy Configuration
-  const PROXY_CONFIG = {
-    baseUrl: '/uv/',
-    searchEngines: {
-      google: {
-        url: 'http://www.google.com/search',
-        params: {
-          q: 'query',
-          num: '10',
-          ie: 'UTF-8',
-          oe: 'UTF-8'
-        }
-      },
-      bing: {
-        url: 'https://www.bing.com/search',
-        params: {
-          q: 'query',
-          count: '10',
-          setlang: 'en'
-        }
-      }
-    },
-    defaultEngine: 'google'
-  };
-
-  // Simplified Notification System
-  class NotificationSystem {
-    constructor() {
-      this.container = document.getElementById('notificationContainer');
-      this.autoRemoveDelay = 3000;
-    }
-
-    show(type, title, message, duration = this.autoRemoveDelay) {
-      const notification = document.createElement('div');
-      notification.className = `notification ${type}`;
-      notification.innerHTML = `
-        <div class="notification-title">${title}</div>
-        <div>${message}</div>
-      `;
-
-      this.container.appendChild(notification);
-      
-      requestAnimationFrame(() => {
-        notification.classList.add('show');
-      });
-
-      setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-          if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-          }
-        }, 300);
-      }, duration);
-    }
-
-    success(title, message, duration) {
-      this.show('success', title, message, duration);
-    }
-
-    info(title, message, duration) {
-      this.show('info', title, message, duration);
-    }
-
-    error(title, message, duration) {
-      this.show('error', title, message, duration);
-    }
-  }
-
-  const notificationSystem = new NotificationSystem();
-  const loadingOverlay = document.getElementById('loadingOverlay');
-
-  // Loading State Management
-  function showLoading(text = 'Loading...') {
-    loadingOverlay.querySelector('.loading-text').textContent = text;
-    loadingOverlay.classList.add('active');
-  }
-
-  function hideLoading() {
-    loadingOverlay.classList.remove('active');
-  }
-
-  // Simplified Theme Function
-  function applyTheme(themeName) {
-    const theme = themes[themeName];
-    Object.entries(theme).forEach(([property, value]) => {
-      document.documentElement.style.setProperty(property, value);
-    });
-    
-    currentTheme = themeName;
-    localStorage.setItem('artclass-theme', themeName);
-    
-    notificationSystem.success('Theme', `${themeName.charAt(0).toUpperCase() + themeName.slice(1)} applied`, 2000);
-  }
-
-  function loadSavedTheme() {
-    const savedTheme = localStorage.getItem('artclass-theme') || 'green';
-    applyTheme(savedTheme);
-  }
-
-  // Simplified Time Display
+  // Simple Time Display
   function updateTime() {
     const now = new Date();
     const timeString = now.toLocaleTimeString('en-US', {
@@ -667,167 +230,36 @@
   updateTime();
   setInterval(updateTime, 1000);
 
-  // Proxy Search Function
-  function proxySearch(query, engine = PROXY_CONFIG.defaultEngine) {
-    try {
-      const searchConfig = PROXY_CONFIG.searchEngines[engine];
-      if (!searchConfig) {
-        throw new Error('Search engine not found');
-      }
-
-      // Build search URL
-      const url = new URL(searchConfig.url);
-      Object.entries(searchConfig.params).forEach(([key, value]) => {
-        if (key === 'query') {
-          url.searchParams.set(key, query);
-        } else {
-          url.searchParams.set(key, value);
-        }
-      });
-
-      // Use UV proxy
-      const proxyUrl = `${PROXY_CONFIG.baseUrl}proxy/${btoa(unescape(encodeURIComponent(url.toString())))}`;
-      
-      return proxyUrl;
-    } catch (error) {
-      console.error('Search error:', error);
-      notificationSystem.error('Search Error', 'Failed to process search request', 3000);
-      return null;
-    }
-  }
-
-  // Simplified Tab System
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  const tabContents = document.querySelectorAll('.tab-content');
-  const mainFrame = document.getElementById('mainFrame');
-  const closeBtn = document.getElementById('closeBtn');
+  // Simple Search Functionality
   const searchInput = document.getElementById('searchInput');
+  const mainFrame = document.getElementById('mainFrame');
 
-  // Tab switching
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      const targetTab = this.dataset.tab;
-      
-      tabBtns.forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      
-      tabContents.forEach(content => content.classList.remove('active'));
-      document.getElementById(targetTab + 'Tab').classList.add('active');
-      
-      // Close frame when switching tabs
-      if (mainFrame.classList.contains('active')) {
-        closeFrame();
-      }
-      
-      if (targetTab === 'home') {
-        searchInput.focus();
-      }
-    });
-  });
-
-  // Simplified Frame Management
-  function loadInFrame(url, isSearch = false) {
-    tabContents.forEach(content => content.classList.remove('active'));
-    
-    // Show loading
-    showLoading(isSearch ? 'Searching...' : 'Loading...');
-    
-    mainFrame.src = url;
-    mainFrame.classList.add('active');
-    closeBtn.classList.add('active');
-    
-    if (isSearch) {
-      notificationSystem.success('Search', 'Results loading...', 1500);
-    }
-  }
-
-  function closeFrame() {
-    mainFrame.classList.remove('active');
-    closeBtn.classList.remove('active');
-    mainFrame.src = '';
-    hideLoading();
-    
-    // Return to home
-    tabContents.forEach(content => content.classList.remove('active'));
-    document.getElementById('homeTab').classList.add('active');
-    tabBtns[0].classList.add('active');
-    searchInput.focus();
-    
-    notificationSystem.info('Closed', 'Back to home', 1500);
-  }
-
-  // Close button
-  closeBtn.addEventListener('click', closeFrame);
-
-  // Enhanced Search functionality with proxy
   searchInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter' && this.value.trim()) {
       e.preventDefault();
       const searchTerm = this.value.trim();
       
-      // Use proxy search
-      const proxySearchUrl = proxySearch(searchTerm);
-      if (proxySearchUrl) {
-        loadInFrame(proxySearchUrl, true);
-        this.value = '';
-      }
-    }
-  });
-
-  // Keyboard shortcuts
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      if (mainFrame.classList.contains('active')) {
-        closeFrame();
-      } else {
-        // Return to home
-        tabContents.forEach(content => content.classList.remove('active'));
-        document.getElementById('homeTab').classList.add('active');
-        tabBtns[0].classList.add('active');
-        searchInput.focus();
-      }
-    }
-  });
-
-  // Frame load handler
-  mainFrame.addEventListener('load', function() {
-    if (mainFrame.classList.contains('active')) {
-      hideLoading();
-      closeBtn.style.transform = 'rotate(90deg)';
-      setTimeout(() => {
-        closeBtn.style.transform = 'rotate(0deg)';
-      }, 150);
+      // Simple proxy search (same as the original second code would use)
+      const searchUrl = `http://www.google.com/search?q=${encodeURIComponent(searchTerm)}`;
       
-      // Small delay to ensure content is loaded
-      setTimeout(() => {
-        notificationSystem.success('Loaded', 'Content ready!', 1000);
-      }, 500);
+      // Use UV proxy if available
+      try {
+        const proxyUrl = `/uv/proxy/${btoa(unescape(encodeURIComponent(searchUrl)))}`;
+        mainFrame.src = proxyUrl;
+      } catch (error) {
+        // Fallback to direct URL
+        mainFrame.src = searchUrl;
+      }
+      
+      mainFrame.classList.add('active');
+      this.value = '';
     }
   });
-
-  // Frame error handler
-  mainFrame.addEventListener('error', function() {
-    hideLoading();
-    notificationSystem.error('Load Error', 'Failed to load content. Try again?', 3000);
-  });
-
-  // Prevent context menu on frame
-  mainFrame.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-  });
-
-  // Welcome message
-  setTimeout(() => {
-    notificationSystem.info('Welcome to Art Class', 'Press Enter to search or explore tabs', 3000);
-  }, 800);
 
   // Auto-focus search
   setTimeout(() => {
     searchInput.focus();
   }, 300);
-
-  // Initialize
-  loadSavedTheme();
 </script>
 
 </html>
