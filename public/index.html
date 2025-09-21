@@ -533,7 +533,7 @@
   <div class="tab-content active" id="homeTab">
     <div class="center-container">
       <h1>Search</h1>
-      <input class="pxyinput" type="text" placeholder="Search..." id="searchInput" />
+      <input class="pxyinput" type="text" placeholder="Search or enter URL (e.g., roblox.com)..." id="searchInput" />
     </div>
   </div>
 
@@ -788,6 +788,32 @@
   updateTime();
   setInterval(updateTime, 1000);
 
+  // URL Detection Function
+  function isValidURL(string) {
+    try {
+      const url = new URL(string.startsWith('http') ? string : 'https://' + string);
+      return url.protocol === 'http:' || url.protocol === 'https:';
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function formatURL(input) {
+    let url = input.trim();
+    
+    // If no protocol, add https://
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = 'https://' + url;
+    }
+    
+    // If it's just a domain, ensure it has www or proper format
+    if (!url.includes('/')) {
+      url = url.replace(/^(https?:\/\/)?([^\/]+)/, '$1$2/');
+    }
+    
+    return url;
+  }
+
   // Simplified Tab System
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
@@ -825,9 +851,9 @@
     closeBtn.classList.add('active');
     
     if (isGame) {
-      notificationSystem.success('Game', 'Ready to play!', 1500);
+      notificationSystem.success('Game Loaded', 'Ready to play!', 1500);
     } else {
-      notificationSystem.success('Search', 'Loading results...', 1500);
+      notificationSystem.success('Loading', 'Opening website...', 1500);
     }
   }
 
@@ -848,13 +874,24 @@
   // Close button
   closeBtn.addEventListener('click', closeFrame);
 
-  // Search functionality (like old Art Class)
+  // Enhanced Search functionality - detects URLs vs search queries
   searchInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter' && this.value.trim()) {
       e.preventDefault();
-      const searchTerm = this.value.trim();
-      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchTerm)}`;
-      loadInFrame(searchUrl);
+      const input = this.value.trim();
+      
+      if (isValidURL(input)) {
+        // Direct URL navigation
+        const formattedURL = formatURL(input);
+        loadInFrame(formattedURL);
+        notificationSystem.success('Navigation', `Loading ${input}...`, 2000);
+      } else {
+        // Search query
+        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+        loadInFrame(searchUrl);
+        notificationSystem.success('Search', `Searching for "${input}"`, 2000);
+      }
+      
       this.value = '';
     }
   });
@@ -905,9 +942,9 @@
     e.preventDefault();
   });
 
-  // Welcome message
+  // Welcome message with instructions
   setTimeout(() => {
-    notificationSystem.info('Welcome', 'Press Enter to search or click Games', 3000);
+    notificationSystem.info('Welcome to Viper', 'Type a URL (roblox.com) or search term and press Enter', 4000);
   }, 800);
 
   // Auto-focus search
