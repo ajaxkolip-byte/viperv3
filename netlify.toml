@@ -1,0 +1,19 @@
+[build]
+  command = ""  # No build step needed for static files; adjust if you have a build process
+  publish = "."  # Root directory for static files (HTML/JS); adjust to "dist" if needed
+  functions = "functions"  # Directory for Netlify Functions
+
+[[redirects]]
+  from = "/proxy/*"
+  to = "/.netlify/functions/proxy/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/(.*)"
+  to = "/.netlify/functions/index/:splat"
+  status = 200
+  force = true
+
+[functions]
+  directory = "functions"  # Where your index.js (or proxy.js) will live
