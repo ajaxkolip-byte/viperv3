@@ -18,80 +18,80 @@
     }
 
     :root {
-      --bg-primary: #0a0a0a;
-      --bg-secondary: #1a1a1a;
-      --bg-tertiary: #2a2a2a;
-      --text-primary: #ffffff;
-      --text-secondary: #b0b0b0;
-      --accent-primary: #00ff88;
-      --accent-secondary: #00cc6a;
-      --border-color: #333333;
-      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      --radius: 12px;
+      --bg-primary: #050505;
+      --bg-secondary: #101010;
+      --bg-tertiary: #1a1a1a;
+      --text-primary: #e0e0e0;
+      --text-secondary: #a0a0a0;
+      --accent-primary: #00cc70;
+      --accent-secondary: #009955;
+      --border-color: #2a2a2a;
+      --shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      --radius: 10px;
       --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     body.theme-light {
-      --bg-primary: #f8f9fa;
-      --bg-secondary: #e9ecef;
-      --bg-tertiary: #dee2e6;
-      --text-primary: #212529;
-      --text-secondary: #6c757d;
-      --accent-primary: #007bff;
-      --accent-secondary: #0056b3;
-      --border-color: #ced4da;
-      --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      --bg-primary: #d0d4d8;
+      --bg-secondary: #c0c4c8;
+      --bg-tertiary: #b0b4b8;
+      --text-primary: #1a1e22;
+      --text-secondary: #5a5e62;
+      --accent-primary: #0055aa;
+      --accent-secondary: #003377;
+      --border-color: #a0a4a8;
+      --shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     }
 
     body.theme-violet {
-      --bg-primary: #1a0033;
-      --bg-secondary: #2d0059;
-      --bg-tertiary: #4a0080;
-      --text-primary: #e6ccff;
-      --text-secondary: #b894ff;
-      --accent-primary: #ff00ff;
-      --accent-secondary: #cc00cc;
-      --border-color: #6600cc;
-      --shadow: 0 8px 32px rgba(255, 0, 255, 0.2);
+      --bg-primary: #14002a;
+      --bg-secondary: #22004a;
+      --bg-tertiary: #3a0066;
+      --text-primary: #d0b3ff;
+      --text-secondary: #a080ff;
+      --accent-primary: #cc00cc;
+      --accent-secondary: #990099;
+      --border-color: #5500aa;
+      --shadow: 0 4px 16px rgba(128, 0, 128, 0.3);
     }
 
     body.theme-matrix {
       --bg-primary: #000000;
       --bg-secondary: #001100;
       --bg-tertiary: #002200;
-      --text-primary: #00ff00;
-      --text-secondary: #00cc00;
-      --accent-primary: #00ff41;
-      --accent-secondary: #00cc33;
-      --border-color: #004400;
-      --shadow: 0 8px 32px rgba(0, 255, 0, 0.1);
+      --text-primary: #00cc00;
+      --text-secondary: #009900;
+      --accent-primary: #00cc33;
+      --accent-secondary: #009922;
+      --border-color: #003300;
+      --shadow: 0 4px 16px rgba(0, 128, 0, 0.2);
       background-image: 
-        radial-gradient(circle at 25% 25%, rgba(0, 255, 0, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(0, 255, 0, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 25% 25%, rgba(0, 128, 0, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(0, 128, 0, 0.05) 0%, transparent 50%);
     }
 
     body.theme-red {
-      --bg-primary: #2c0000;
-      --bg-secondary: #4d0000;
-      --bg-tertiary: #660000;
-      --text-primary: #ffcccc;
-      --text-secondary: #ff9999;
-      --accent-primary: #ff0000;
-      --accent-secondary: #cc0000;
-      --border-color: #990000;
-      --shadow: 0 8px 32px rgba(255, 0, 0, 0.2);
+      --bg-primary: #220000;
+      --bg-secondary: #3d0000;
+      --bg-tertiary: #550000;
+      --text-primary: #ffaaaa;
+      --text-secondary: #ff7777;
+      --accent-primary: #cc0000;
+      --accent-secondary: #990000;
+      --border-color: #770000;
+      --shadow: 0 4px 16px rgba(128, 0, 0, 0.3);
     }
 
     body.theme-blue {
-      --bg-primary: #001a33;
-      --bg-secondary: #003366;
-      --bg-tertiary: #004080;
-      --text-primary: #cce6ff;
-      --text-secondary: #99ccff;
-      --accent-primary: #0000ff;
-      --accent-secondary: #0000cc;
-      --border-color: #003399;
-      --shadow: 0 8px 32px rgba(0, 0, 255, 0.2);
+      --bg-primary: #001422;
+      --bg-secondary: #002a55;
+      --bg-tertiary: #003366;
+      --text-primary: #aaccff;
+      --text-secondary: #77aaff;
+      --accent-primary: #0000cc;
+      --accent-secondary: #000099;
+      --border-color: #002277;
+      --shadow: 0 4px 16px rgba(0, 0, 128, 0.3);
     }
 
     body {
@@ -122,19 +122,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: titleGlow 2s ease-in-out infinite alternate;
       text-align: center;
-    }
-
-    @keyframes titleGlow {
-      from { 
-        filter: drop-shadow(0 0 10px var(--accent-primary));
-        transform: scale(1);
-      }
-      to { 
-        filter: drop-shadow(0 0 20px var(--accent-primary));
-        transform: scale(1.02);
-      }
     }
 
     .pxyinput {
@@ -153,7 +141,6 @@
 
     .pxyinput:focus {
       border-color: var(--accent-primary);
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
       transform: scale(1.02);
     }
 
@@ -197,11 +184,11 @@
     }
 
     .notification.error {
-      border-left: 4px solid #ff4757;
+      border-left: 4px solid #cc3a47;
     }
 
     .notification.info {
-      border-left: 4px solid #3742fa;
+      border-left: 4px solid #2a3aff;
     }
 
     .notification-title {
@@ -272,11 +259,6 @@
       50% { transform: scale(1.05); }
     }
 
-    .logo:hover {
-      transform: scale(1.1) rotate(360deg);
-      box-shadow: 0 0 20px var(--accent-primary);
-    }
-
     .logo-text {
       font-size: 1.5rem;
       font-weight: 700;
@@ -284,13 +266,6 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin: 0;
-      animation: textGlow 3s ease-in-out infinite alternate;
-    }
-
-    @keyframes textGlow {
-      from { filter: drop-shadow(0 0 5px var(--accent-primary)); }
-      to { filter: drop-shadow(0 0 15px var(--accent-primary)); }
     }
 
     .tabs-container {
@@ -307,45 +282,13 @@
       border-radius: var(--radius);
       cursor: pointer;
       transition: var(--transition);
-      position: relative;
-      overflow: hidden;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .tab-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      transition: left 0.5s;
-    }
-
-    .tab-btn:hover::before {
-      left: 100%;
-    }
-
-    .tab-btn:hover {
-      color: var(--text-primary);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
     .tab-btn.active {
       color: var(--accent-primary);
-      background: rgba(0, 255, 136, 0.1);
-      box-shadow: inset 0 0 0 2px var(--accent-primary);
-      animation: activeTab 0.6s ease-out;
-    }
-
-    @keyframes activeTab {
-      0% { transform: scale(0.95); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
     }
 
     .tab-icon {
@@ -401,8 +344,8 @@
     /* Games Grid */
     .games-grid, .apps-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
       padding: 1rem 0;
     }
 
@@ -411,8 +354,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 150px;
-      height: 150px;
+      width: 140px;
+      height: 140px;
       background: none;
       border: none;
       cursor: pointer;
@@ -422,7 +365,7 @@
     .app-card {
       background: var(--bg-secondary);
       border-radius: var(--radius);
-      padding: 1.5rem;
+      padding: 1rem;
       border: 1px solid var(--border-color);
       cursor: pointer;
       transition: var(--transition);
@@ -430,43 +373,22 @@
       overflow: hidden;
     }
 
-    .game-card::before, .app-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, transparent, rgba(0, 255, 136, 0.1));
-      opacity: 0;
-      transition: var(--transition);
-    }
-
-    .game-card:hover::before, .app-card:hover::before {
-      opacity: 1;
-    }
-
-    .game-card:hover, .app-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    }
-
     .game-icon, .app-icon {
-      width: 150px;
-      height: 150px;
+      width: 140px;
+      height: 140px;
       margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 16px;
+      border-radius: 12px;
       transition: var(--transition);
       overflow: hidden;
       position: relative;
     }
 
     .app-icon {
-      width: 80px;
-      height: 80px;
+      width: 70px;
+      height: 70px;
       background: var(--bg-tertiary);
     }
 
@@ -474,29 +396,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 16px;
+      border-radius: 12px;
       transition: var(--transition);
-    }
-
-    .game-card:hover .game-icon {
-      filter: brightness(0.6);
-    }
-
-    .game-card:hover .game-icon::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: inherit;
-      filter: blur(5px);
-      border-radius: 16px;
-      z-index: 1;
-    }
-
-    .game-icon img {
-      z-index: 2;
     }
 
     .game-info {
@@ -513,7 +414,7 @@
       transition: var(--transition);
       padding: 0.25rem;
       background: rgba(0, 0, 0, 0.8);
-      border-radius: 16px;
+      border-radius: 12px;
       overflow: hidden;
       z-index: 3;
     }
@@ -523,7 +424,7 @@
     }
 
     .game-info h3 {
-      font-size: 1rem;
+      font-size: 0.9rem;
       margin-bottom: 0.2rem;
       color: var(--text-primary);
       font-weight: 600;
@@ -532,7 +433,7 @@
     }
 
     .game-info p {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: var(--text-secondary);
       line-height: 1.1;
       margin: 0;
@@ -543,32 +444,19 @@
       white-space: nowrap;
     }
 
-    .app-card:hover .app-icon {
-      filter: brightness(1.2);
-      transform: scale(1.1) rotateY(180deg);
-      background: var(--accent-primary);
-      animation: iconPulse 0.6s ease-out;
-    }
-
-    @keyframes iconPulse {
-      0% { transform: scale(0.8) rotateY(0deg); }
-      50% { transform: scale(1.2) rotateY(90deg); }
-      100% { transform: scale(1.1) rotateY(180deg); }
-    }
-
     .app-info {
       text-align: center;
     }
 
     .app-info h3 {
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       margin-bottom: 0.5rem;
       color: var(--text-primary);
     }
 
     .app-info p {
       color: var(--text-secondary);
-      line-height: 1.5;
+      line-height: 1.4;
     }
 
     /* Settings */
@@ -584,11 +472,6 @@
       margin-bottom: 2rem;
       border: 1px solid var(--border-color);
       transition: var(--transition);
-    }
-
-    .setting-group:hover {
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      transform: translateX(5px);
     }
 
     .setting-group h2 {
@@ -614,17 +497,10 @@
       font-weight: 500;
     }
 
-    .theme-btn:hover {
-      border-color: var(--accent-primary);
-      color: var(--accent-primary);
-      transform: scale(1.05);
-    }
-
     .theme-btn.active {
       background: var(--accent-primary);
       color: white;
       border-color: var(--accent-primary);
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
     }
 
     .switch {
@@ -761,7 +637,6 @@
       background: var(--accent-primary);
       color: white;
       transform: rotate(90deg) scale(1.1);
-      box-shadow: 0 0 20px var(--accent-primary);
     }
 
     .fullscreen-iframe {
@@ -786,8 +661,8 @@
       }
 
       .games-grid, .apps-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 0.8rem;
       }
 
       #notification-container {
@@ -1158,6 +1033,17 @@
       timeDisplay.textContent = timeString;
     }
 
+    // Validate URL
+    function isValidUrl(string) {
+      try {
+        // Basic URL validation
+        const urlPattern = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/i;
+        return urlPattern.test(string);
+      } catch (error) {
+        return false;
+      }
+    }
+
     // Setup event listeners
     function setupEventListeners() {
       // Tab switching
@@ -1241,15 +1127,25 @@
         if (e.key === 'Enter') {
           let query = e.target.value.trim();
           if (query) {
+            // Ensure the query is a valid URL or domain
             let rawUrl = query.startsWith('http') ? query : 'https://' + query;
-            const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
-            openInModal(prefixedUrl, query);
-            searchInput.value = '';
-            showNotification(`Loading ${query} via proxy...`, '', 'info');
-            if (soundEnabled) {
-              initAudioContext();
-              await resumeAudioContext();
-              playSound('open');
+            if (isValidUrl(rawUrl)) {
+              const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
+              openInModal(prefixedUrl, query);
+              searchInput.value = '';
+              showNotification(`Loading ${query} via proxy...`, '', 'info');
+              if (soundEnabled) {
+                initAudioContext();
+                await resumeAudioContext();
+                playSound('open');
+              }
+            } else {
+              showNotification('Invalid URL', 'Please enter a valid website address (e.g., google.com)', 'error');
+              if (soundEnabled) {
+                initAudioContext();
+                await resumeAudioContext();
+                playSound('click');
+              }
             }
           }
         }
@@ -1407,7 +1303,7 @@
 
     function loadSettings() {
       const savedTheme = localStorage.getItem('viper-theme');
-      if (savedTheme) {
+      if (savedTheme && ['dark', 'light', 'violet', 'matrix', 'red', 'blue'].includes(savedTheme)) {
         switchTheme(savedTheme);
       }
       const savedSound = localStorage.getItem('viper-sound');
