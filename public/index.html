@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./assets/images/icon.png" type="image/png" />
   <title>Viper</title>
+  <script src="/uv/uv.bundle.js" charset="UTF-8"></script>
+  <script src="/uv/uv.config.js"></script>
+  <script src="./js/preload.js"></script>
   <style>
     /* Reset and Base Styles */
     * {
@@ -721,7 +726,7 @@
   <!-- Tab Bar -->
   <nav class="tab-bar">
     <div class="logo-container">
-      <div class="logo">🐍</div>
+      <img src="./assets/images/icon.png" alt="Viper Logo" class="logo" draggable="false" />
       <h1 class="logo-text">Viper</h1>
     </div>
     
@@ -733,7 +738,7 @@
     </div>
 
     <div class="time-container">
-      <span id="time" class="time-display"></span>
+      <p id="time" class="time-display"></p>
     </div>
   </nav>
 
@@ -754,7 +759,7 @@
       <div class="games-grid">
         <div class="game-card" data-game="tetris">
           <div class="game-icon">
-            <img src="https://img.icons8.com/color/96/000000/tetris.png" alt="Tetris" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/tetris.png" alt="Tetris" loading="lazy" />
           </div>
           <div class="game-info">
             <h3>Tetris</h3>
@@ -764,7 +769,7 @@
 
         <div class="game-card" data-game="minesweeper">
           <div class="game-icon">
-            <img src="https://img.icons8.com/color/96/000000/mine.png" alt="Minesweeper" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/mine.png" alt="Minesweeper" loading="lazy" />
           </div>
           <div class="game-info">
             <h3>Minesweeper</h3>
@@ -774,7 +779,7 @@
 
         <div class="game-card" data-game="snake">
           <div class="game-icon">
-            <img src="https://img.icons8.com/color/96/000000/snake.png" alt="Snake" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/snake.png" alt="Snake" loading="lazy" />
           </div>
           <div class="game-info">
             <h3>Snake</h3>
@@ -784,7 +789,7 @@
 
         <div class="game-card" data-game="2048">
           <div class="game-icon">
-            <img src="https://img.icons8.com/color/96/000000/2048.png" alt="2048" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/number-2048.png" alt="2048" loading="lazy" />
           </div>
           <div class="game-info">
             <h3>2048</h3>
@@ -794,7 +799,7 @@
 
         <div class="game-card" data-game="memory">
           <div class="game-icon">
-            <img src="https://img.icons8.com/color/96/000000/memory-card.png" alt="Memory" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/memory-card.png" alt="Memory" loading="lazy" />
           </div>
           <div class="game-info">
             <h3>Memory</h3>
@@ -804,7 +809,7 @@
 
         <div class="game-card" data-game="tic-tac-toe">
           <div class="game-icon">
-            <img src="https://img.icons8.com/color/96/000000/tic-tac-toe.png" alt="Tic Tac Toe" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/tic-tac-toe.png" alt="Tic Tac Toe" loading="lazy" />
           </div>
           <div class="game-info">
             <h3>Tic Tac Toe</h3>
@@ -820,7 +825,7 @@
       <div class="apps-grid">
         <div class="app-card" data-url="https://www.youtube.com">
           <div class="app-icon">
-            <img src="https://img.icons8.com/color/96/000000/youtube-play.png" alt="YouTube" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/youtube-play.png" alt="YouTube" loading="lazy" />
           </div>
           <div class="app-info">
             <h3>YouTube</h3>
@@ -830,7 +835,7 @@
 
         <div class="app-card" data-url="https://www.google.com">
           <div class="app-icon">
-            <img src="https://img.icons8.com/color/96/000000/google-logo.png" alt="Google" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/google-logo.png" alt="Google" loading="lazy" />
           </div>
           <div class="app-info">
             <h3>Google</h3>
@@ -840,7 +845,7 @@
 
         <div class="app-card" data-url="https://chat.openai.com">
           <div class="app-icon">
-            <img src="https://img.icons8.com/color/96/000000/openai.png" alt="ChatGPT" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/chatgpt.png" alt="ChatGPT" loading="lazy" />
           </div>
           <div class="app-info">
             <h3>ChatGPT</h3>
@@ -850,7 +855,7 @@
 
         <div class="app-card" data-url="https://github.com">
           <div class="app-icon">
-            <img src="https://img.icons8.com/color/96/000000/github.png" alt="GitHub" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/github.png" alt="GitHub" loading="lazy" />
           </div>
           <div class="app-info">
             <h3>GitHub</h3>
@@ -860,7 +865,7 @@
 
         <div class="app-card" data-url="https://www.notion.so">
           <div class="app-icon">
-            <img src="https://img.icons8.com/color/96/000000/notion.png" alt="Notion" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/notion.png" alt="Notion" loading="lazy" />
           </div>
           <div class="app-info">
             <h3>Notion</h3>
@@ -870,7 +875,7 @@
 
         <div class="app-card" data-url="https://www.spotify.com">
           <div class="app-icon">
-            <img src="https://img.icons8.com/color/96/000000/spotify.png" alt="Spotify" loading="lazy" />
+            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/spotify.png" alt="Spotify" loading="lazy" />
           </div>
           <div class="app-info">
             <h3>Spotify</h3>
@@ -929,6 +934,9 @@
       <iframe id="fullscreen-iframe" class="fullscreen-iframe" src=""></iframe>
     </div>
   </div>
+
+<script src="./js/index.js"></script>
+<script src="./js/search.js"></script>
 
   <script>
     // Global Variables
@@ -1325,4 +1333,5 @@
     });
   </script>
 </body>
+
 </html>
