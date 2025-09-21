@@ -1,1342 +1,1186 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="./assets/images/icon.png" type="image/png" />
-  <title>Viper</title>
-  <script src="/uv/uv.bundle.js" charset="UTF-8"></script>
-  <script src="/uv/uv.config.js"></script>
-  <script src="./js/preload.js"></script>
-  <style>
-    /* Reset and Base Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    :root {
-      --bg-primary: #050505;
-      --bg-secondary: #101010;
-      --bg-tertiary: #1a1a1a;
-      --text-primary: #e0e0e0;
-      --text-secondary: #a0a0a0;
-      --accent-primary: #00cc70;
-      --accent-secondary: #009955;
-      --border-color: #2a2a2a;
-      --shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-      --radius: 10px;
-      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    body.theme-light {
-      --bg-primary: #d0d4d8;
-      --bg-secondary: #c0c4c8;
-      --bg-tertiary: #b0b4b8;
-      --text-primary: #1a1e22;
-      --text-secondary: #5a5e62;
-      --accent-primary: #0055aa;
-      --accent-secondary: #003377;
-      --border-color: #a0a4a8;
-      --shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    body.theme-violet {
-      --bg-primary: #14002a;
-      --bg-secondary: #22004a;
-      --bg-tertiary: #3a0066;
-      --text-primary: #d0b3ff;
-      --text-secondary: #a080ff;
-      --accent-primary: #cc00cc;
-      --accent-secondary: #990099;
-      --border-color: #5500aa;
-      --shadow: 0 4px 16px rgba(128, 0, 128, 0.3);
-    }
-
-    body.theme-matrix {
-      --bg-primary: #000000;
-      --bg-secondary: #001100;
-      --bg-tertiary: #002200;
-      --text-primary: #00cc00;
-      --text-secondary: #009900;
-      --accent-primary: #00cc33;
-      --accent-secondary: #009922;
-      --border-color: #003300;
-      --shadow: 0 4px 16px rgba(0, 128, 0, 0.2);
-      background-image: 
-        radial-gradient(circle at 25% 25%, rgba(0, 128, 0, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 75% 75%, rgba(0, 128, 0, 0.05) 0%, transparent 50%);
-    }
-
-    body.theme-red {
-      --bg-primary: #220000;
-      --bg-secondary: #3d0000;
-      --bg-tertiary: #550000;
-      --text-primary: #ffaaaa;
-      --text-secondary: #ff7777;
-      --accent-primary: #cc0000;
-      --accent-secondary: #990000;
-      --border-color: #770000;
-      --shadow: 0 4px 16px rgba(128, 0, 0, 0.3);
-    }
-
-    body.theme-blue {
-      --bg-primary: #001422;
-      --bg-secondary: #002a55;
-      --bg-tertiary: #003366;
-      --text-primary: #aaccff;
-      --text-secondary: #77aaff;
-      --accent-primary: #0000cc;
-      --accent-secondary: #000099;
-      --border-color: #002277;
-      --shadow: 0 4px 16px rgba(0, 0, 128, 0.3);
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      overflow-x: hidden;
-      transition: var(--transition);
-    }
-
-    /* Search Bar */
-    .center-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 3rem 2rem;
-      background: var(--bg-primary);
-      position: relative;
-      min-height: 70vh;
-    }
-
-    .viper-title {
-      font-size: 3rem;
-      font-weight: 800;
-      margin-bottom: 2rem;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-align: center;
-    }
-
-    .pxyinput {
-      width: 100%;
-      max-width: 500px;
-      padding: 1rem 1.5rem;
-      background: var(--bg-secondary);
-      border: 2px solid var(--border-color);
-      border-radius: var(--radius);
-      color: var(--text-primary);
-      font-size: 1.1rem;
-      transition: var(--transition);
-      outline: none;
-      text-align: center;
-    }
-
-    .pxyinput:focus {
-      border-color: var(--accent-primary);
-      transform: scale(1.02);
-    }
-
-    .pxyinput::placeholder {
-      color: var(--text-secondary);
-      text-align: center;
-    }
-
-    /* Notification System */
-    #notification-container {
-      position: fixed;
-      top: 100px;
-      right: 20px;
-      z-index: 10000;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .notification {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      padding: 1rem 1.5rem;
-      max-width: 350px;
-      box-shadow: var(--shadow);
-      transform: translateX(400px);
-      opacity: 0;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .notification.show {
-      transform: translateX(0);
-      opacity: 1;
-    }
-
-    .notification.success {
-      border-left: 4px solid var(--accent-primary);
-    }
-
-    .notification.error {
-      border-left: 4px solid #cc3a47;
-    }
-
-    .notification.info {
-      border-left: 4px solid #2a3aff;
-    }
-
-    .notification-title {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .notification-message {
-      font-size: 0.9rem;
-      opacity: 0.8;
-    }
-
-    .notification-close {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.75rem;
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 1.2rem;
-      cursor: pointer;
-      opacity: 0.7;
-      transition: var(--transition);
-    }
-
-    .notification-close:hover {
-      opacity: 1;
-      transform: scale(1.1);
-    }
-
-    /* Tab Bar */
-    .tab-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 2rem;
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border-color);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      box-shadow: var(--shadow);
-    }
-
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .logo {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--accent-primary);
-      padding: 4px;
-      transition: var(--transition);
-      animation: pulse 2s infinite;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-
-    .logo-text {
-      font-size: 1.5rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .tabs-container {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .tab-btn {
-      padding: 0.75rem 1.5rem;
-      border: none;
-      background: transparent;
-      color: var(--text-secondary);
-      font-weight: 500;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: var(--transition);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .tab-btn.active {
-      color: var(--accent-primary);
-    }
-
-    .tab-icon {
-      width: 16px;
-      height: 16px;
-      fill: currentColor;
-    }
-
-    .time-container {
-      text-align: right;
-    }
-
-    .time-display {
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      letter-spacing: 1px;
-      animation: blink 2s infinite;
-    }
-
-    @keyframes blink {
-      0%, 50% { opacity: 1; }
-      51%, 100% { opacity: 0.3; }
-    }
-
-    /* Main Content */
-    .main-content {
-      min-height: calc(100vh - 80px);
-      padding: 2rem;
-      position: relative;
-    }
-
-    .tab-content {
-      display: none;
-      animation: fadeInUp 0.5s ease-out;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Games Grid */
-    .games-grid, .apps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 1rem;
-      padding: 1rem 0;
-    }
-
-    .game-card {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 140px;
-      height: 140px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .app-card {
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      padding: 1rem;
-      border: 1px solid var(--border-color);
-      cursor: pointer;
-      transition: var(--transition);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .game-icon, .app-icon {
-      width: 140px;
-      height: 140px;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 12px;
-      transition: var(--transition);
-      overflow: hidden;
-      position: relative;
-    }
-
-    .app-icon {
-      width: 70px;
-      height: 70px;
-      background: var(--bg-tertiary);
-    }
-
-    .game-icon img, .app-icon img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 12px;
-      transition: var(--transition);
-    }
-
-    .game-info {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: var(--transition);
-      padding: 0.25rem;
-      background: rgba(0, 0, 0, 0.8);
-      border-radius: 12px;
-      overflow: hidden;
-      z-index: 3;
-    }
-
-    .game-card:hover .game-info {
-      opacity: 1;
-    }
-
-    .game-info h3 {
-      font-size: 0.9rem;
-      margin-bottom: 0.2rem;
-      color: var(--text-primary);
-      font-weight: 600;
-      text-align: center;
-      line-height: 1.1;
-    }
-
-    .game-info p {
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-      line-height: 1.1;
-      margin: 0;
-      text-align: center;
-      max-width: 90%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .app-info {
-      text-align: center;
-    }
-
-    .app-info h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-      color: var(--text-primary);
-    }
-
-    .app-info p {
-      color: var(--text-secondary);
-      line-height: 1.4;
-    }
-
-    /* Settings */
-    .settings-container {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .setting-group {
-      background: var(--bg-secondary);
-      border-radius: var(--radius);
-      padding: 2rem;
-      margin-bottom: 2rem;
-      border: 1px solid var(--border-color);
-      transition: var(--transition);
-    }
-
-    .setting-group h2 {
-      margin-bottom: 1.5rem;
-      color: var(--text-primary);
-      font-size: 1.5rem;
-    }
-
-    .theme-selector {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .theme-btn {
-      padding: 0.75rem 1.5rem;
-      border: 2px solid var(--border-color);
-      background: transparent;
-      color: var(--text-secondary);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: var(--transition);
-      font-weight: 500;
-    }
-
-    .theme-btn.active {
-      background: var(--accent-primary);
-      color: white;
-      border-color: var(--accent-primary);
-    }
-
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-    }
-
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: var(--bg-tertiary);
-      transition: var(--transition);
-      border-radius: 34px;
-    }
-
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      transition: var(--transition);
-      border-radius: 50%;
-    }
-
-    input:checked + .slider {
-      background-color: var(--accent-primary);
-    }
-
-    input:checked + .slider:before {
-      transform: translateX(26px);
-    }
-
-    .slider-container {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .slider-container input[type="range"] {
-      flex: 1;
-      height: 6px;
-      border-radius: 3px;
-      background: var(--bg-tertiary);
-      outline: none;
-      -webkit-appearance: none;
-    }
-
-    .slider-container input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--accent-primary);
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    }
-
-    .slider-value {
-      min-width: 60px;
-      text-align: center;
-      font-weight: 500;
-    }
-
-    /* Fullscreen Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 2000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.95);
-      backdrop-filter: blur(10px);
-    }
-
-    .modal.active {
-      display: block;
-      animation: modalFadeIn 0.3s ease-out;
-    }
-
-    @keyframes modalFadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .modal-content {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .modal-header {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      z-index: 10;
-    }
-
-    .close-btn {
-      background: var(--bg-secondary);
-      border: none;
-      color: var(--text-primary);
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      font-size: 1.5rem;
-      cursor: pointer;
-      transition: var(--transition);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-    }
-
-    .close-btn:hover {
-      background: var(--accent-primary);
-      color: white;
-      transform: rotate(90deg) scale(1.1);
-    }
-
-    .fullscreen-iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: white;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .tab-bar {
-        padding: 1rem;
-        flex-wrap: wrap;
-      }
-
-      .tabs-container {
-        order: 3;
-        width: 100%;
-        justify-content: center;
-        margin-top: 1rem;
-      }
-
-      .games-grid, .apps-grid {
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-        gap: 0.8rem;
-      }
-
-      #notification-container {
-        top: 80px;
-        right: 10px;
-        left: 10px;
-      }
-
-      .notification {
-        max-width: none;
-      }
-
-      .center-container {
-        padding: 2rem 1rem;
-      }
-
-      .viper-title {
-        font-size: 2.2rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .pxyinput {
-        max-width: 90%;
-        padding: 0.9rem 1.2rem;
-        font-size: 1rem;
-      }
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: var(--bg-secondary);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: var(--accent-primary);
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--accent-secondary);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="./assets/images/icon.png" type="image/png" />
+<title>Viper</title>
+<script src="/uv/uv.bundle.js" charset="UTF-8"></script>
+<script src="/uv/uv.config.js"></script>
+<script src="./js/preload.js"></script>
+<style>
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --bg-primary: #050505;
+  --bg-secondary: #101010;
+  --bg-tertiary: #1a1a1a;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --accent-primary: #00cc70;
+  --accent-secondary: #009955;
+  --border-color: #2a2a2a;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --radius: 10px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+body.theme-light {
+  --bg-primary: #d0d4d8;
+  --bg-secondary: #c0c4c8;
+  --bg-tertiary: #b0b4b8;
+  --text-primary: #1a1e22;
+  --text-secondary: #5a5e62;
+  --accent-primary: #0055aa;
+  --accent-secondary: #003377;
+  --border-color: #a0a4a8;
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+body.theme-violet {
+  --bg-primary: #14002a;
+  --bg-secondary: #22004a;
+  --bg-tertiary: #3a0066;
+  --text-primary: #d0b3ff;
+  --text-secondary: #a080ff;
+  --accent-primary: #cc00cc;
+  --accent-secondary: #990099;
+  --border-color: #5500aa;
+  --shadow: 0 4px 16px rgba(128, 0, 128, 0.3);
+}
+body.theme-matrix {
+  --bg-primary: #000000;
+  --bg-secondary: #001100;
+  --bg-tertiary: #002200;
+  --text-primary: #00cc00;
+  --text-secondary: #009900;
+  --accent-primary: #00cc33;
+  --accent-secondary: #009922;
+  --border-color: #003300;
+  --shadow: 0 4px 16px rgba(0, 128, 0, 0.2);
+  background-image: radial-gradient(circle at 25% 25%, rgba(0, 128, 0, 0.05) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(0, 128, 0, 0.05) 0%, transparent 50%);
+}
+body.theme-red {
+  --bg-primary: #220000;
+  --bg-secondary: #3d0000;
+  --bg-tertiary: #550000;
+  --text-primary: #ffaaaa;
+  --text-secondary: #ff7777;
+  --accent-primary: #cc0000;
+  --accent-secondary: #990000;
+  --border-color: #770000;
+  --shadow: 0 4px 16px rgba(128, 0, 0, 0.3);
+}
+body.theme-blue {
+  --bg-primary: #001422;
+  --bg-secondary: #002a55;
+  --bg-tertiary: #003366;
+  --text-primary: #aaccff;
+  --text-secondary: #77aaff;
+  --accent-primary: #0000cc;
+  --accent-secondary: #000099;
+  --border-color: #002277;
+  --shadow: 0 4px 16px rgba(0, 0, 128, 0.3);
+}
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  transition: var(--transition);
+}
+/* Search Bar */
+.center-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  background: var(--bg-primary);
+  position: relative;
+  min-height: 70vh;
+}
+.viper-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+.pxyinput {
+  width: 100%;
+  max-width: 500px;
+  padding: 1rem 1.5rem;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  transition: var(--transition);
+  outline: none;
+  text-align: center;
+}
+.pxyinput:focus {
+  border-color: var(--accent-primary);
+  transform: scale(1.02);
+}
+.pxyinput::placeholder {
+  color: var(--text-secondary);
+  text-align: center;
+}
+/* Notification System */
+#notification-container {
+  position: fixed;
+  top: 100px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.notification {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  max-width: 350px;
+  box-shadow: var(--shadow);
+  transform: translateX(400px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.notification.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+.notification.success {
+  border-left: 4px solid var(--accent-primary);
+}
+.notification.error {
+  border-left: 4px solid #cc3a47;
+}
+.notification.info {
+  border-left: 4px solid #2a3aff;
+}
+.notification-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.notification-message {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+.notification-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: var(--transition);
+}
+.notification-close:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+/* Tab Bar */
+.tab-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow);
+}
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  padding: 4px;
+  transition: var(--transition);
+  animation: pulse 2s infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.tabs-container {
+  display: flex;
+  gap: 0.5rem;
+}
+.tab-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 500;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.tab-btn.active {
+  color: var(--accent-primary);
+}
+.tab-icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+.time-container {
+  text-align: right;
+}
+.time-display {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  animation: blink 2s infinite;
+}
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+/* Main Content */
+.main-content {
+  min-height: calc(100vh - 80px);
+  padding: 2rem;
+  position: relative;
+}
+.tab-content {
+  display: none;
+  animation: fadeInUp 0.5s ease-out;
+}
+.tab-content.active {
+  display: block;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Games Grid */
+.games-grid, .apps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.5rem;
+  padding: 1rem 0;
+}
+.game-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 140px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.app-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.game-icon, .app-icon {
+  width: 140px;
+  height: 140px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  transition: var(--transition);
+  overflow: hidden;
+  position: relative;
+}
+.app-icon {
+  width: 70px;
+  height: 70px;
+  background: var(--bg-tertiary);
+}
+.game-icon img, .app-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: var(--transition);
+}
+.game-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: var(--transition);
+  padding: 0.25rem;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 3;
+}
+.game-card:hover .game-info {
+  opacity: 1;
+}
+.game-info h3 {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.1;
+}
+.game-info p {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  line-height: 1.1;
+  margin: 0;
+  text-align: center;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.app-info {
+  text-align: center;
+}
+.app-info h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+.app-info p {
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+/* Settings */
+.settings-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.setting-group {
+  background: var(--bg-secondary);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-color);
+  transition: var(--transition);
+}
+.setting-group h2 {
+  margin-bottom: 1.5rem;
+  color: var(--text-primary);
+  font-size: 1.5rem;
+}
+.theme-selector {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.theme-btn {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+.theme-btn.active {
+  background: var(--accent-primary);
+  color: white;
+  border-color: var(--accent-primary);
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-tertiary);
+  transition: var(--transition);
+  border-radius: 34px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: var(--transition);
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: var(--accent-primary);
+}
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.slider-container input[type="range"] {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--bg-tertiary);
+  outline: none;
+  -webkit-appearance: none;
+}
+.slider-container input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+.slider-value {
+  min-width: 60px;
+  text-align: center;
+  font-weight: 500;
+}
+/* Fullscreen Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+}
+.modal.active {
+  display: block;
+  animation: modalFadeIn 0.3s ease-out;
+}
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.modal-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.modal-header {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+}
+.close-btn {
+  background: var(--bg-secondary);
+  border: none;
+  color: var(--text-primary);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+.close-btn:hover {
+  background: var(--accent-primary);
+  color: white;
+  transform: rotate(90deg) scale(1.1);
+}
+.fullscreen-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: white;
+}
+/* Responsive */
+@media (max-width: 768px) {
+  .tab-bar {
+    padding: 1rem;
+    flex-wrap: wrap;
+  }
+  .tabs-container {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  .games-grid, .apps-grid {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.8rem;
+  }
+  #notification-container {
+    top: 80px;
+    right: 10px;
+    left: 10px;
+  }
+  .notification {
+    max-width: none;
+  }
+  .center-container {
+    padding: 2rem 1rem;
+  }
+  .viper-title {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .pxyinput {
+    max-width: 90%;
+    padding: 0.9rem 1.2rem;
+    font-size: 1rem;
+  }
+}
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-primary);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-secondary);
+}
+</style>
 </head>
-
 <body class="theme-dark">
-  <!-- Notification Container -->
-  <div id="notification-container"></div>
-
-  <!-- Tab Bar -->
-  <nav class="tab-bar">
-    <div class="logo-container">
-      <img src="./assets/images/icon.png" alt="Viper Logo" class="logo" draggable="false" />
-      <h1 class="logo-text">Viper</h1>
-    </div>
-    
-    <div class="tabs-container">
-      <button class="tab-btn active" data-tab="home">
-        <svg class="tab-icon" viewBox="0 0 24 24">
-          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-        </svg>
-        Home
-      </button>
-      <button class="tab-btn" data-tab="games">
-        <svg class="tab-icon" viewBox="0 0 24 24">
-          <path d="M15.41 7.41L14 6l-6 6 1.41 1.41L15.41 7.41zM6.7 20.29l5.59-5.59L15.99 20l5.99-5.99-5.99-5.99L12.29 8.7 6.7 20.29zM10 18h4v-2h-4v2z"/>
-        </svg>
-        Games
-      </button>
-      <button class="tab-btn" data-tab="apps">
-        <svg class="tab-icon" viewBox="0 0 24 24">
-          <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/>
-        </svg>
-        Apps
-      </button>
-      <button class="tab-btn" data-tab="settings">
-        <svg class="tab-icon" viewBox="0 0 24 24">
-          <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.48.48 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22l-1.92 3.32c-.12.22-.07.49.12.61l2.03 1.58c-.05.3-.09.63-.09 0.94s0 .64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.24.1.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
-        </svg>
-        Settings
-      </button>
-    </div>
-
-    <div class="time-container">
-      <p id="time" class="time-display"></p>
-    </div>
-  </nav>
-
-  <!-- Main Content -->
-  <main class="main-content">
-    
-    <!-- Home Tab -->
-    <section id="home" class="tab-content active">
-      <div class="center-container">
-        <h1 class="viper-title">Viper</h1>
-        <input class="pxyinput" type="text" placeholder="Search..." id="search-input" />
-      </div>
-    </section>
-
-    <!-- Games Tab -->
-    <section id="games" class="tab-content">
-      <h2 style="margin-bottom: 1rem; text-align: center; color: var(--text-primary);">Featured Games</h2>
-      <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
-        <input class="pxyinput" type="text" placeholder="Search games..." id="games-search-input" />
-      </div>
-      <div class="games-grid">
-        <div class="game-card" data-game="tetris">
-          <div class="game-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/tetris.png" alt="Tetris" loading="lazy" />
-          </div>
-          <div class="game-info">
-            <h3>Tetris</h3>
-            <p>Classic block-stacking puzzle game</p>
-          </div>
-        </div>
-
-        <div class="game-card" data-game="minesweeper">
-          <div class="game-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/mine.png" alt="Minesweeper" loading="lazy" />
-          </div>
-          <div class="game-info">
-            <h3>Minesweeper</h3>
-            <p>Navigate the minefield strategically</p>
-          </div>
-        </div>
-
-        <div class="game-card" data-game="snake">
-          <div class="game-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/snake.png" alt="Snake" loading="lazy" />
-          </div>
-          <div class="game-info">
-            <h3>Snake</h3>
-            <p>Grow your snake by eating food</p>
-          </div>
-        </div>
-
-        <div class="game-card" data-game="2048">
-          <div class="game-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/number-2048.png" alt="2048" loading="lazy" />
-          </div>
-          <div class="game-info">
-            <h3>2048</h3>
-            <p>Slide tiles to reach 2048</p>
-          </div>
-        </div>
-
-        <div class="game-card" data-game="memory">
-          <div class="game-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/memory-card.png" alt="Memory" loading="lazy" />
-          </div>
-          <div class="game-info">
-            <h3>Memory</h3>
-            <p>Match pairs of cards</p>
-          </div>
-        </div>
-
-        <div class="game-card" data-game="tic-tac-toe">
-          <div class="game-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/tic-tac-toe.png" alt="Tic Tac Toe" loading="lazy" />
-          </div>
-          <div class="game-info">
-            <h3>Tic Tac Toe</h3>
-            <p>Classic 3x3 strategy game</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Apps Tab -->
-    <section id="apps" class="tab-content">
-      <h2 style="margin-bottom: 2rem; text-align: center; color: var(--text-primary);">Web Applications</h2>
-      <div class="apps-grid">
-        <div class="app-card" data-url="https://www.youtube.com">
-          <div class="app-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/youtube-play.png" alt="YouTube" loading="lazy" />
-          </div>
-          <div class="app-info">
-            <h3>YouTube</h3>
-            <p>Watch videos and music</p>
-          </div>
-        </div>
-
-        <div class="app-card" data-url="https://www.google.com">
-          <div class="app-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/google-logo.png" alt="Google" loading="lazy" />
-          </div>
-          <div class="app-info">
-            <h3>Google</h3>
-            <p>Search the web</p>
-          </div>
-        </div>
-
-        <div class="app-card" data-url="https://chat.openai.com">
-          <div class="app-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/chatgpt.png" alt="ChatGPT" loading="lazy" />
-          </div>
-          <div class="app-info">
-            <h3>ChatGPT</h3>
-            <p>AI conversation assistant</p>
-          </div>
-        </div>
-
-        <div class="app-card" data-url="https://github.com">
-          <div class="app-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/github.png" alt="GitHub" loading="lazy" />
-          </div>
-          <div class="app-info">
-            <h3>GitHub</h3>
-            <p>Code collaboration platform</p>
-          </div>
-        </div>
-
-        <div class="app-card" data-url="https://www.notion.so">
-          <div class="app-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/notion.png" alt="Notion" loading="lazy" />
-          </div>
-          <div class="app-info">
-            <h3>Notion</h3>
-            <p>All-in-one workspace</p>
-          </div>
-        </div>
-
-        <div class="app-card" data-url="https://www.spotify.com">
-          <div class="app-icon">
-            <img src="/uv/proxy/https://img.icons8.com/color/96/000000/spotify.png" alt="Spotify" loading="lazy" />
-          </div>
-          <div class="app-info">
-            <h3>Spotify</h3>
-            <p>Music streaming service</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Settings Tab -->
-    <section id="settings" class="tab-content">
-      <div class="settings-container">
-        <div class="setting-group">
-          <h2>🎨 Theme</h2>
-          <div class="theme-selector">
-            <button class="theme-btn active" data-theme="dark">Dark</button>
-            <button class="theme-btn" data-theme="light">Light</button>
-            <button class="theme-btn" data-theme="violet">Violet</button>
-            <button class="theme-btn" data-theme="matrix">Matrix</button>
-            <button class="theme-btn" data-theme="red">Red</button>
-            <button class="theme-btn" data-theme="blue">Blue</button>
-          </div>
-        </div>
-
-        <div class="setting-group">
-          <h2>🔔 Notifications</h2>
-          <label class="switch">
-            <input type="checkbox" id="notifications-toggle" checked>
-            <span class="slider"></span>
-          </label>
-          <p style="margin-top: 1rem; color: var(--text-secondary);">Enable desktop notifications</p>
-        </div>
-
-        <div class="setting-group">
-          <h2>🔊 Sound Effects</h2>
-          <label class="switch">
-            <input type="checkbox" id="sound-toggle">
-            <span class="slider"></span>
-          </label>
-          <p style="margin-top: 1rem; color: var(--text-secondary);">Enable UI sound effects</p>
-          
-          <div class="slider-container" style="margin-top: 1.5rem;">
-            <label style="color: var(--text-secondary); font-size: 0.9rem;">SFX Volume:</label>
-            <input type="range" id="sfx-volume" min="0" max="100" value="50">
-            <span class="slider-value" style="min-width: 30px;">50%</span>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Fullscreen Iframe Modal -->
-  <div id="fullscreen-modal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button id="close-modal" class="close-btn">×</button>
-      </div>
-      <iframe id="fullscreen-iframe" class="fullscreen-iframe" src=""></iframe>
-    </div>
+<!-- Notification Container -->
+<div id="notification-container"></div>
+<!-- Tab Bar -->
+<nav class="tab-bar">
+  <div class="logo-container">
+    <img src="./assets/images/icon.png" alt="Viper Logo" class="logo" draggable="false" />
+    <h1 class="logo-text">Viper</h1>
   </div>
-
-  <script>
-    // Global Variables
-    let currentTheme = 'dark';
-    let soundEnabled = false;
-    let sfxVolume = 50;
-    
-    // AudioContext management
-    let audioContext = null;
-    let audioContextInitialized = false;
-
-    // DOM Elements
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-    const timeDisplay = document.getElementById('time');
-    const notificationContainer = document.getElementById('notification-container');
-    const fullscreenModal = document.getElementById('fullscreen-modal');
-    const fullscreenIframe = document.getElementById('fullscreen-iframe');
-    const closeModalBtn = document.getElementById('close-modal');
-    const themeButtons = document.querySelectorAll('.theme-btn');
-    const notificationsToggle = document.getElementById('notifications-toggle');
-    const soundToggle = document.getElementById('sound-toggle');
-    const sfxVolumeSlider = document.getElementById('sfx-volume');
-    const sfxVolumeValue = document.querySelector('#settings .slider-value');
-    const searchInput = document.getElementById('search-input');
-    const gamesSearchInput = document.getElementById('games-search-input');
-
-    // Games and their URLs
-    const games = {
-      tetris: 'https://tetris.com/play-tetris',
-      minesweeper: 'https://minesweeper.online/',
-      snake: 'https://playsnake.org/',
-      '2048': 'https://play2048.co/',
-      memory: 'https://www.memory-improvement-tips.com/online-memory-games.html',
-      'tic-tac-toe': 'https://tictactoe.paper-games.com/'
-    };
-
-    // Initialize AudioContext
-    function initAudioContext() {
-      if (!audioContextInitialized) {
-        try {
-          audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          audioContextInitialized = true;
-          console.log('AudioContext initialized');
-        } catch (error) {
-          console.error('Failed to initialize AudioContext:', error);
-        }
+  <div class="tabs-container">
+    <button class="tab-btn active" data-tab="home">
+      <svg class="tab-icon" viewBox="0 0 24 24">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      </svg>
+      Home
+    </button>
+    <button class="tab-btn" data-tab="games">
+      <svg class="tab-icon" viewBox="0 0 24 24">
+        <path d="M15.41 7.41L14 6l-6 6 1.41 1.41L15.41 7.41zM6.7 20.29l5.59-5.59L15.99 20l5.99-5.99-5.99-5.99L12.29 8.7 6.7 20.29zM10 18h4v-2h-4v2z"/>
+      </svg>
+      Games
+    </button>
+    <button class="tab-btn" data-tab="apps">
+      <svg class="tab-icon" viewBox="0 0 24 24">
+        <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/>
+      </svg>
+      Apps
+    </button>
+    <button class="tab-btn" data-tab="settings">
+      <svg class="tab-icon" viewBox="0 0 24 24">
+        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.48.48 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22l-1.92 3.32c-.12.22-.07.49.12.61l2.03 1.58c-.05.3-.09.63-.09 0.94s0 .64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.24.1.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+      </svg>
+      Settings
+    </button>
+  </div>
+  <div class="time-container">
+    <p id="time" class="time-display"></p>
+  </div>
+</nav>
+<!-- Main Content -->
+<main class="main-content">
+  <!-- Home Tab -->
+  <section id="home" class="tab-content active">
+    <div class="center-container">
+      <h1 class="viper-title">Viper</h1>
+      <input class="pxyinput" type="text" placeholder="Search..." id="search-input" />
+    </div>
+  </section>
+  <!-- Games Tab -->
+  <section id="games" class="tab-content">
+    <h2 style="margin-bottom: 1rem; text-align: center; color: var(--text-primary);">Featured Games</h2>
+    <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+      <input class="pxyinput" type="text" placeholder="Search games..." id="games-search-input" />
+    </div>
+    <div class="games-grid">
+      <div class="game-card" data-game="tetris">
+        <div class="game-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/tetris.png" alt="Tetris" loading="lazy" />
+        </div>
+        <div class="game-info">
+          <h3>Tetris</h3>
+          <p>Classic block-stacking puzzle game</p>
+        </div>
+      </div>
+      <div class="game-card" data-game="minesweeper">
+        <div class="game-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/mine.png" alt="Minesweeper" loading="lazy" />
+        </div>
+        <div class="game-info">
+          <h3>Minesweeper</h3>
+          <p>Navigate the minefield strategically</p>
+        </div>
+      </div>
+      <div class="game-card" data-game="snake">
+        <div class="game-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/snake.png" alt="Snake" loading="lazy" />
+        </div>
+        <div class="game-info">
+          <h3>Snake</h3>
+          <p>Grow your snake by eating food</p>
+        </div>
+      </div>
+      <div class="game-card" data-game="2048">
+        <div class="game-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/number-2048.png" alt="2048" loading="lazy" />
+        </div>
+        <div class="game-info">
+          <h3>2048</h3>
+          <p>Slide tiles to reach 2048</p>
+        </div>
+      </div>
+      <div class="game-card" data-game="memory">
+        <div class="game-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/memory-card.png" alt="Memory" loading="lazy" />
+        </div>
+        <div class="game-info">
+          <h3>Memory</h3>
+          <p>Match pairs of cards</p>
+        </div>
+      </div>
+      <div class="game-card" data-game="tic-tac-toe">
+        <div class="game-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/tic-tac-toe.png" alt="Tic Tac Toe" loading="lazy" />
+        </div>
+        <div class="game-info">
+          <h3>Tic Tac Toe</h3>
+          <p>Classic 3x3 strategy game</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Apps Tab -->
+  <section id="apps" class="tab-content">
+    <h2 style="margin-bottom: 2rem; text-align: center; color: var(--text-primary);">Web Applications</h2>
+    <div class="apps-grid">
+      <div class="app-card" data-url="https://www.youtube.com">
+        <div class="app-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/youtube-play.png" alt="YouTube" loading="lazy" />
+        </div>
+        <div class="app-info">
+          <h3>YouTube</h3>
+          <p>Watch videos and music</p>
+        </div>
+      </div>
+      <div class="app-card" data-url="https://www.google.com">
+        <div class="app-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/google-logo.png" alt="Google" loading="lazy" />
+        </div>
+        <div class="app-info">
+          <h3>Google</h3>
+          <p>Search the web</p>
+        </div>
+      </div>
+      <div class="app-card" data-url="https://chat.openai.com">
+        <div class="app-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/chatgpt.png" alt="ChatGPT" loading="lazy" />
+        </div>
+        <div class="app-info">
+          <h3>ChatGPT</h3>
+          <p>AI conversation assistant</p>
+        </div>
+      </div>
+      <div class="app-card" data-url="https://github.com">
+        <div class="app-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/github.png" alt="GitHub" loading="lazy" />
+        </div>
+        <div class="app-info">
+          <h3>GitHub</h3>
+          <p>Code collaboration platform</p>
+        </div>
+      </div>
+      <div class="app-card" data-url="https://www.notion.so">
+        <div class="app-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/notion.png" alt="Notion" loading="lazy" />
+        </div>
+        <div class="app-info">
+          <h3>Notion</h3>
+          <p>All-in-one workspace</p>
+        </div>
+      </div>
+      <div class="app-card" data-url="https://www.spotify.com">
+        <div class="app-icon">
+          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/spotify.png" alt="Spotify" loading="lazy" />
+        </div>
+        <div class="app-info">
+          <h3>Spotify</h3>
+          <p>Music streaming service</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Settings Tab -->
+  <section id="settings" class="tab-content">
+    <div class="settings-container">
+      <div class="setting-group">
+        <h2>🎨 Theme</h2>
+        <div class="theme-selector">
+          <button class="theme-btn active" data-theme="dark">Dark</button>
+          <button class="theme-btn" data-theme="light">Light</button>
+          <button class="theme-btn" data-theme="violet">Violet</button>
+          <button class="theme-btn" data-theme="matrix">Matrix</button>
+          <button class="theme-btn" data-theme="red">Red</button>
+          <button class="theme-btn" data-theme="blue">Blue</button>
+        </div>
+      </div>
+      <div class="setting-group">
+        <h2>🔔 Notifications</h2>
+        <label class="switch">
+          <input type="checkbox" id="notifications-toggle" checked>
+          <span class="slider"></span>
+        </label>
+        <p style="margin-top: 1rem; color: var(--text-secondary);">Enable desktop notifications</p>
+      </div>
+      <div class="setting-group">
+        <h2>🔊 Sound Effects</h2>
+        <label class="switch">
+          <input type="checkbox" id="sound-toggle">
+          <span class="slider"></span>
+        </label>
+        <p style="margin-top: 1rem; color: var(--text-secondary);">Enable UI sound effects</p>
+        <div class="slider-container" style="margin-top: 1.5rem;">
+          <label style="color: var(--text-secondary); font-size: 0.9rem;">SFX Volume:</label>
+          <input type="range" id="sfx-volume" min="0" max="100" value="50">
+          <span class="slider-value" style="min-width: 30px;">50%</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<!-- Fullscreen Iframe Modal -->
+<div id="fullscreen-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button id="close-modal" class="close-btn">×</button>
+    </div>
+    <iframe id="fullscreen-iframe" class="fullscreen-iframe" src=""></iframe>
+  </div>
+</div>
+<script>
+// Global Variables
+let currentTheme = 'dark';
+let soundEnabled = false;
+let sfxVolume = 50;
+// AudioContext management
+let audioContext = null;
+let audioContextInitialized = false;
+// DOM Elements
+const tabButtons = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+const timeDisplay = document.getElementById('time');
+const notificationContainer = document.getElementById('notification-container');
+const fullscreenModal = document.getElementById('fullscreen-modal');
+const fullscreenIframe = document.getElementById('fullscreen-iframe');
+const closeModalBtn = document.getElementById('close-modal');
+const themeButtons = document.querySelectorAll('.theme-btn');
+const notificationsToggle = document.getElementById('notifications-toggle');
+const soundToggle = document.getElementById('sound-toggle');
+const sfxVolumeSlider = document.getElementById('sfx-volume');
+const sfxVolumeValue = document.querySelector('#settings .slider-value');
+const searchInput = document.getElementById('search-input');
+const gamesSearchInput = document.getElementById('games-search-input');
+// Games and their URLs
+const games = {
+  tetris: 'https://tetris.com/play-tetris',
+  minesweeper: 'https://minesweeper.online/',
+  snake: 'https://playsnake.org/',
+  '2048': 'https://play2048.co/',
+  memory: 'https://www.memory-improvement-tips.com/online-memory-games.html',
+  'tic-tac-toe': 'https://tictactoe.paper-games.com/'
+};
+// Initialize AudioContext
+function initAudioContext() {
+  if (!audioContextInitialized) {
+    try {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      audioContextInitialized = true;
+      console.log('AudioContext initialized');
+    } catch (error) {
+      console.error('Failed to initialize AudioContext:', error);
+    }
+  }
+}
+// Resume AudioContext if suspended
+async function resumeAudioContext() {
+  if (audioContext && audioContext.state === 'suspended') {
+    try {
+      await audioContext.resume();
+      console.log('AudioContext resumed');
+    } catch (error) {
+      console.error('Failed to resume AudioContext:', error);
+    }
+  }
+}
+// Initialize the app
+function init() {
+  updateTime();
+  setupEventListeners();
+  setupSearch();
+  setupGamesSearch();
+  setInterval(updateTime, 1000);
+}
+// Update time display
+function updateTime() {
+  const now = new Date();
+  const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  timeDisplay.textContent = timeString;
+}
+// Validate URL
+function isValidUrl(string) {
+  try {
+    // Basic URL validation
+    const urlPattern = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/i;
+    return urlPattern.test(string);
+  } catch (error) {
+    return false;
+  }
+}
+// Setup event listeners
+function setupEventListeners() {
+  // Tab switching
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => switchTab(button.dataset.tab));
+  });
+  // Theme switching
+  themeButtons.forEach(button => {
+    button.addEventListener('click', () => switchTheme(button.dataset.theme));
+  });
+  // Settings
+  notificationsToggle.addEventListener('change', (e) => {
+    if (e.target.checked) {
+      showNotification('Notifications enabled', '', 'success');
+    } else {
+      showNotification('Notifications disabled', '', 'info');
+    }
+  });
+  soundToggle.addEventListener('change', async (e) => {
+    soundEnabled = e.target.checked;
+    if (soundEnabled) {
+      initAudioContext();
+      await resumeAudioContext();
+      playSound('click');
+      showNotification('Sound enabled', '', 'success');
+    } else {
+      showNotification('Sound disabled', '', 'info');
+    }
+  });
+  sfxVolumeSlider.addEventListener('input', async (e) => {
+    sfxVolume = e.target.value;
+    sfxVolumeValue.textContent = `${sfxVolume}%`;
+    if (soundEnabled) {
+      initAudioContext();
+      await resumeAudioContext();
+      playSound('click');
+    }
+  });
+  // Modal controls
+  closeModalBtn.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && fullscreenModal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+  fullscreenModal.addEventListener('click', (e) => {
+    if (e.target === fullscreenModal) {
+      closeModal();
+    }
+  });
+  document.querySelectorAll('.game-card, .app-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const rawUrl = card.dataset.url || games[card.dataset.game];
+      if (rawUrl) {
+        const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
+        const title = card.querySelector('h3').textContent;
+        openInModal(prefixedUrl, title);
+        showNotification(`Loading ${title} via proxy...`, '', 'info');
       }
+    });
+  });
+  document.addEventListener('click', () => {
+    if (soundEnabled) {
+      initAudioContext();
+      resumeAudioContext();
     }
-
-    // Resume AudioContext if suspended
-    async function resumeAudioContext() {
-      if (audioContext && audioContext.state === 'suspended') {
-        try {
-          await audioContext.resume();
-          console.log('AudioContext resumed');
-        } catch (error) {
-          console.error('Failed to resume AudioContext:', error);
-        }
-      }
-    }
-
-    // Initialize the app
-    function init() {
-      updateTime();
-      setupEventListeners();
-      setupSearch();
-      setupGamesSearch();
-      setInterval(updateTime, 1000);
-    }
-
-    // Update time display
-    function updateTime() {
-      const now = new Date();
-      const timeString = now.toLocaleTimeString([], { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        second: '2-digit'
-      });
-      timeDisplay.textContent = timeString;
-    }
-
-    // Validate URL
-    function isValidUrl(string) {
-      try {
-        // Basic URL validation
-        const urlPattern = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/i;
-        return urlPattern.test(string);
-      } catch (error) {
-        return false;
-      }
-    }
-
-    // Setup event listeners
-    function setupEventListeners() {
-      // Tab switching
-      tabButtons.forEach(button => {
-        button.addEventListener('click', () => switchTab(button.dataset.tab));
-      });
-
-      // Theme switching
-      themeButtons.forEach(button => {
-        button.addEventListener('click', () => switchTheme(button.dataset.theme));
-      });
-
-      // Settings
-      notificationsToggle.addEventListener('change', (e) => {
-        if (e.target.checked) {
-          showNotification('Notifications enabled', '', 'success');
+  }, { once: true });
+}
+function setupSearch() {
+  searchInput.addEventListener('keypress', async (e) => {
+    if (e.key === 'Enter') {
+      let query = e.target.value.trim();
+      if (query) {
+        // Ensure the query is a valid URL or domain
+        let rawUrl = query.startsWith('http') ? query : 'https://' + query;
+        if (isValidUrl(rawUrl)) {
+          const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
+          openInModal(prefixedUrl, query);
+          searchInput.value = '';
+          showNotification(`Loading ${query} via proxy...`, '', 'info');
+          if (soundEnabled) {
+            initAudioContext();
+            await resumeAudioContext();
+            playSound('open');
+          }
         } else {
-          showNotification('Notifications disabled', '', 'info');
-        }
-      });
-
-      soundToggle.addEventListener('change', async (e) => {
-        soundEnabled = e.target.checked;
-        if (soundEnabled) {
-          initAudioContext();
-          await resumeAudioContext();
-          playSound('click');
-          showNotification('Sound enabled', '', 'success');
-        } else {
-          showNotification('Sound disabled', '', 'info');
-        }
-      });
-
-      sfxVolumeSlider.addEventListener('input', async (e) => {
-        sfxVolume = e.target.value;
-        sfxVolumeValue.textContent = `${sfxVolume}%`;
-        if (soundEnabled) {
-          initAudioContext();
-          await resumeAudioContext();
-          playSound('click');
-        }
-      });
-
-      // Modal controls
-      closeModalBtn.addEventListener('click', closeModal);
-      
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && fullscreenModal.classList.contains('active')) {
-          closeModal();
-        }
-      });
-
-      fullscreenModal.addEventListener('click', (e) => {
-        if (e.target === fullscreenModal) {
-          closeModal();
-        }
-      });
-
-      document.querySelectorAll('.game-card, .app-card').forEach(card => {
-        card.addEventListener('click', () => {
-          const rawUrl = card.dataset.url || games[card.dataset.game];
-          if (rawUrl) {
-            const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
-            const title = card.querySelector('h3').textContent;
-            openInModal(prefixedUrl, title);
-            showNotification(`Loading ${title} via proxy...`, '', 'info');
-          }
-        });
-      });
-
-      document.addEventListener('click', () => {
-        if (soundEnabled) {
-          initAudioContext();
-          resumeAudioContext();
-        }
-      }, { once: true });
-    }
-
-    function setupSearch() {
-      searchInput.addEventListener('keypress', async (e) => {
-        if (e.key === 'Enter') {
-          let query = e.target.value.trim();
-          if (query) {
-            // Ensure the query is a valid URL or domain
-            let rawUrl = query.startsWith('http') ? query : 'https://' + query;
-            if (isValidUrl(rawUrl)) {
-              const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
-              openInModal(prefixedUrl, query);
-              searchInput.value = '';
-              showNotification(`Loading ${query} via proxy...`, '', 'info');
-              if (soundEnabled) {
-                initAudioContext();
-                await resumeAudioContext();
-                playSound('open');
-              }
-            } else {
-              showNotification('Invalid URL', 'Please enter a valid website address (e.g., google.com)', 'error');
-              if (soundEnabled) {
-                initAudioContext();
-                await resumeAudioContext();
-                playSound('click');
-              }
-            }
+          showNotification('Invalid URL', 'Please enter a valid website address (e.g., google.com)', 'error');
+          if (soundEnabled) {
+            initAudioContext();
+            await resumeAudioContext();
+            playSound('click');
           }
         }
-      });
-    }
-
-    function setupGamesSearch() {
-      gamesSearchInput.addEventListener('input', (e) => {
-        const query = e.target.value.trim().toLowerCase();
-        const gameCards = document.querySelectorAll('.game-card');
-        gameCards.forEach(card => {
-          const title = card.querySelector('.game-info h3').textContent.toLowerCase();
-          if (query === '' || title.includes(query)) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-        if (soundEnabled) {
-          initAudioContext();
-          resumeAudioContext();
-          playSound('click');
-        }
-      });
-    }
-
-    function switchTab(tabName) {
-      tabButtons.forEach(btn => btn.classList.remove('active'));
-      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-      tabContents.forEach(content => content.classList.remove('active'));
-      document.getElementById(tabName).classList.add('active');
-      if (soundEnabled) {
-        initAudioContext();
-        resumeAudioContext();
-        playSound('click');
-      }
-      if (tabName === 'games') {
-        gamesSearchInput.value = ''; // Reset search input
-        document.querySelectorAll('.game-card').forEach(card => {
-          card.style.display = 'flex'; // Show all games
-        });
       }
     }
-
-    function switchTheme(theme) {
-      themeButtons.forEach(btn => btn.classList.remove('active'));
-      document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
-      document.body.className = `theme-${theme}`;
-      currentTheme = theme;
-      localStorage.setItem('viper-theme', theme);
-      if (soundEnabled) {
-        initAudioContext();
-        resumeAudioContext();
-        playSound('switch');
+  });
+}
+function setupGamesSearch() {
+  gamesSearchInput.addEventListener('input', (e) => {
+    const query = e.target.value.trim().toLowerCase();
+    const gameCards = document.querySelectorAll('.game-card');
+    gameCards.forEach(card => {
+      const title = card.querySelector('.game-info h3').textContent.toLowerCase();
+      if (query === '' || title.includes(query)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
       }
-      const themeNames = {
-        dark: 'Dark Mode',
-        light: 'Light Mode',
-        violet: 'Violet Mode',
-        matrix: 'Matrix Mode',
-        red: 'Red Mode',
-        blue: 'Blue Mode'
-      };
-      showNotification(`Theme: ${themeNames[theme]}`, '', 'success');
+    });
+    if (soundEnabled) {
+      initAudioContext();
+      resumeAudioContext();
+      playSound('click');
     }
-
-    function openInModal(url, title) {
-      fullscreenIframe.src = url;
-      fullscreenModal.classList.add('active');
-      document.body.style.overflow = 'hidden';
-      document.title = `${title} - Viper`;
-      if (soundEnabled) {
-        initAudioContext();
-        resumeAudioContext();
-        playSound('open');
-      }
-    }
-
-    function closeModal() {
-      fullscreenModal.classList.remove('active');
-      fullscreenIframe.src = '';
-      document.body.style.overflow = '';
-      document.title = 'Viper';
-      if (soundEnabled) {
-        initAudioContext();
-        resumeAudioContext();
-        playSound('close');
-      }
-      showNotification('Closed fullscreen mode', '', 'info');
-    }
-
-    function showNotification(title, message = '', type = 'info') {
-      if (!notificationsToggle.checked) return;
-      const notification = document.createElement('div');
-      notification.className = `notification ${type}`;
-      notification.innerHTML = `
-        <button class="notification-close">&times;</button>
-        <div class="notification-title">${title}</div>
-        ${message ? `<div class="notification-message">${message}</div>` : ''}
-      `;
-      notificationContainer.appendChild(notification);
-      setTimeout(() => notification.classList.add('show'), 100);
+  });
+}
+function switchTab(tabName) {
+  tabButtons.forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+  tabContents.forEach(content => content.classList.remove('active'));
+  document.getElementById(tabName).classList.add('active');
+  if (soundEnabled) {
+    initAudioContext();
+    resumeAudioContext();
+    playSound('click');
+  }
+  if (tabName === 'games') {
+    gamesSearchInput.value = ''; // Reset search input
+    document.querySelectorAll('.game-card').forEach(card => {
+      card.style.display = 'flex'; // Show all games
+    });
+  }
+}
+function switchTheme(theme) {
+  themeButtons.forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
+  document.body.className = `theme-${theme}`;
+  currentTheme = theme;
+  localStorage.setItem('viper-theme', theme);
+  if (soundEnabled) {
+    initAudioContext();
+    resumeAudioContext();
+    playSound('switch');
+  }
+  const themeNames = {
+    dark: 'Dark Mode',
+    light: 'Light Mode',
+    violet: 'Violet Mode',
+    matrix: 'Matrix Mode',
+    red: 'Red Mode',
+    blue: 'Blue Mode'
+  };
+  showNotification(`Theme: ${themeNames[theme]}`, '', 'success');
+}
+function openInModal(url, title) {
+  fullscreenIframe.src = url;
+  fullscreenModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  document.title = `${title} - Viper`;
+  if (soundEnabled) {
+    initAudioContext();
+    resumeAudioContext();
+    playSound('open');
+  }
+}
+function closeModal() {
+  fullscreenModal.classList.remove('active');
+  fullscreenIframe.src = '';
+  document.body.style.overflow = '';
+  document.title = 'Viper';
+  if (soundEnabled) {
+    initAudioContext();
+    resumeAudioContext();
+    playSound('close');
+  }
+  showNotification('Closed fullscreen mode', '', 'info');
+}
+function showNotification(title, message = '', type = 'info') {
+  if (!notificationsToggle.checked) return;
+  const notification = document.createElement('div');
+  notification.className = `notification ${type}`;
+  notification.innerHTML = `
+    <button class="notification-close">&times;</button>
+    <div class="notification-title">${title}</div>
+    ${message ? `<div class="notification-message">${message}</div>` : ''}
+  `;
+  notificationContainer.appendChild(notification);
+  setTimeout(() => notification.classList.add('show'), 100);
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.classList.remove('show');
       setTimeout(() => {
         if (notification.parentNode) {
-          notification.classList.remove('show');
-          setTimeout(() => {
-            if (notification.parentNode) {
-              notification.parentNode.removeChild(notification);
-            }
-          }, 300);
+          notification.parentNode.removeChild(notification);
         }
-      }, 3000);
-      notification.querySelector('.notification-close').addEventListener('click', () => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-          if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
-          }
-        }, 300);
-      });
+      }, 300);
     }
-
-    function playSound(type) {
-      if (!soundEnabled || !audioContextInitialized) return;
-      if (audioContext.state === 'suspended') {
-        audioContext.resume();
+  }, 3000);
+  notification.querySelector('.notification-close').addEventListener('click', () => {
+    notification.classList.remove('show');
+    setTimeout(() => {
+      if (notification.parentNode) {
+        notification.parentNode.removeChild(notification);
       }
-      try {
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        const frequencies = {
-          click: 800,
-          switch: 600,
-          open: 400,
-          close: 300
-        };
-        const duration = type === 'open' || type === 'close' ? 0.3 : 0.1;
-        oscillator.frequency.setValueAtTime(frequencies[type] || 440, audioContext.currentTime);
-        oscillator.type = 'sine';
-        const volume = sfxVolume / 100;
-        gainNode.gain.setValueAtTime(0.3 * volume, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01 * volume, audioContext.currentTime + duration);
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + duration);
-        oscillator.onended = () => {
-          oscillator.disconnect();
-          gainNode.disconnect();
-        };
-      } catch (error) {
-        console.error('Error playing sound:', error);
-      }
-    }
-
-    function loadSettings() {
-      const savedTheme = localStorage.getItem('viper-theme');
-      if (savedTheme && ['dark', 'light', 'violet', 'matrix', 'red', 'blue'].includes(savedTheme)) {
-        switchTheme(savedTheme);
-      }
-      const savedSound = localStorage.getItem('viper-sound');
-      if (savedSound === 'true') {
-        soundEnabled = true;
-        soundToggle.checked = true;
-      }
-      const savedVolume = localStorage.getItem('viper-sfx-volume');
-      if (savedVolume) {
-        sfxVolume = parseInt(savedVolume);
-        sfxVolumeSlider.value = sfxVolume;
-        sfxVolumeValue.textContent = `${sfxVolume}%`;
-      }
-    }
-
-    function saveSettings() {
-      localStorage.setItem('viper-theme', currentTheme);
-      localStorage.setItem('viper-sound', soundEnabled);
-      localStorage.setItem('viper-sfx-volume', sfxVolume);
-    }
-
-    themeButtons.forEach(btn => {
-      btn.addEventListener('click', saveSettings);
-    });
-
-    soundToggle.addEventListener('change', saveSettings);
-    sfxVolumeSlider.addEventListener('input', saveSettings);
-
-    document.addEventListener('DOMContentLoaded', () => {
-      loadSettings();
-      init();
-    });
-  </script>
+    }, 300);
+  });
+}
+function playSound(type) {
+  if (!soundEnabled || !audioContextInitialized) return;
+  if (audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+  try {
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    const frequencies = {
+      click: 800,
+      switch: 600,
+      open: 400,
+      close: 300
+    };
+    const duration = type === 'open' || type === 'close' ? 0.3 : 0.1;
+    oscillator.frequency.setValueAtTime(frequencies[type] || 440, audioContext.currentTime);
+    oscillator.type = 'sine';
+    const volume = sfxVolume / 100;
+    gainNode.gain.setValueAtTime(0.3 * volume, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01 * volume, audioContext.currentTime + duration);
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + duration);
+    oscillator.onended = () => {
+      oscillator.disconnect();
+      gainNode.disconnect();
+    };
+  } catch (error) {
+    console.error('Error playing sound:', error);
+  }
+}
+function loadSettings() {
+  const savedTheme = localStorage.getItem('viper-theme');
+  if (savedTheme && ['dark', 'light', 'violet', 'matrix', 'red', 'blue'].includes(savedTheme)) {
+    switchTheme(savedTheme);
+  }
+  const savedSound = localStorage.getItem('viper-sound');
+  if (savedSound === 'true') {
+    soundEnabled = true;
+    soundToggle.checked = true;
+  }
+  const savedVolume = localStorage.getItem('viper-sfx-volume');
+  if (savedVolume) {
+    sfxVolume = parseInt(savedVolume);
+    sfxVolumeSlider.value = sfxVolume;
+    sfxVolumeValue.textContent = `${sfxVolume}%`;
+  }
+}
+function saveSettings() {
+  localStorage.setItem('viper-theme', currentTheme);
+  localStorage.setItem('viper-sound', soundEnabled);
+  localStorage.setItem('viper-sfx-volume', sfxVolume);
+}
+themeButtons.forEach(btn => {
+  btn.addEventListener('click', saveSettings);
+});
+soundToggle.addEventListener('change', saveSettings);
+sfxVolumeSlider.addEventListener('input', saveSettings);
+document.addEventListener('DOMContentLoaded', () => {
+  loadSettings();
+  init();
+});
+</script>
 </body>
-
 </html>
