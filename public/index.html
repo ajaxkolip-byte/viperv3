@@ -632,7 +632,7 @@ input:checked + .slider:before {
   <section id="home" class="tab-content active">
     <div class="center-container">
       <h1 class="viper-title">Viper</h1>
-      <input class="pxyinput" type="text" placeholder="Search..." id="search-input" />
+      <input class="pxyinput" type="text" placeholder="Search with Bing..." id="search-input" />
     </div>
   </section>
   <!-- Games Tab -->
@@ -917,25 +917,23 @@ function setupSearch() {
     if (e.key === 'Enter') {
       let query = e.target.value.trim();
       if (query) {
-        // Ensure the query is a valid URL or domain
-        let rawUrl = query.startsWith('http') ? query : 'https://' + query;
-        if (isValidUrl(rawUrl)) {
-          const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
-          openInModal(prefixedUrl, query);
-          searchInput.value = '';
-          showNotification(`Loading ${query} via proxy...`, '', 'info');
-          if (soundEnabled) {
-            initAudioContext();
-            await resumeAudioContext();
-            playSound('open');
-          }
+        // Check if it's a valid URL; if not, treat as search query for Bing
+        let rawUrl = query.startsWith('http') ? query : null;
+        if (rawUrl && isValidUrl(rawUrl)) {
+          rawUrl = query;
         } else {
-          showNotification('Invalid URL', 'Please enter a valid website address (e.g., google.com)', 'error');
-          if (soundEnabled) {
-            initAudioContext();
-            await resumeAudioContext();
-            playSound('click');
-          }
+          // Treat as Bing search query
+          rawUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
+        }
+        const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
+        const displayQuery = rawUrl.includes('bing.com/search') ? `Bing search for "${query}"` : query;
+        openInModal(prefixedUrl, displayQuery);
+        searchInput.value = '';
+        showNotification(`Loading ${displayQuery} via proxy...`, '', 'info');
+        if (soundEnabled) {
+          initAudioContext();
+          await resumeAudioContext();
+          playSound('open');
         }
       }
     }
