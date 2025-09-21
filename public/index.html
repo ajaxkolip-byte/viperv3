@@ -36,15 +36,15 @@
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+      background: var(--bg-primary);
       color: var(--text-primary);
       min-height: 100vh;
       overflow: hidden;
       position: relative;
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: background-color 0.3s ease;
     }
 
-    /* Static background particles */
+    /* Simplified background */
     body::before {
       content: '';
       position: fixed;
@@ -52,13 +52,11 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: 
-        radial-gradient(circle at 20% 80%, rgba(0, 255, 0, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(0, 255, 0, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(0, 255, 0, 0.02) 0%, transparent 50%);
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(0, 255, 0, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0, 255, 0, 0.02) 0%, transparent 50%);
       pointer-events: none;
       z-index: -1;
-      transition: all 0.5s ease;
     }
 
     nav {
@@ -67,15 +65,14 @@
       align-items: center;
       padding: 1rem 2rem;
       background: var(--glass-bg);
-      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border-color);
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 1000;
-      box-shadow: 0 2px 20px var(--shadow-color);
-      transition: all 0.5s ease;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
     }
 
     .logo {
@@ -88,13 +85,7 @@
       width: 32px;
       height: 32px;
       border-radius: 8px;
-      filter: drop-shadow(0 2px 8px var(--shadow-color));
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
+      filter: drop-shadow(0 2px 4px var(--shadow-color));
     }
 
     .logo h1 {
@@ -104,158 +95,108 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      letter-spacing: -0.5px;
-      text-shadow: 0 0 20px var(--shadow-color);
     }
 
     #time {
       font-size: 0.9rem;
       color: var(--text-secondary);
       font-weight: 500;
-      text-shadow: 0 0 10px var(--shadow-color);
     }
 
-    /* Tab Navigation */
+    /* Simplified Tab Navigation */
     .tab-nav {
       display: flex;
-      gap: 4px;
+      gap: 2px;
       background: rgba(10, 31, 10, 0.8);
-      border-radius: 25px;
+      border-radius: 20px;
       padding: 4px;
       backdrop-filter: blur(10px);
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      transition: all 0.5s ease;
     }
 
     .tab-btn {
-      padding: 10px 20px;
+      padding: 8px 16px;
       border: none;
       background: transparent;
       color: var(--text-secondary);
       font-size: 0.9rem;
       font-weight: 500;
-      border-radius: 20px;
+      border-radius: 16px;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
+      transition: all 0.2s ease;
     }
 
     .tab-btn:hover {
       color: var(--text-primary);
       background: rgba(0, 255, 0, 0.1);
-      transform: translateY(-1px);
     }
 
     .tab-btn.active {
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
       color: var(--bg-primary);
-      box-shadow: 0 4px 15px var(--shadow-color);
-      transform: translateY(-2px);
+      box-shadow: 0 2px 8px var(--shadow-color);
     }
 
-    .tab-btn.active::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.6s;
-    }
-
-    .tab-btn.active:hover::before {
-      left: 100%;
-    }
-
-    /* Tab Content */
+    /* Simplified Tab Content */
     .tab-content {
-      position: fixed;
+      position: absolute;
       top: 80px;
       left: 0;
       right: 0;
       bottom: 0;
-      background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      border-top: 1px solid var(--border-color);
-      overflow-y: auto;
       opacity: 0;
       visibility: hidden;
-      transform: translateY(-20px);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       z-index: 600;
       padding: 2rem;
+      overflow-y: auto;
     }
 
     .tab-content.active {
       opacity: 1;
       visibility: visible;
-      transform: translateY(0);
-    }
-
-    /* Hide tab content when iframe is active */
-    .tab-content.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
     }
 
     .tab-content h2 {
       color: var(--accent-primary);
-      font-size: 2.5rem;
-      margin-bottom: 2rem;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
       text-align: center;
-      text-shadow: 0 0 20px var(--shadow-color);
       font-weight: 300;
-      letter-spacing: -0.5px;
     }
 
-    /* Home Tab - Search Interface */
-    .home-search-container {
+    /* Home Tab - Simplified Search */
+    .center-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100%;
-      gap: 32px;
+      gap: 24px;
       padding: 2rem;
     }
 
-    .home-search-title {
-      font-size: 4rem;
+    .center-container h1 {
+      font-size: 3rem;
       font-weight: 300;
       color: var(--text-primary);
       text-align: center;
       letter-spacing: -1px;
       opacity: 0.9;
-      text-shadow: 0 0 30px var(--shadow-color);
-      margin-bottom: 16px;
-    }
-
-    .home-search-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
-      max-width: 600px;
-      width: 100%;
     }
 
     .pxyinput {
       width: 100%;
       max-width: 500px;
-      padding: 18px 24px;
-      font-size: 1.2rem;
+      padding: 16px 20px;
+      font-size: 1.1rem;
       background: rgba(10, 31, 10, 0.8);
       border: 2px solid var(--border-color);
       border-radius: 50px;
       color: var(--text-primary);
       outline: none;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 var(--border-color);
     }
 
     .pxyinput::placeholder {
@@ -264,55 +205,46 @@
 
     .pxyinput:focus {
       border-color: var(--accent-primary);
-      box-shadow: 0 0 0 4px rgba(0, 255, 65, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 var(--border-color);
-      transform: translateY(-2px);
-      text-shadow: 0 0 10px var(--shadow-color);
+      box-shadow: 0 0 0 3px rgba(0, 255, 65, 0.2);
+      transform: translateY(-1px);
     }
 
-    /* Games Tab - Square Game Grid */
+    /* Games Tab - Simplified Grid */
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 24px;
-      max-width: 1200px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      max-width: 1000px;
       margin: 0 auto;
-      padding: 2rem 0;
+      padding: 1rem 0;
     }
 
     .game-card {
       position: relative;
-      width: 250px;
-      height: 250px;
-      border-radius: 16px;
+      aspect-ratio: 1;
+      border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      border: 2px solid var(--border-color);
-      margin: 0 auto;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border-color);
     }
 
     .game-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 16px 48px var(--shadow-color);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px var(--shadow-color);
       border-color: var(--accent-primary);
-    }
-
-    .game-card:active {
-      transform: translateY(-4px) scale(0.98);
-      transition: all 0.1s ease;
     }
 
     .game-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: all 0.4s ease;
-      filter: brightness(1) blur(0px);
+      transition: all 0.3s ease;
     }
 
     .game-card:hover .game-image {
-      filter: brightness(0.3) blur(2px);
+      filter: brightness(0.4);
     }
 
     .game-overlay {
@@ -321,14 +253,13 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       opacity: 0;
-      transition: all 0.4s ease;
-      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
     }
 
     .game-card:hover .game-overlay {
@@ -337,53 +268,24 @@
 
     .game-title {
       color: var(--accent-primary);
-      font-size: 1.6rem;
+      font-size: 1.3rem;
       font-weight: 700;
       text-align: center;
-      text-shadow: 0 0 20px var(--shadow-color);
-      transform: translateY(20px);
-      opacity: 0;
-      transition: all 0.4s ease 0.2s;
-      letter-spacing: 1px;
-    }
-
-    .game-card:hover .game-title {
-      transform: translateY(0);
-      opacity: 1;
+      margin-bottom: 4px;
     }
 
     .game-description {
       color: var(--text-secondary);
       text-align: center;
-      margin-top: 8px;
-      font-size: 0.85rem;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s ease 0.3s;
+      font-size: 0.8rem;
     }
 
-    .game-card:hover .game-description {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Click animation */
-    .game-card.clicked {
-      animation: clickPulse 0.6s ease;
-    }
-
-    @keyframes clickPulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(0.95); }
-      100% { transform: scale(1); }
-    }
-
-    /* Settings Tab */
+    /* Simplified Settings */
     .settings-container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 32px;
+      gap: 24px;
       max-width: 600px;
       margin: 0 auto;
       padding: 2rem;
@@ -391,27 +293,24 @@
 
     .theme-selector {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
       width: 100%;
     }
 
     .theme-card {
       background: rgba(10, 31, 10, 0.8);
       border: 2px solid var(--border-color);
-      border-radius: 16px;
-      padding: 24px;
+      border-radius: 12px;
+      padding: 20px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
+      transition: all 0.2s ease;
     }
 
     .theme-card:hover {
       border-color: var(--accent-primary);
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px var(--shadow-color);
+      transform: translateY(-2px);
     }
 
     .theme-card.active {
@@ -421,303 +320,26 @@
     }
 
     .theme-card .theme-color {
-      width: 60px;
-      height: 60px;
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
-      margin: 0 auto 16px;
-      border: 3px solid rgba(255, 255, 255, 0.2);
+      margin: 0 auto 12px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
     }
 
     .theme-card h3 {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 600;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .theme-card p {
       color: var(--text-secondary);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       opacity: 0.8;
     }
 
-    /* Fullscreen Game Iframe */
-    .game-frame {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      border: none;
-      background: #000;
-      z-index: 2000;
-      opacity: 0;
-      visibility: hidden;
-      transform: scale(0.8);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: none;
-    }
-
-    .game-frame.active {
-      opacity: 1;
-      visibility: visible;
-      transform: scale(1);
-      display: block;
-    }
-
-    .game-close-btn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 52px;
-      height: 52px;
-      background: var(--glass-bg);
-      border: 2px solid var(--accent-primary);
-      border-radius: 50%;
-      color: var(--text-primary);
-      font-size: 1.6rem;
-      font-weight: bold;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2100;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px var(--shadow-color);
-      opacity: 0;
-      visibility: hidden;
-    }
-
-    .game-close-btn:hover {
-      background: rgba(0, 255, 65, 0.2);
-      transform: scale(1.1);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8), 0 0 30px var(--shadow-color);
-    }
-
-    .game-close-btn.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .game-close-btn:active {
-      transform: scale(0.95);
-    }
-
-    /* Other Tab Placeholders */
-    .tab-placeholder {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
-      color: var(--text-muted);
-      text-align: center;
-      justify-content: center;
-      height: 100%;
-    }
-
-    .tab-placeholder .icon {
-      font-size: 4rem;
-      opacity: 0.7;
-    }
-
-    .tab-placeholder h3 {
-      color: var(--text-primary);
-      font-size: 1.5rem;
-      margin-bottom: 8px;
-    }
-
-    .tab-placeholder p {
-      color: var(--text-secondary);
-      font-size: 1.2rem;
-      line-height: 1.6;
-      opacity: 0.9;
-      max-width: 600px;
-    }
-
-    /* Search Bar Popup */
-    .search-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0);
-      background: var(--glass-bg);
-      border: 2px solid var(--border-color);
-      border-radius: 20px;
-      padding: 32px;
-      max-width: 500px;
-      width: 90%;
-      z-index: 1200;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7), 0 0 50px var(--shadow-color);
-    }
-
-    .search-popup.show {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .search-popup h2 {
-      color: var(--accent-primary);
-      font-size: 2rem;
-      margin-bottom: 8px;
-      text-align: center;
-      text-shadow: 0 0 15px var(--shadow-color);
-      font-weight: 300;
-      letter-spacing: -0.5px;
-    }
-
-    .search-popup p {
-      color: var(--text-secondary);
-      text-align: center;
-      margin-bottom: 24px;
-      opacity: 0.8;
-      font-size: 1rem;
-    }
-
-    .search-popup-input {
-      width: 100%;
-      padding: 16px 20px;
-      font-size: 1.1rem;
-      background: rgba(10, 31, 10, 0.8);
-      border: 2px solid var(--border-color);
-      border-radius: 50px;
-      color: var(--text-primary);
-      outline: none;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(10px);
-      box-shadow: inset 0 1px 0 var(--border-color);
-      margin-bottom: 20px;
-    }
-
-    .search-popup-input::placeholder {
-      color: var(--text-muted);
-    }
-
-    .search-popup-input:focus {
-      border-color: var(--accent-primary);
-      box-shadow: 0 0 0 4px rgba(0, 255, 65, 0.2), inset 0 1px 0 var(--border-color);
-    }
-
-    .popup-buttons {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-    }
-
-    .popup-btn {
-      padding: 12px 24px;
-      border: none;
-      border-radius: 25px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-      min-width: 100px;
-    }
-
-    .popup-btn.primary {
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: var(--bg-primary);
-      box-shadow: 0 4px 20px var(--shadow-color);
-    }
-
-    .popup-btn.primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 25px var(--shadow-color);
-    }
-
-    .popup-btn.secondary {
-      background: rgba(168, 230, 207, 0.1);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-    }
-
-    .popup-btn.secondary:hover {
-      background: rgba(0, 255, 0, 0.1);
-      border-color: var(--accent-primary);
-      transform: translateY(-2px);
-    }
-
-    /* Notification System */
-    .notification-container {
-      position: fixed;
-      top: 100px;
-      right: 20px;
-      z-index: 2000;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      max-width: 350px;
-      pointer-events: none;
-    }
-
-    .notification {
-      background: linear-gradient(135deg, var(--glass-bg), rgba(26, 43, 26, 0.95));
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 16px 20px;
-      color: var(--text-primary);
-      font-size: 0.95rem;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 20px var(--shadow-color);
-      backdrop-filter: blur(15px);
-      transform: translateX(400px);
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      pointer-events: auto;
-      max-width: 100%;
-    }
-
-    .notification.show {
-      transform: translateX(0);
-      opacity: 1;
-    }
-
-    .notification.success {
-      border-left: 4px solid var(--accent-primary);
-    }
-
-    .notification.info {
-      border-left: 4px solid #4fc3f7;
-    }
-
-    .notification.error {
-      border-left: 4px solid #ff6b6b;
-    }
-
-    .notification-title {
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: var(--accent-primary);
-    }
-
-    .notification-message {
-      opacity: 0.9;
-      line-height: 1.4;
-    }
-
-    .notification-close {
-      position: absolute;
-      top: 8px;
-      right: 12px;
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      font-size: 1.2rem;
-      cursor: pointer;
-      opacity: 0.7;
-      transition: opacity 0.2s;
-    }
-
-    .notification-close:hover {
-      opacity: 1;
-    }
-
-    /* Frame Styles */
+    /* Simplified Fullscreen Frame */
     .frame {
       position: fixed;
       top: 0;
@@ -726,18 +348,16 @@
       height: 100vh;
       border: none;
       background: #000;
-      z-index: 100;
+      z-index: 2000;
       opacity: 0;
       visibility: hidden;
-      transform: scale(0.8);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       display: none;
     }
 
     .frame.active {
       opacity: 1;
       visibility: visible;
-      transform: scale(1);
       display: block;
     }
 
@@ -745,31 +365,28 @@
       position: fixed;
       top: 20px;
       right: 20px;
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       background: var(--glass-bg);
       border: 2px solid var(--border-color);
       border-radius: 50%;
       color: var(--text-primary);
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: bold;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1100;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px var(--shadow-color);
+      z-index: 2100;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
       opacity: 0;
       visibility: hidden;
     }
 
     .close-btn:hover {
-      background: rgba(0, 255, 0, 0.1);
-      border-color: var(--accent-primary);
+      background: rgba(0, 255, 65, 0.2);
       transform: scale(1.1);
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 30px var(--shadow-color);
     }
 
     .close-btn.active {
@@ -777,13 +394,80 @@
       visibility: visible;
     }
 
-    .close-btn:active {
-      transform: scale(0.95);
+    /* Placeholder Styles */
+    .tab-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-muted);
+      text-align: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .tab-placeholder .icon {
+      font-size: 3rem;
+      opacity: 0.7;
+    }
+
+    .tab-placeholder h3 {
+      color: var(--text-primary);
+      font-size: 1.3rem;
+      margin-bottom: 6px;
+    }
+
+    .tab-placeholder p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.5;
+      opacity: 0.9;
+      max-width: 500px;
+    }
+
+    /* Simplified Notification */
+    .notification-container {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      z-index: 2000;
+      pointer-events: none;
+    }
+
+    .notification {
+      background: var(--glass-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      transform: translateX(300px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: auto;
+      margin-bottom: 8px;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    .notification.success {
+      border-left: 3px solid var(--accent-primary);
+    }
+
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 2px;
+      color: var(--accent-primary);
     }
 
     @media (max-width: 768px) {
       nav {
-        padding: 1rem;
+        padding: 0.8rem 1rem;
         flex-wrap: wrap;
       }
 
@@ -795,83 +479,34 @@
       }
 
       .logo h1 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
       }
 
-      #time {
-        font-size: 0.8rem;
-      }
-
-      .home-search-title {
-        font-size: 2.8rem;
-      }
-
-      .tab-content h2 {
-        font-size: 2rem;
+      .center-container h1 {
+        font-size: 2.2rem;
       }
 
       .tab-content {
-        top: 120px;
+        top: 110px;
         padding: 1rem;
       }
 
       .games-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
       }
 
-      .game-card {
-        width: 200px;
-        height: 200px;
-      }
-
-      .game-title {
-        font-size: 1.3rem;
-      }
-
-      .tab-placeholder .icon {
-        font-size: 3rem;
-      }
-
-      .pxyinput {
-        padding: 16px 20px;
-        font-size: 1.1rem;
-      }
-
-      .game-close-btn, .close-btn {
-        width: 44px;
-        height: 44px;
-        font-size: 1.3rem;
+      .close-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
         top: 15px;
         right: 15px;
       }
 
       .notification-container {
-        top: 80px;
+        top: 90px;
         right: 10px;
-        max-width: 300px;
-      }
-
-      .search-popup {
-        width: 95%;
-        padding: 24px;
-      }
-
-      .search-popup h2 {
-        font-size: 1.5rem;
-      }
-
-      .popup-buttons {
-        flex-direction: column;
-      }
-
-      .home-search-container {
-        gap: 24px;
-        padding: 1rem;
-      }
-
-      .theme-selector {
-        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -894,13 +529,11 @@
     <p id="time"></p>
   </nav>
 
-  <!-- Home Tab - Main Search Interface -->
+  <!-- Home Tab - Simplified Search Interface -->
   <div class="tab-content active" id="homeTab">
-    <div class="home-search-container">
-      <h1 class="home-search-title">VIPER</h1>
-      <div class="home-search-section">
-        <input class="pxyinput" type="text" placeholder="Search the web..." id="searchInput" />
-      </div>
+    <div class="center-container">
+      <h1>Search</h1>
+      <input class="pxyinput" type="text" placeholder="Search..." id="searchInput" />
     </div>
   </div>
 
@@ -910,7 +543,7 @@
     <div class="games-grid">
       <!-- 2048 -->
       <div class="game-card" data-game-url="https://play2048.co">
-        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=400&fit=crop&crop=face" alt="2048" class="game-image" />
+        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=400&fit=crop&crop=face" alt="2048" class="game-image" loading="lazy" />
         <div class="game-overlay">
           <div class="game-title">2048</div>
           <div class="game-description">Slide tiles to reach 2048</div>
@@ -919,7 +552,7 @@
 
       <!-- Tetris -->
       <div class="game-card" data-game-url="https://tetris.com/play-tetris">
-        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=400&fit=crop&crop=face" alt="Tetris" class="game-image" />
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=400&fit=crop&crop=face" alt="Tetris" class="game-image" loading="lazy" />
         <div class="game-overlay">
           <div class="game-title">Tetris</div>
           <div class="game-description">Classic block puzzle game</div>
@@ -928,7 +561,7 @@
 
       <!-- Minesweeper -->
       <div class="game-card" data-game-url="https://minesweeper.online">
-        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=face" alt="Minesweeper" class="game-image" />
+        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=face" alt="Minesweeper" class="game-image" loading="lazy" />
         <div class="game-overlay">
           <div class="game-title">Minesweeper</div>
           <div class="game-description">Find hidden mines</div>
@@ -937,7 +570,7 @@
 
       <!-- Snake -->
       <div class="game-card" data-game-url="https://www.snake-game.com">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=400&fit=crop&crop=face" alt="Snake" class="game-image" />
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=400&fit=crop&crop=face" alt="Snake" class="game-image" loading="lazy" />
         <div class="game-overlay">
           <div class="game-title">Snake</div>
           <div class="game-description">Classic arcade snake game</div>
@@ -946,7 +579,7 @@
 
       <!-- Pac-Man -->
       <div class="game-card" data-game-url="https://www.pacman-game.com">
-        <img src="https://images.unsplash.com/photo-1582232816066-0e1806e21241?w=400&h=400&fit=crop&crop=face" alt="Pac-Man" class="game-image" />
+        <img src="https://images.unsplash.com/photo-1582232816066-0e1806e21241?w=400&h=400&fit=crop&crop=face" alt="Pac-Man" class="game-image" loading="lazy" />
         <div class="game-overlay">
           <div class="game-title">Pac-Man</div>
           <div class="game-description">Eat dots, avoid ghosts</div>
@@ -955,7 +588,7 @@
 
       <!-- Flappy Bird -->
       <div class="game-card" data-game-url="https://flappybird.io">
-        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=400&fit=crop&crop=face" alt="Flappy Bird" class="game-image" />
+        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=400&fit=crop&crop=face" alt="Flappy Bird" class="game-image" loading="lazy" />
         <div class="game-overlay">
           <div class="game-title">Flappy Bird</div>
           <div class="game-description">Navigate through pipes</div>
@@ -1003,24 +636,9 @@
     </div>
   </div>
 
-  <!-- Search Frame -->
-  <iframe class="frame" id="searchFrame"></iframe>
+  <!-- Single Frame for Both Search and Games -->
+  <iframe class="frame" id="mainFrame"></iframe>
   <button class="close-btn" id="closeBtn" title="Close">×</button>
-
-  <!-- Game Frame -->
-  <iframe class="game-frame" id="gameFrame"></iframe>
-  <button class="game-close-btn" id="gameCloseBtn" title="Close Game">✕</button>
-
-  <!-- Search Popup -->
-  <div class="search-popup" id="searchPopup">
-    <h2>🔍 Ready to Search?</h2>
-    <p>What would you like to explore next?</p>
-    <input class="search-popup-input" type="text" placeholder="Enter your search query..." id="popupSearchInput" />
-    <div class="popup-buttons">
-      <button class="popup-btn primary" id="popupSearchBtn">Search Now</button>
-      <button class="popup-btn secondary" id="popupCloseBtn">Skip</button>
-    </div>
-  </div>
 
   <!-- Notification Container -->
   <div class="notification-container" id="notificationContainer"></div>
@@ -1029,7 +647,7 @@
 <script src="./js/index.js"></script>
 <script src="./js/search.js"></script>
 <script>
-  // Theme System
+  // Simplified Theme System
   const themes = {
     dark: {
       '--bg-primary': '#1a1a2e',
@@ -1087,55 +705,35 @@
 
   let currentTheme = 'green';
 
-  // Notification System
+  // Simplified Notification System
   class NotificationSystem {
     constructor() {
       this.container = document.getElementById('notificationContainer');
-      this.notifications = [];
-      this.autoRemoveDelay = 5000;
+      this.autoRemoveDelay = 3000;
     }
 
     show(type, title, message, duration = this.autoRemoveDelay) {
       const notification = document.createElement('div');
       notification.className = `notification ${type}`;
       notification.innerHTML = `
-        <button class="notification-close" onclick="notificationSystem.remove(this.parentElement)">×</button>
         <div class="notification-title">${title}</div>
-        <div class="notification-message">${message}</div>
+        <div>${message}</div>
       `;
 
       this.container.appendChild(notification);
       
-      // Show animation
       requestAnimationFrame(() => {
         notification.classList.add('show');
       });
 
-      // Auto remove
-      const removeTimeout = setTimeout(() => {
-        this.remove(notification);
-      }, duration);
-
-      // Store for manual removal
-      notification.remove = () => {
-        clearTimeout(removeTimeout);
-        this.remove(notification);
-      };
-
-      this.notifications.push(notification);
-    }
-
-    remove(notification) {
-      notification.classList.remove('show');
       setTimeout(() => {
-        if (notification.parentNode) {
-          notification.parentNode.removeChild(notification);
-        }
-        const index = this.notifications.indexOf(notification);
-        if (index > -1) {
-          this.notifications.splice(index, 1);
-        }
-      }, 400);
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+          }
+        }, 300);
+      }, duration);
     }
 
     success(title, message, duration) {
@@ -1151,17 +749,15 @@
     }
   }
 
-  // Initialize notification system
   const notificationSystem = new NotificationSystem();
 
-  // Theme switching function
+  // Simplified Theme Function
   function applyTheme(themeName) {
     const theme = themes[themeName];
     Object.entries(theme).forEach(([property, value]) => {
       document.documentElement.style.setProperty(property, value);
     });
     
-    // Update active theme card
     document.querySelectorAll('.theme-card').forEach(card => {
       card.classList.remove('active');
     });
@@ -1170,16 +766,15 @@
     currentTheme = themeName;
     localStorage.setItem('viper-theme', themeName);
     
-    notificationSystem.success('Theme Applied', `${themeName.charAt(0).toUpperCase() + themeName.slice(1)} theme activated`, 2500);
+    notificationSystem.success('Theme', `${themeName.charAt(0).toUpperCase() + themeName.slice(1)} applied`, 2000);
   }
 
-  // Load saved theme
   function loadSavedTheme() {
     const savedTheme = localStorage.getItem('viper-theme') || 'green';
     applyTheme(savedTheme);
   }
 
-  // Time display functionality
+  // Simplified Time Display
   function updateTime() {
     const now = new Date();
     const timeString = now.toLocaleTimeString('en-US', {
@@ -1190,37 +785,89 @@
     document.getElementById('time').textContent = timeString;
   }
 
-  // Update time every second
   updateTime();
   setInterval(updateTime, 1000);
 
-  // Tab functionality
+  // Simplified Tab System
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
+  const mainFrame = document.getElementById('mainFrame');
+  const closeBtn = document.getElementById('closeBtn');
+  const searchInput = document.getElementById('searchInput');
 
+  // Tab switching
   tabBtns.forEach(btn => {
     btn.addEventListener('click', function() {
       const targetTab = this.dataset.tab;
       
-      // Update active tab button
       tabBtns.forEach(b => b.classList.remove('active'));
       this.classList.add('active');
       
-      // Update active tab content
       tabContents.forEach(content => content.classList.remove('active'));
       document.getElementById(targetTab + 'Tab').classList.add('active');
       
-      if (targetTab === 'home') {
-        document.getElementById('searchInput').focus();
-      } else if (targetTab === 'settings') {
-        loadSavedTheme();
+      // Close frame when switching tabs
+      if (mainFrame.classList.contains('active')) {
+        closeFrame();
       }
       
-      notificationSystem.info('Tab Switched', `Now viewing ${this.textContent} section`, 2000);
+      if (targetTab === 'home') {
+        searchInput.focus();
+      }
     });
   });
 
-  // Theme card functionality
+  // Simplified Frame Management
+  function loadInFrame(url, isGame = false) {
+    tabContents.forEach(content => content.classList.remove('active'));
+    mainFrame.src = url;
+    mainFrame.classList.add('active');
+    closeBtn.classList.add('active');
+    
+    if (isGame) {
+      notificationSystem.success('Game', 'Ready to play!', 1500);
+    } else {
+      notificationSystem.success('Search', 'Loading results...', 1500);
+    }
+  }
+
+  function closeFrame() {
+    mainFrame.classList.remove('active');
+    closeBtn.classList.remove('active');
+    mainFrame.src = '';
+    
+    // Return to home
+    tabContents.forEach(content => content.classList.remove('active'));
+    document.getElementById('homeTab').classList.add('active');
+    tabBtns[0].classList.add('active');
+    searchInput.focus();
+    
+    notificationSystem.info('Closed', 'Back to home', 1500);
+  }
+
+  // Close button
+  closeBtn.addEventListener('click', closeFrame);
+
+  // Search functionality (like old Art Class)
+  searchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && this.value.trim()) {
+      e.preventDefault();
+      const searchTerm = this.value.trim();
+      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchTerm)}`;
+      loadInFrame(searchUrl);
+      this.value = '';
+    }
+  });
+
+  // Game functionality
+  document.querySelectorAll('.game-card').forEach(card => {
+    card.addEventListener('click', function() {
+      const gameUrl = this.dataset.gameUrl;
+      loadInFrame(gameUrl, true);
+    });
+  });
+
+  // Theme functionality
   document.querySelectorAll('.theme-card').forEach(card => {
     card.addEventListener('click', function() {
       const themeName = this.dataset.theme;
@@ -1228,118 +875,13 @@
     });
   });
 
-  // Game functionality
-  const gameCards = document.querySelectorAll('.game-card');
-  const gameFrame = document.getElementById('gameFrame');
-  const gameCloseBtn = document.getElementById('gameCloseBtn');
-
-  gameCards.forEach(card => {
-    card.addEventListener('click', function() {
-      const gameUrl = this.dataset.gameUrl;
-      const gameTitle = this.querySelector('.game-title').textContent;
-      
-      // Add click animation
-      this.classList.add('clicked');
-      setTimeout(() => {
-        this.classList.remove('clicked');
-      }, 600);
-      
-      // Load game
-      gameFrame.src = gameUrl;
-      gameFrame.classList.add('active');
-      gameCloseBtn.classList.add('active');
-      
-      // Hide tabs
-      tabContents.forEach(content => content.classList.add('hidden'));
-      
-      notificationSystem.success('Game Loaded', `${gameTitle} is ready to play!`, 2000);
-      
-      // Focus on game frame
-      gameFrame.focus();
-    });
-  });
-
-  // Game close functionality
-  gameCloseBtn.addEventListener('click', function() {
-    gameFrame.classList.remove('active');
-    gameCloseBtn.classList.remove('active');
-    gameFrame.src = '';
-    tabContents.forEach(content => content.classList.remove('hidden'));
-    
-    // Return to games tab
-    tabContents.forEach(content => content.classList.remove('active'));
-    document.getElementById('gamesTab').classList.add('active');
-    tabBtns[1].classList.add('active');
-    
-    notificationSystem.info('Game Closed', 'Back to the games lobby', 2000);
-  });
-
-  // Elements for search functionality
-  const searchInput = document.getElementById('searchInput');
-  const searchFrame = document.getElementById('searchFrame');
-  const closeBtn = document.getElementById('closeBtn');
-  const searchPopup = document.getElementById('searchPopup');
-  const popupSearchInput = document.getElementById('popupSearchInput');
-  const popupSearchBtn = document.getElementById('popupSearchBtn');
-  const popupCloseBtn = document.getElementById('popupCloseBtn');
-
-  // Search input functionality
-  searchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && this.value.trim()) {
-      e.preventDefault();
-      const searchTerm = this.value.trim();
-      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchTerm)}`;
-      
-      performSearch(searchUrl);
-      notificationSystem.success('Search Started', `Loading results for "${searchTerm}"`, 2000);
-    }
-  });
-
-  // Popup search functionality
-  popupSearchBtn.addEventListener('click', function() {
-    const searchTerm = popupSearchInput.value.trim();
-    if (searchTerm) {
-      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchTerm)}`;
-      performSearch(searchUrl);
-      notificationSystem.success('Search Launched', `Searching for "${searchTerm}"`, 2000);
-    } else {
-      notificationSystem.error('Empty Search', 'Please enter a search term');
-    }
-  });
-
-  // Enter key in popup
-  popupSearchInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      popupSearchBtn.click();
-    }
-  });
-
-  // Close popup
-  popupCloseBtn.addEventListener('click', function() {
-    closePopup();
-    returnToHome();
-  });
-
-  // Click outside to close popup
-  searchPopup.addEventListener('click', function(e) {
-    if (e.target === this) {
-      closePopup();
-      returnToHome();
-    }
-  });
-
-  // Escape key handler
+  // Keyboard shortcuts
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
-      if (gameFrame.classList.contains('active')) {
-        gameCloseBtn.click();
-      } else if (searchFrame.classList.contains('active')) {
-        closeSearch();
-      } else if (searchPopup.classList.contains('show')) {
-        closePopup();
-        returnToHome();
+      if (mainFrame.classList.contains('active')) {
+        closeFrame();
       } else {
-        // If in a different tab, return to home
+        // Return to home
         tabContents.forEach(content => content.classList.remove('active'));
         document.getElementById('homeTab').classList.add('active');
         tabBtns[0].classList.add('active');
@@ -1348,113 +890,32 @@
     }
   });
 
-  // Main search function
-  function performSearch(url) {
-    tabContents.forEach(content => content.classList.add('hidden'));
-    
-    setTimeout(() => {
-      searchFrame.src = url;
-      searchFrame.classList.add('active');
-      closeBtn.classList.add('active');
-      searchPopup.classList.remove('show');
-    }, 100);
-    
-    // Focus on iframe
-    searchFrame.focus();
-  }
-
-  // Close search function with popup
-  function closeSearch() {
-    searchFrame.classList.remove('active');
-    closeBtn.classList.remove('active');
-    searchFrame.src = '';
-    tabContents.forEach(content => content.classList.remove('hidden'));
-    
-    // Show popup after brief delay
-    setTimeout(() => {
-      searchPopup.classList.add('show');
-      popupSearchInput.focus();
-      notificationSystem.info('Search Complete', 'Ready for your next query?', 3000);
-    }, 200);
-  }
-
-  // Close popup function
-  function closePopup() {
-    searchPopup.classList.remove('show');
-  }
-
-  // Return to home interface
-  function returnToHome() {
-    tabContents.forEach(content => content.classList.remove('hidden'));
-    document.getElementById('homeTab').classList.add('active');
-    tabBtns[0].classList.add('active');
-    searchInput.value = '';
-    popupSearchInput.value = '';
-    searchInput.focus();
-  }
-
-  // Close button functionality
-  closeBtn.addEventListener('click', closeSearch);
-
-  // Handle iframe load
-  searchFrame.addEventListener('load', function() {
-    if (searchFrame.classList.contains('active')) {
+  // Frame load handler
+  mainFrame.addEventListener('load', function() {
+    if (mainFrame.classList.contains('active')) {
       closeBtn.style.transform = 'rotate(90deg)';
       setTimeout(() => {
         closeBtn.style.transform = 'rotate(0deg)';
-        notificationSystem.success('Page Loaded', 'Results ready - press X to search again', 2000);
-      }, 200);
+      }, 150);
     }
   });
 
-  // Handle game frame load
-  gameFrame.addEventListener('load', function() {
-    if (gameFrame.classList.contains('active')) {
-      gameCloseBtn.style.transform = 'rotate(90deg)';
-      setTimeout(() => {
-        gameCloseBtn.style.transform = 'rotate(0deg)';
-      }, 200);
-    }
-  });
-
-  // Prevent iframe context menu
-  searchFrame.addEventListener('contextmenu', function(e) {
+  // Prevent context menu on frame
+  mainFrame.addEventListener('contextmenu', function(e) {
     e.preventDefault();
   });
 
-  gameFrame.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-  });
-
-  // Welcome notification on load
+  // Welcome message
   setTimeout(() => {
-    notificationSystem.info('VIPER Ready', 'Press Enter to search or click Games tab to play', 4000);
-  }, 1000);
+    notificationSystem.info('Welcome', 'Press Enter to search or click Games', 3000);
+  }, 800);
 
-  // Input focus effects
-  searchInput.addEventListener('focus', function() {
-    if (!searchFrame.classList.contains('active')) {
-      notificationSystem.info('Search Ready', 'Type your query and press Enter', 2000);
-    }
-  });
-
-  popupSearchInput.addEventListener('focus', function() {
-    notificationSystem.info('Quick Search', 'Enter your query and click Search Now', 2000);
-  });
-
-  // Auto-focus search input on load
+  // Auto-focus search
   setTimeout(() => {
     searchInput.focus();
-  }, 500);
+  }, 300);
 
-  // Disable text selection on game cards
-  document.querySelectorAll('.game-card').forEach(card => {
-    card.addEventListener('selectstart', function(e) {
-      e.preventDefault();
-    });
-  });
-
-  // Initialize theme on load
+  // Initialize
   loadSavedTheme();
 </script>
 
