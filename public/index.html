@@ -70,6 +70,30 @@
         radial-gradient(circle at 75% 75%, rgba(0, 255, 0, 0.05) 0%, transparent 50%);
     }
 
+    body.theme-red {
+      --bg-primary: #2c0000;
+      --bg-secondary: #4d0000;
+      --bg-tertiary: #660000;
+      --text-primary: #ffcccc;
+      --text-secondary: #ff9999;
+      --accent-primary: #ff0000;
+      --accent-secondary: #cc0000;
+      --border-color: #990000;
+      --shadow: 0 8px 32px rgba(255, 0, 0, 0.2);
+    }
+
+    body.theme-blue {
+      --bg-primary: #001a33;
+      --bg-secondary: #003366;
+      --bg-tertiary: #004080;
+      --text-primary: #cce6ff;
+      --text-secondary: #99ccff;
+      --accent-primary: #0000ff;
+      --accent-secondary: #0000cc;
+      --border-color: #003399;
+      --shadow: 0 8px 32px rgba(0, 0, 255, 0.2);
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: var(--bg-primary);
@@ -285,6 +309,9 @@
       transition: var(--transition);
       position: relative;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .tab-btn::before {
@@ -319,6 +346,12 @@
       0% { transform: scale(0.95); }
       50% { transform: scale(1.05); }
       100% { transform: scale(1); }
+    }
+
+    .tab-icon {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
     }
 
     .time-container {
@@ -368,7 +401,7 @@
     /* Games Grid */
     .games-grid, .apps-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 2rem;
       padding: 1rem 0;
     }
@@ -378,8 +411,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 100px;
-      height: 100px;
+      width: 150px;
+      height: 150px;
       background: none;
       border: none;
       cursor: pointer;
@@ -419,8 +452,8 @@
     }
 
     .game-icon, .app-icon {
-      width: 100px;
-      height: 100px;
+      width: 150px;
+      height: 150px;
       margin: 0;
       display: flex;
       align-items: center;
@@ -490,8 +523,8 @@
     }
 
     .game-info h3 {
-      font-size: 0.9rem;
-      margin-bottom: 0.1rem;
+      font-size: 1rem;
+      margin-bottom: 0.2rem;
       color: var(--text-primary);
       font-weight: 600;
       text-align: center;
@@ -499,7 +532,7 @@
     }
 
     .game-info p {
-      font-size: 0.65rem;
+      font-size: 0.75rem;
       color: var(--text-secondary);
       line-height: 1.1;
       margin: 0;
@@ -753,7 +786,7 @@
       }
 
       .games-grid, .apps-grid {
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 1rem;
       }
 
@@ -815,10 +848,30 @@
     </div>
     
     <div class="tabs-container">
-      <button class="tab-btn active" data-tab="home">🏠 Home</button>
-      <button class="tab-btn" data-tab="games">🎮 Games</button>
-      <button class="tab-btn" data-tab="apps">💻 Apps</button>
-      <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
+      <button class="tab-btn active" data-tab="home">
+        <svg class="tab-icon" viewBox="0 0 24 24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        Home
+      </button>
+      <button class="tab-btn" data-tab="games">
+        <svg class="tab-icon" viewBox="0 0 24 24">
+          <path d="M15.41 7.41L14 6l-6 6 1.41 1.41L15.41 7.41zM6.7 20.29l5.59-5.59L15.99 20l5.99-5.99-5.99-5.99L12.29 8.7 6.7 20.29zM10 18h4v-2h-4v2z"/>
+        </svg>
+        Games
+      </button>
+      <button class="tab-btn" data-tab="apps">
+        <svg class="tab-icon" viewBox="0 0 24 24">
+          <path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/>
+        </svg>
+        Apps
+      </button>
+      <button class="tab-btn" data-tab="settings">
+        <svg class="tab-icon" viewBox="0 0 24 24">
+          <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.48.48 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22l-1.92 3.32c-.12.22-.07.49.12.61l2.03 1.58c-.05.3-.09.63-.09 0.94s0 .64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.24.1.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+        </svg>
+        Settings
+      </button>
     </div>
 
     <div class="time-container">
@@ -982,6 +1035,8 @@
             <button class="theme-btn" data-theme="light">Light</button>
             <button class="theme-btn" data-theme="violet">Violet</button>
             <button class="theme-btn" data-theme="matrix">Matrix</button>
+            <button class="theme-btn" data-theme="red">Red</button>
+            <button class="theme-btn" data-theme="blue">Blue</button>
           </div>
         </div>
 
@@ -1254,7 +1309,9 @@
         dark: 'Dark Mode',
         light: 'Light Mode',
         violet: 'Violet Mode',
-        matrix: 'Matrix Mode'
+        matrix: 'Matrix Mode',
+        red: 'Red Mode',
+        blue: 'Blue Mode'
       };
       showNotification(`Theme: ${themeNames[theme]}`, '', 'success');
     }
