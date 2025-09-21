@@ -1153,7 +1153,6 @@ themeButtons.forEach(btn => {
 });
 soundToggle.addEventListener('change', saveSettings);
 sfxVolumeSlider.addEventListener('input', saveSettings);
-console.warn("Tabcloaker initializing...")
 
 function tabcloaker_apply() {
     const customTitle = document.getElementById("tabcloakertitle").value.trim();
@@ -1187,15 +1186,13 @@ function tabcloaker_apply() {
           </html>
         `);
         newWin.document.close();
-        alert("Cloaked tab opened!");
+        showNotification('Cloaked tab opened!', '', 'info');
     } else {
-        alert("Popup blocked! Please allow popups for this site.");
+        showNotification('Popup blocked! Please allow popups for this site.', '', 'info');
     }
 }
 
 document.querySelector("#tabcloaker-apply-btn").addEventListener("click", tabcloaker_apply)
-
-console.log("Tabcloaker initialized.")
 
 document.addEventListener('DOMContentLoaded', () => {
   loadSettings();
