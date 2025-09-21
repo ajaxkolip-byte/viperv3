@@ -646,17 +646,7 @@ input:checked + .slider:before {
     <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
       <input class="pxyinput" type="text" placeholder="Search games..." id="games-search-input" />
     </div>
-    <div class="games-grid">
-      <div class="game-card" data-game="tetris">
-        <div class="game-icon">
-          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/tetris.png" alt="Tetris" loading="lazy" />
-        </div>
-        <div class="game-info">
-          <h3>Tetris</h3>
-          <p>Classic block-stacking puzzle game</p>
-        </div>
-      </div>
-    </div>
+    <div class="games-grid" id="games-grid"></div>
   </section>
   <!-- Apps Tab -->
   <section id="apps" class="tab-content">
@@ -664,62 +654,7 @@ input:checked + .slider:before {
     <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
       <input class="pxyinput" type="text" placeholder="Search apps..." id="apps-search-input" />
     </div>
-    <div class="games-grid">
-      <div class="game-card" data-url="https://www.youtube.com">
-        <div class="game-icon">
-          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/youtube-play.png" alt="YouTube" loading="lazy" />
-        </div>
-        <div class="game-info">
-          <h3>YouTube</h3>
-          <p>Watch videos and music</p>
-        </div>
-      </div>
-      <div class="game-card" data-url="https://www.bing.com">
-        <div class="game-icon">
-          <img src="/img/bing.jpg" alt="Bing" loading="lazy" />
-        </div>
-        <div class="game-info">
-          <h3>Bing</h3>
-          <p>Search the web</p>
-        </div>
-      </div>
-      <div class="game-card" data-url="https://chat.openai.com">
-        <div class="game-icon">
-          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/chatgpt.png" alt="ChatGPT" loading="lazy" />
-        </div>
-        <div class="game-info">
-          <h3>ChatGPT</h3>
-          <p>AI conversation assistant</p>
-        </div>
-      </div>
-      <div class="game-card" data-url="https://github.com">
-        <div class="game-icon">
-          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/github.png" alt="GitHub" loading="lazy" />
-        </div>
-        <div class="game-info">
-          <h3>GitHub</h3>
-          <p>Code collaboration platform</p>
-        </div>
-      </div>
-      <div class="game-card" data-url="https://www.notion.so">
-        <div class="game-icon">
-          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/notion.png" alt="Notion" loading="lazy" />
-        </div>
-        <div class="game-info">
-          <h3>Notion</h3>
-          <p>All-in-one workspace</p>
-        </div>
-      </div>
-      <div class="game-card" data-url="https://www.spotify.com">
-        <div class="game-icon">
-          <img src="/uv/proxy/https://img.icons8.com/color/96/000000/spotify.png" alt="Spotify" loading="lazy" />
-        </div>
-        <div class="game-info">
-          <h3>Spotify</h3>
-          <p>Music streaming service</p>
-        </div>
-      </div>
-    </div>
+    <div class="games-grid" id="apps-grid"></div>
   </section>
   <!-- Settings Tab -->
   <section id="settings" class="tab-content">
@@ -792,15 +727,18 @@ const sfxVolumeValue = document.querySelector('#settings .slider-value');
 const searchInput = document.getElementById('search-input');
 const gamesSearchInput = document.getElementById('games-search-input');
 const appsSearchInput = document.getElementById('apps-search-input');
-// Games and their URLs
-const games = {
-  tetris: 'https://tetris.com/play-tetris',
-  minesweeper: 'https://minesweeper.online/',
-  snake: 'https://playsnake.org/',
-  '2048': 'https://play2048.co/',
-  memory: 'https://www.memory-improvement-tips.com/online-memory-games.html',
-  'tic-tac-toe': 'https://tictactoe.paper-games.com/'
-};
+// Games and Apps data
+const games = [
+  { title: "Basket Random", src: "/clbasketrandom.html", img: "/img/liquid.jpg", description: "Basketball game" },
+];
+const apps = [
+  { title: "YouTube", src: "https://www.youtube.com", img: "/uv/proxy/https://img.icons8.com/color/96/000000/youtube-play.png", description: "Watch videos and music" },
+  { title: "Bing", src: "https://www.bing.com", img: "/img/bing.jpg", description: "Search the web" },
+  { title: "ChatGPT", src: "https://chat.openai.com", img: "/uv/proxy/https://img.icons8.com/color/96/000000/chatgpt.png", description: "AI conversation assistant" },
+  { title: "GitHub", src: "https://github.com", img: "/uv/proxy/https://img.icons8.com/color/96/000000/github.png", description: "Code collaboration platform" },
+  { title: "Notion", src: "https://www.notion.so", img: "/uv/proxy/https://img.icons8.com/color/96/000000/notion.png", description: "All-in-one workspace" },
+  { title: "Spotify", src: "https://www.spotify.com", img: "/uv/proxy/https://img.icons8.com/color/96/000000/spotify.png", description: "Music streaming service" }
+];
 // Initialize AudioContext
 function initAudioContext() {
   if (!audioContextInitialized) {
@@ -832,6 +770,8 @@ function init() {
   setupGamesSearch();
   setupAppsSearch();
   setupSkewEffect();
+  renderGames();
+  renderApps();
   setInterval(updateTime, 1000);
 }
 // Update time display
@@ -843,12 +783,51 @@ function updateTime() {
 // Validate URL
 function isValidUrl(string) {
   try {
-    // Basic URL validation
     const urlPattern = /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/i;
     return urlPattern.test(string);
   } catch (error) {
     return false;
   }
+}
+// Render games
+function renderGames() {
+  const gamesGrid = document.getElementById('games-grid');
+  gamesGrid.innerHTML = '';
+  games.forEach(game => {
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    card.dataset.url = game.src;
+    card.innerHTML = `
+      <div class="game-icon">
+        <img src="${game.img}" alt="${game.title}" loading="lazy" />
+      </div>
+      <div class="game-info">
+        <h3>${game.title}</h3>
+        <p>${game.description}</p>
+      </div>
+    `;
+    gamesGrid.appendChild(card);
+  });
+}
+// Render apps
+function renderApps() {
+  const appsGrid = document.getElementById('apps-grid');
+  appsGrid.innerHTML = '';
+  apps.forEach(app => {
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    card.dataset.url = app.src;
+    card.innerHTML = `
+      <div class="game-icon">
+        <img src="${app.img}" alt="${app.title}" loading="lazy" />
+      </div>
+      <div class="game-info">
+        <h3>${app.title}</h3>
+        <p>${app.description}</p>
+      </div>
+    `;
+    appsGrid.appendChild(card);
+  });
 }
 // Setup skew effect for game and app cards
 function setupSkewEffect() {
@@ -860,10 +839,9 @@ function setupSkewEffect() {
       const centerY = rect.top + rect.height / 2;
       const mouseX = e.clientX - centerX;
       const mouseY = e.clientY - centerY;
-      // Calculate skew angles based on mouse position (max 10 degrees)
       const maxSkew = 10;
-      const skewX = -(mouseY / rect.height) * maxSkew; // Tilt left/right based on vertical position
-      const skewY = (mouseX / rect.width) * maxSkew; // Tilt up/down based on horizontal position
+      const skewX = -(mouseY / rect.height) * maxSkew;
+      const skewY = (mouseX / rect.width) * maxSkew;
       card.style.transform = `scale(1.1) skew(${skewX}deg, ${skewY}deg)`;
     });
     card.addEventListener('mouseleave', () => {
@@ -873,15 +851,12 @@ function setupSkewEffect() {
 }
 // Setup event listeners
 function setupEventListeners() {
-  // Tab switching
   tabButtons.forEach(button => {
     button.addEventListener('click', () => switchTab(button.dataset.tab));
   });
-  // Theme switching
   themeButtons.forEach(button => {
     button.addEventListener('click', () => switchTheme(button.dataset.theme));
   });
-  // Settings
   notificationsToggle.addEventListener('change', (e) => {
     if (e.target.checked) {
       showNotification('Notifications enabled', '', 'success');
@@ -909,7 +884,6 @@ function setupEventListeners() {
       playSound('click');
     }
   });
-  // Modal controls
   closeModalBtn.addEventListener('click', closeModal);
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && fullscreenModal.classList.contains('active')) {
@@ -921,23 +895,25 @@ function setupEventListeners() {
       closeModal();
     }
   });
-  document.querySelectorAll('.game-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const rawUrl = card.dataset.url || games[card.dataset.game];
-      if (rawUrl) {
-        const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
-        const title = card.querySelector('h3').textContent;
-        openInModal(prefixedUrl, title);
-        showNotification(`Loading ${title}  `, '', 'info');
-      }
-    });
-  });
   document.addEventListener('click', () => {
     if (soundEnabled) {
       initAudioContext();
       resumeAudioContext();
     }
   }, { once: true });
+  // Dynamic event listeners for game and app cards
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.game-card');
+    if (card) {
+      const rawUrl = card.dataset.url;
+      if (rawUrl) {
+        const prefixedUrl = rawUrl.startsWith('http') ? __uv$config.prefix + __uv$config.encodeUrl(rawUrl) : rawUrl;
+        const title = card.querySelector('h3').textContent;
+        openInModal(prefixedUrl, title);
+        showNotification(`Loading ${title}`, '', 'info');
+      }
+    }
+  });
 }
 function setupSearch() {
   searchInput.addEventListener('keypress', async (e) => {
@@ -945,21 +921,18 @@ function setupSearch() {
       let query = e.target.value.trim();
       if (query) {
         let rawUrl = query;
-        // Check if it's a valid URL
         if (isValidUrl(rawUrl)) {
-          // Ensure protocol is included
           if (!rawUrl.startsWith('http://') && !rawUrl.startsWith('https://')) {
             rawUrl = 'https://' + rawUrl;
           }
         } else {
-          // Treat as Bing search query
           rawUrl = `https://www.bing.com/search?q=${encodeURIComponent(query)}`;
         }
         const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
         const displayQuery = rawUrl.includes('bing.com/search') ? `Bing search for "${query}"` : query;
         openInModal(prefixedUrl, displayQuery);
         searchInput.value = '';
-        showNotification(`Loading ${displayQuery}  `, '', 'info');
+        showNotification(`Loading ${displayQuery}`, '', 'info');
         if (soundEnabled) {
           initAudioContext();
           await resumeAudioContext();
@@ -1018,15 +991,15 @@ function switchTab(tabName) {
     playSound('click');
   }
   if (tabName === 'games') {
-    gamesSearchInput.value = ''; // Reset search input
+    gamesSearchInput.value = '';
     document.querySelectorAll('#games .game-card').forEach(card => {
-      card.style.display = 'flex'; // Show all games
+      card.style.display = 'flex';
     });
   }
   if (tabName === 'apps') {
-    appsSearchInput.value = ''; // Reset search input
+    appsSearchInput.value = '';
     document.querySelectorAll('#apps .game-card').forEach(card => {
-      card.style.display = 'flex'; // Show all apps
+      card.style.display = 'flex';
     });
   }
 }
