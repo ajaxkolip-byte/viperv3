@@ -691,6 +691,14 @@ input:checked + .slider:before {
           <span class="slider-value" style="min-width: 30px;">50%</span>
         </div>
       </div>
+      <div class="setting-group">
+        <h2>Tab Cloaker</h2>
+        <label class="switch">
+          <input type="checkbox" id="cloaker-toggle">
+          <span class="slider"></span>
+        </label>
+        <p style="margin-top: 1rem; color: var(--text-secondary);">Enable about:blank tab cloaker</p>
+      </div>
     </div>
   </section>
 </main>
@@ -708,6 +716,8 @@ input:checked + .slider:before {
 let currentTheme = 'dark';
 let soundEnabled = false;
 let sfxVolume = 50;
+let originalTitle = 'Viper';
+let originalFavicon = './assets/images/icon.png';
 // AudioContext management
 let audioContext = null;
 let audioContextInitialized = false;
@@ -727,6 +737,7 @@ const sfxVolumeValue = document.querySelector('#settings .slider-value');
 const searchInput = document.getElementById('search-input');
 const gamesSearchInput = document.getElementById('games-search-input');
 const appsSearchInput = document.getElementById('apps-search-input');
+const cloakerToggle = document.getElementById('cloaker-toggle');
 // Games and Apps data
 const games = [
   { title: "Basket Random", src: "/clbasketrandom.html", img: "/img/basketrandom.png", description: "Basketball game" },
@@ -884,6 +895,12 @@ function setupEventListeners() {
       playSound('click');
     }
   });
+  cloakerToggle.addEventListener('change', (e) => {
+    const enabled = e.target.checked;
+    toggleCloaker(enabled);
+    localStorage.setItem('viper-cloaker', enabled);
+    showNotification(enabled ? 'Tab cloaker enabled' : 'Tab cloaker disabled', '', 'success');
+  });
   closeModalBtn.addEventListener('click', closeModal);
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && fullscreenModal.classList.contains('active')) {
@@ -1024,11 +1041,23 @@ function switchTheme(theme) {
   };
   showNotification(`Theme: ${themeNames[theme]}`, '', 'success');
 }
+function toggleCloaker(enabled) {
+  const favicon = document.querySelector('link[rel="shortcut icon"]');
+  if (enabled) {
+    document.title = '';
+    favicon.href = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+  } else {
+    document.title = originalTitle;
+    favicon.href = originalFavicon;
+  }
+}
 function openInModal(url, title) {
   fullscreenIframe.src = url;
   fullscreenModal.classList.add('active');
   document.body.style.overflow = 'hidden';
-  document.title = `${title} - Viper`;
+  if (!cloakerToggle.checked) {
+    document.title = `${title} - Viper`;
+  }
   if (soundEnabled) {
     initAudioContext();
     resumeAudioContext();
@@ -1039,7 +1068,9 @@ function closeModal() {
   fullscreenModal.classList.remove('active');
   fullscreenIframe.src = '';
   document.body.style.overflow = '';
-  document.title = 'Viper';
+  if (!cloakerToggle.checked) {
+    document.title = 'Viper';
+  }
   if (soundEnabled) {
     initAudioContext();
     resumeAudioContext();
@@ -1125,17 +1156,24 @@ function loadSettings() {
     sfxVolumeSlider.value = sfxVolume;
     sfxVolumeValue.textContent = `${sfxVolume}%`;
   }
+  const savedCloaker = localStorage.getItem('viper-cloaker');
+  if (savedCloaker === 'true') {
+    cloakerToggle.checked = true;
+    toggleCloaker(true);
+  }
 }
 function saveSettings() {
   localStorage.setItem('viper-theme', currentTheme);
   localStorage.setItem('viper-sound', soundEnabled);
   localStorage.setItem('viper-sfx-volume', sfxVolume);
+  localStorage.setItem('viper-cloaker', cloakerToggle.checked);
 }
 themeButtons.forEach(btn => {
   btn.addEventListener('click', saveSettings);
 });
 soundToggle.addEventListener('change', saveSettings);
 sfxVolumeSlider.addEventListener('input', saveSettings);
+cloakerToggle.addEventListener('change', saveSettings);
 document.addEventListener('DOMContentLoaded', () => {
   loadSettings();
   init();
