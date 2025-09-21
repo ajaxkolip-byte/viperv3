@@ -94,6 +94,60 @@
       text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
     }
 
+    /* Tab Navigation */
+    .tab-nav {
+      display: flex;
+      gap: 4px;
+      background: rgba(10, 31, 10, 0.8);
+      border-radius: 25px;
+      padding: 4px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 255, 0, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      border: none;
+      background: transparent;
+      color: #a8e6cf;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tab-btn:hover {
+      color: #e0f2e9;
+      background: rgba(0, 255, 0, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #00ff41, #39ff14);
+      color: #0a1f0a;
+      box-shadow: 0 4px 15px rgba(0, 255, 65, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .tab-btn.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s;
+    }
+
+    .tab-btn.active:hover::before {
+      left: 100%;
+    }
+
     .center-container {
       display: flex;
       flex-direction: column;
@@ -149,6 +203,74 @@
       box-shadow: 0 0 0 4px rgba(0, 255, 65, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(0, 255, 0, 0.2);
       transform: translateY(-2px);
       text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    /* Tab Content */
+    .tab-content {
+      position: fixed;
+      top: 80px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(10, 31, 10, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(0, 255, 0, 0.2);
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-20px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 600;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tab-content.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .tab-content h2 {
+      color: #00ff41;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      text-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+      font-weight: 300;
+      letter-spacing: -0.5px;
+    }
+
+    .tab-content p {
+      color: #a8e6cf;
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 600px;
+      line-height: 1.6;
+      opacity: 0.9;
+    }
+
+    .tab-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      color: #81c784;
+      text-align: center;
+    }
+
+    .tab-placeholder .icon {
+      font-size: 4rem;
+      opacity: 0.7;
+    }
+
+    .tab-placeholder h3 {
+      color: #e0f2e9;
+      font-size: 1.5rem;
+      margin-bottom: 8px;
     }
 
     .frame {
@@ -214,7 +336,7 @@
       transform: scale(0.95);
     }
 
-    /* Hide center container when iframe is active */
+    /* Hide center container when iframe or tab is active */
     .center-container.hidden {
       opacity: 0;
       visibility: hidden;
@@ -407,10 +529,22 @@
     @media (max-width: 768px) {
       nav {
         padding: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .tab-nav {
+        margin-top: 8px;
+        order: 3;
+        width: 100%;
+        justify-content: center;
       }
 
       .logo h1 {
         font-size: 1.3rem;
+      }
+
+      #time {
+        font-size: 0.8rem;
       }
 
       .center-container h1 {
@@ -420,6 +554,19 @@
       .pxyinput, .search-popup-input {
         padding: 14px 18px;
         font-size: 1rem;
+      }
+
+      .tab-content {
+        top: 120px;
+        padding: 1rem;
+      }
+
+      .tab-content h2 {
+        font-size: 2rem;
+      }
+
+      .tab-placeholder .icon {
+        font-size: 3rem;
       }
 
       .close-btn {
@@ -458,6 +605,13 @@
       <img src="./assets/images/icon.png" alt="Viper Logo" draggable="false" />
       <h1>Viper</h1>
     </div>
+    
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="home">🏠 Home</button>
+      <button class="tab-btn" data-tab="games">🎮 Games</button>
+      <button class="tab-btn" data-tab="apps">📱 Apps</button>
+    </div>
+
     <p id="time"></p>
   </nav>
 
@@ -465,6 +619,34 @@
     <h1>Search</h1>
     <div class="search-section">
       <input class="pxyinput" type="text" placeholder="Search..." id="searchInput" />
+    </div>
+  </div>
+
+  <!-- Tab Contents -->
+  <div class="tab-content active" id="homeTab">
+    <h2>🌿 Welcome to Viper</h2>
+    <div class="tab-placeholder">
+      <span class="icon">🏠</span>
+      <h3>Home Dashboard</h3>
+      <p>Your personalized starting point. Access quick links, recent searches, and featured content. Everything you need to get started and stay productive.</p>
+    </div>
+  </div>
+
+  <div class="tab-content" id="gamesTab">
+    <h2>🎮 Games</h2>
+    <div class="tab-placeholder">
+      <span class="icon">🎮</span>
+      <h3>Game Collection</h3>
+      <p>Coming soon: A curated collection of browser-based games and entertainment options to enjoy during breaks or leisure time.</p>
+    </div>
+  </div>
+
+  <div class="tab-content" id="appsTab">
+    <h2>📱 Apps</h2>
+    <div class="tab-placeholder">
+      <span class="icon">📱</span>
+      <h3>Productivity Suite</h3>
+      <p>Coming soon: Essential web applications and productivity tools integrated seamlessly into your Viper experience.</p>
     </div>
   </div>
 
@@ -571,10 +753,33 @@
   updateTime();
   setInterval(updateTime, 1000);
 
-  // Elements
+  // Tab functionality
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  const searchContainer = document.getElementById('searchContainer');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const targetTab = this.dataset.tab;
+      
+      // Update active tab button
+      tabBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Update active tab content
+      tabContents.forEach(content => content.classList.remove('active'));
+      document.getElementById(targetTab + 'Tab').classList.add('active');
+      
+      // Hide search container when tabs are active
+      searchContainer.classList.add('hidden');
+      
+      notificationSystem.info('Tab Switched', `Now viewing ${this.textContent} section`, 2000);
+    });
+  });
+
+  // Elements for search functionality
   const searchInput = document.getElementById('searchInput');
   const searchFrame = document.getElementById('searchFrame');
-  const searchContainer = document.getElementById('searchContainer');
   const closeBtn = document.getElementById('closeBtn');
   const searchPopup = document.getElementById('searchPopup');
   const popupSearchInput = document.getElementById('popupSearchInput');
@@ -634,17 +839,28 @@
       } else if (searchPopup.classList.contains('show')) {
         closePopup();
         returnToMain();
+      } else {
+        // If in a tab, return to search
+        tabContents.forEach(content => content.classList.remove('active'));
+        tabBtns[0].classList.add('active'); // Return to Home tab
+        searchContainer.classList.remove('hidden');
       }
     }
   });
 
   // Main search function
   function performSearch(url) {
-    searchFrame.src = url;
-    searchFrame.classList.add('active');
-    searchContainer.classList.add('hidden');
-    closeBtn.classList.add('active');
-    searchPopup.classList.remove('show');
+    // Hide tabs and show search container briefly
+    tabContents.forEach(content => content.classList.remove('active'));
+    searchContainer.classList.remove('hidden');
+    
+    setTimeout(() => {
+      searchFrame.src = url;
+      searchFrame.classList.add('active');
+      searchContainer.classList.add('hidden');
+      closeBtn.classList.add('active');
+      searchPopup.classList.remove('show');
+    }, 100);
     
     // Focus on iframe
     searchFrame.focus();
@@ -675,6 +891,10 @@
     searchInput.value = '';
     popupSearchInput.value = '';
     searchInput.focus();
+    
+    // Hide tabs when returning to search
+    tabContents.forEach(content => content.classList.remove('active'));
+    tabBtns[0].classList.add('active');
   }
 
   // Close button functionality
@@ -698,7 +918,7 @@
 
   // Welcome notification on load
   setTimeout(() => {
-    notificationSystem.info('Viper Ready', 'Press Enter to search Google', 4000);
+    notificationSystem.info('Viper Ready', 'Use the tabs to navigate or press Enter to search Google', 4000);
   }, 1000);
 
   // Input focus effects
