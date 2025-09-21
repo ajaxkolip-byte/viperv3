@@ -368,12 +368,25 @@
     /* Games Grid */
     .games-grid, .apps-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
       gap: 2rem;
       padding: 1rem 0;
     }
 
-    .game-card, .app-card {
+    .game-card {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .app-card {
       background: var(--bg-secondary);
       border-radius: var(--radius);
       padding: 1.5rem;
@@ -403,30 +416,101 @@
     .game-card:hover, .app-card:hover {
       transform: translateY(-8px) scale(1.02);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-      border-color: var(--accent-primary);
     }
 
     .game-icon, .app-icon {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 1rem;
+      width: 100px;
+      height: 100px;
+      margin: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--bg-tertiary);
       border-radius: 16px;
       transition: var(--transition);
       overflow: hidden;
+      position: relative;
+    }
+
+    .app-icon {
+      width: 80px;
+      height: 80px;
+      background: var(--bg-tertiary);
     }
 
     .game-icon img, .app-icon img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 12px;
+      border-radius: 16px;
+      transition: var(--transition);
     }
 
-    .game-card:hover .game-icon, .app-card:hover .app-icon {
+    .game-card:hover .game-icon {
+      filter: brightness(0.6);
+    }
+
+    .game-card:hover .game-icon::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: inherit;
+      filter: blur(5px);
+      border-radius: 16px;
+      z-index: 1;
+    }
+
+    .game-icon img {
+      z-index: 2;
+    }
+
+    .game-info {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: var(--transition);
+      padding: 0.25rem;
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 16px;
+      overflow: hidden;
+      z-index: 3;
+    }
+
+    .game-card:hover .game-info {
+      opacity: 1;
+    }
+
+    .game-info h3 {
+      font-size: 0.9rem;
+      margin-bottom: 0.1rem;
+      color: var(--text-primary);
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.1;
+    }
+
+    .game-info p {
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      line-height: 1.1;
+      margin: 0;
+      text-align: center;
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .app-card:hover .app-icon {
       filter: brightness(1.2);
       transform: scale(1.1) rotateY(180deg);
       background: var(--accent-primary);
@@ -439,17 +523,17 @@
       100% { transform: scale(1.1) rotateY(180deg); }
     }
 
-    .game-info, .app-info {
+    .app-info {
       text-align: center;
     }
 
-    .game-info h3, .app-info h3 {
+    .app-info h3 {
       font-size: 1.25rem;
       margin-bottom: 0.5rem;
       color: var(--text-primary);
     }
 
-    .game-info p, .app-info p {
+    .app-info p {
       color: var(--text-secondary);
       line-height: 1.5;
     }
@@ -669,7 +753,7 @@
       }
 
       .games-grid, .apps-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
         gap: 1rem;
       }
 
@@ -755,7 +839,10 @@
 
     <!-- Games Tab -->
     <section id="games" class="tab-content">
-      <h2 style="margin-bottom: 2rem; text-align: center; color: var(--text-primary);">Featured Games</h2>
+      <h2 style="margin-bottom: 1rem; text-align: center; color: var(--text-primary);">Featured Games</h2>
+      <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+        <input class="pxyinput" type="text" placeholder="Search games..." id="games-search-input" />
+      </div>
       <div class="games-grid">
         <div class="game-card" data-game="tetris">
           <div class="game-icon">
@@ -959,6 +1046,7 @@
     const sfxVolumeSlider = document.getElementById('sfx-volume');
     const sfxVolumeValue = document.querySelector('#settings .slider-value');
     const searchInput = document.getElementById('search-input');
+    const gamesSearchInput = document.getElementById('games-search-input');
 
     // Games and their URLs
     const games = {
@@ -1000,6 +1088,7 @@
       updateTime();
       setupEventListeners();
       setupSearch();
+      setupGamesSearch();
       setInterval(updateTime, 1000);
     }
 
@@ -1038,7 +1127,6 @@
       soundToggle.addEventListener('change', async (e) => {
         soundEnabled = e.target.checked;
         if (soundEnabled) {
-          // Initialize and resume audio context when sound is enabled
           initAudioContext();
           await resumeAudioContext();
           playSound('click');
@@ -1051,8 +1139,6 @@
       sfxVolumeSlider.addEventListener('input', async (e) => {
         sfxVolume = e.target.value;
         sfxVolumeValue.textContent = `${sfxVolume}%`;
-        
-        // Only test sound if sound is enabled
         if (soundEnabled) {
           initAudioContext();
           await resumeAudioContext();
@@ -1063,21 +1149,18 @@
       // Modal controls
       closeModalBtn.addEventListener('click', closeModal);
       
-      // Close modal on Escape key
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && fullscreenModal.classList.contains('active')) {
           closeModal();
         }
       });
 
-      // Close modal on outside click
       fullscreenModal.addEventListener('click', (e) => {
         if (e.target === fullscreenModal) {
           closeModal();
         }
       });
 
-      // Game and app cards
       document.querySelectorAll('.game-card, .app-card').forEach(card => {
         card.addEventListener('click', () => {
           const rawUrl = card.dataset.url || games[card.dataset.game];
@@ -1090,7 +1173,6 @@
         });
       });
 
-      // Initialize audio context on first user interaction
       document.addEventListener('click', () => {
         if (soundEnabled) {
           initAudioContext();
@@ -1099,7 +1181,6 @@
       }, { once: true });
     }
 
-    // Setup search functionality
     function setupSearch() {
       searchInput.addEventListener('keypress', async (e) => {
         if (e.key === 'Enter') {
@@ -1120,45 +1201,55 @@
       });
     }
 
-    // Switch between tabs
+    function setupGamesSearch() {
+      gamesSearchInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim().toLowerCase();
+        const gameCards = document.querySelectorAll('.game-card');
+        gameCards.forEach(card => {
+          const title = card.querySelector('.game-info h3').textContent.toLowerCase();
+          if (query === '' || title.includes(query)) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        if (soundEnabled) {
+          initAudioContext();
+          resumeAudioContext();
+          playSound('click');
+        }
+      });
+    }
+
     function switchTab(tabName) {
-      // Update active tab button
       tabButtons.forEach(btn => btn.classList.remove('active'));
       document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-
-      // Update active tab content
       tabContents.forEach(content => content.classList.remove('active'));
       document.getElementById(tabName).classList.add('active');
-
-      // Play sound if enabled
       if (soundEnabled) {
         initAudioContext();
         resumeAudioContext();
         playSound('click');
       }
+      if (tabName === 'games') {
+        gamesSearchInput.value = ''; // Reset search input
+        document.querySelectorAll('.game-card').forEach(card => {
+          card.style.display = 'flex'; // Show all games
+        });
+      }
     }
 
-    // Switch themes
     function switchTheme(theme) {
-      // Update active theme button
       themeButtons.forEach(btn => btn.classList.remove('active'));
       document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
-
-      // Apply theme
       document.body.className = `theme-${theme}`;
       currentTheme = theme;
-
-      // Store in localStorage
       localStorage.setItem('viper-theme', theme);
-
-      // Play sound if enabled
       if (soundEnabled) {
         initAudioContext();
         resumeAudioContext();
         playSound('switch');
       }
-
-      // Show notification for theme changes
       const themeNames = {
         dark: 'Dark Mode',
         light: 'Light Mode',
@@ -1168,15 +1259,11 @@
       showNotification(`Theme: ${themeNames[theme]}`, '', 'success');
     }
 
-    // Open URL in fullscreen modal
     function openInModal(url, title) {
       fullscreenIframe.src = url;
       fullscreenModal.classList.add('active');
       document.body.style.overflow = 'hidden';
-      
-      // Update document title
       document.title = `${title} - Viper`;
-      
       if (soundEnabled) {
         initAudioContext();
         resumeAudioContext();
@@ -1184,13 +1271,11 @@
       }
     }
 
-    // Close fullscreen modal
     function closeModal() {
       fullscreenModal.classList.remove('active');
       fullscreenIframe.src = '';
       document.body.style.overflow = '';
       document.title = 'Viper';
-      
       if (soundEnabled) {
         initAudioContext();
         resumeAudioContext();
@@ -1199,10 +1284,8 @@
       showNotification('Closed fullscreen mode', '', 'info');
     }
 
-    // Notification system
     function showNotification(title, message = '', type = 'info') {
       if (!notificationsToggle.checked) return;
-
       const notification = document.createElement('div');
       notification.className = `notification ${type}`;
       notification.innerHTML = `
@@ -1210,13 +1293,8 @@
         <div class="notification-title">${title}</div>
         ${message ? `<div class="notification-message">${message}</div>` : ''}
       `;
-
       notificationContainer.appendChild(notification);
-
-      // Show notification
       setTimeout(() => notification.classList.add('show'), 100);
-
-      // Auto-remove after 3 seconds
       setTimeout(() => {
         if (notification.parentNode) {
           notification.classList.remove('show');
@@ -1227,8 +1305,6 @@
           }, 300);
         }
       }, 3000);
-
-      // Close on click
       notification.querySelector('.notification-close').addEventListener('click', () => {
         notification.classList.remove('show');
         setTimeout(() => {
@@ -1239,66 +1315,49 @@
       });
     }
 
-    // Sound effects (using Web Audio API) with volume control
     function playSound(type) {
       if (!soundEnabled || !audioContextInitialized) return;
-
-      // Ensure AudioContext is running
       if (audioContext.state === 'suspended') {
         audioContext.resume();
       }
-
       try {
         const oscillator = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
-
         oscillator.connect(gainNode);
         gainNode.connect(audioContext.destination);
-
         const frequencies = {
           click: 800,
           switch: 600,
           open: 400,
           close: 300
         };
-
         const duration = type === 'open' || type === 'close' ? 0.3 : 0.1;
-
         oscillator.frequency.setValueAtTime(frequencies[type] || 440, audioContext.currentTime);
         oscillator.type = 'sine';
-
-        // Apply volume control
         const volume = sfxVolume / 100;
         gainNode.gain.setValueAtTime(0.3 * volume, audioContext.currentTime);
         gainNode.gain.exponentialRampToValueAtTime(0.01 * volume, audioContext.currentTime + duration);
-
         oscillator.start(audioContext.currentTime);
         oscillator.stop(audioContext.currentTime + duration);
-
-        // Clean up nodes
         oscillator.onended = () => {
           oscillator.disconnect();
           gainNode.disconnect();
         };
-
       } catch (error) {
         console.error('Error playing sound:', error);
       }
     }
 
-    // Load saved settings
     function loadSettings() {
       const savedTheme = localStorage.getItem('viper-theme');
       if (savedTheme) {
         switchTheme(savedTheme);
       }
-
       const savedSound = localStorage.getItem('viper-sound');
       if (savedSound === 'true') {
         soundEnabled = true;
         soundToggle.checked = true;
       }
-
       const savedVolume = localStorage.getItem('viper-sfx-volume');
       if (savedVolume) {
         sfxVolume = parseInt(savedVolume);
@@ -1307,14 +1366,12 @@
       }
     }
 
-    // Save settings
     function saveSettings() {
       localStorage.setItem('viper-theme', currentTheme);
       localStorage.setItem('viper-sound', soundEnabled);
       localStorage.setItem('viper-sfx-volume', sfxVolume);
     }
 
-    // Save settings on change
     themeButtons.forEach(btn => {
       btn.addEventListener('click', saveSettings);
     });
@@ -1322,7 +1379,6 @@
     soundToggle.addEventListener('change', saveSettings);
     sfxVolumeSlider.addEventListener('input', saveSettings);
 
-    // Initialize everything when DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
       loadSettings();
       init();
