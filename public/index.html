@@ -1085,7 +1085,7 @@
             const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
             const title = card.querySelector('h3').textContent;
             openInModal(prefixedUrl, title);
-            showNotification('Loading ' + title + ' via proxy...', '', 'info');
+            showNotification(`Loading ${title} via proxy...`, '', 'info');
           }
         });
       });
@@ -1101,14 +1101,6 @@
 
     // Setup search functionality
     function setupSearch() {
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        if (query.length > 2) {
-          // Only show notification for longer searches to reduce spam
-          showNotification('Searching...', '', 'info');
-        }
-      });
-
       searchInput.addEventListener('keypress', async (e) => {
         if (e.key === 'Enter') {
           let query = e.target.value.trim();
@@ -1117,7 +1109,7 @@
             const prefixedUrl = __uv$config.prefix + __uv$config.encodeUrl(rawUrl);
             openInModal(prefixedUrl, query);
             searchInput.value = '';
-            showNotification('Loading ' + query + ' via proxy...', '', 'info');
+            showNotification(`Loading ${query} via proxy...`, '', 'info');
             if (soundEnabled) {
               initAudioContext();
               await resumeAudioContext();
@@ -1166,7 +1158,7 @@
         playSound('switch');
       }
 
-      // Show notification only for theme changes
+      // Show notification for theme changes
       const themeNames = {
         dark: 'Dark Mode',
         light: 'Light Mode',
@@ -1204,9 +1196,10 @@
         resumeAudioContext();
         playSound('close');
       }
+      showNotification('Closed fullscreen mode', '', 'info');
     }
 
-    // Notification system - simplified
+    // Notification system
     function showNotification(title, message = '', type = 'info') {
       if (!notificationsToggle.checked) return;
 
@@ -1246,7 +1239,7 @@
       });
     }
 
-    // Sound effects (using Web Audio API) with volume control - FIXED
+    // Sound effects (using Web Audio API) with volume control
     function playSound(type) {
       if (!soundEnabled || !audioContextInitialized) return;
 
