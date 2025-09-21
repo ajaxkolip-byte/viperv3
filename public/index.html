@@ -8,7 +8,6 @@
 <script src="/uv/uv.bundle.js" charset="UTF-8"></script>
 <script src="/uv/uv.config.js"></script>
 <script src="./js/preload.js"></script>
-<link rel="stylesheet" href="https://a-riceeater.github.io/tabcloaker/cdn/tabcloaker-styles.css">
 <style>
 /* Reset and Base Styles */
 * {
@@ -694,8 +693,18 @@ input:checked + .slider:before {
       </div>
       <div class="setting-group">
         <h2>Tab Cloaker</h2>
-        <button id="open-cloaker-menu" class="theme-btn">Configure and Open Cloaked Tab</button>
-        <p style="margin-top: 1rem; color: var(--text-secondary);">Open this page in a cloaked about:blank tab</p>
+        <p style="margin-top: 1rem; color: var(--text-secondary);">Configure and open this page in a cloaked about:blank tab</p>
+        <input id="tabcloakertitle" placeholder="Website title" class="pxyinput">
+        <br><br>
+        <select id="tabcloakerfavicon" class="pxyinput">
+          <option value="">None (no change)</option>
+          <option value="https://a-riceeater.github.io/tabcloaker/assets/google-favicon.png">Google</option>
+          <option value="https://a-riceeater.github.io/tabcloaker/assets/google-classroom-favicon.png">Google Classroom</option>
+          <option value="https://a-riceeater.github.io/tabcloaker/assets/gmail-favicon.ico">Gmail</option>
+          <option value="https://a-riceeater.github.io/tabcloaker/assets/google-docs-favicon.ico">Google Docs</option>
+        </select>
+        <br><br>
+        <button id="tabcloaker-apply-btn" class="theme-btn">Open Cloaked Tab</button>
       </div>
     </div>
   </section>
@@ -1144,90 +1153,20 @@ themeButtons.forEach(btn => {
 });
 soundToggle.addEventListener('change', saveSettings);
 sfxVolumeSlider.addEventListener('input', saveSettings);
-
-// TABCLOAKER JS INJECTION VERSION
-// MADE BY GHOSTY/DARTHVADER1925
-// ALL IMAGES GO TO THEIR RESPECTIVE OWNERS
-
 console.warn("Tabcloaker initializing...")
-var favcions = [];
-favcions["Google"] = "https://a-riceeater.github.io/tabcloaker/assets/google-favicon.png"
-favcions["Google Classroom"] = "https://a-riceeater.github.io/tabcloaker/assets/google-classroom-favicon.png"
-favcions["Gmail"] = "https://a-riceeater.github.io/tabcloaker/assets/gmail-favicon.ico"
-favcions["Google Docs"] = "https://a-riceeater.github.io/tabcloaker/assets/google-docs-favicon.ico"
-
-const menu = document.createElement("div");
-menu.setAttribute("id", "tabclaoker-gui-main")
-menu.innerHTML = `  
-<br><br><br>
-<h1>TabCloaker</h1>
-<input id="tabcloakertitle" placeholder="Website title" class="tabcloaker-input">
-<br><br>
-<input id="tabcloakerfavicon" placeholder="Favicon (website icon, img link)" class="tabcloaker-input">
-<h1>Presets</h1>
-<ul style="text-align: left;">
-  <li class="tabcloaker-presetOption" data="Google">Google</li>
-  <li class="tabcloaker-presetOption" data="Classes">Google Classroom</li>
-  <li class="tabcloaker-presetOption" data="Inbox">Gmail</li>
-  <li class="tabcloaker-presetOption" data="Google Docs">Google Docs</li>
-</ul>
-<button id="tabcloaker-apply-btn" class="tabcloaker-main-btn">Apply</button>
-<button id="tabcloaker-reset-btn" class="tabcloaker-main-btn">Cancel</button>
-`
-menu.style.display = "none";
-document.body.appendChild(menu);
-
-const shade = document.createElement("div")
-shade.setAttribute("id", "tabcloaker-shade-main")
-shade.style.display = "none"
-document.body.appendChild(shade);
-
-document.querySelectorAll(".tabcloaker-presetOption").forEach(ele => {
-    ele.addEventListener("click", setPreset);
-})
-
-function setPreset(e) {
-    const presetTitle = e.target.getAttribute("data");
-    const presetFavicon = favcions[e.target.innerHTML];
-    const newWin = window.open('about:blank', '_blank');
-    if (newWin) {
-        newWin.document.write(`
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>${presetTitle}</title>
-            <link rel="shortcut icon" href="${presetFavicon}" type="image/x-icon">
-          </head>
-          <body style="margin: 0; padding: 0; overflow: hidden;">
-            <iframe src="${window.location.href}" style="width: 100vw; height: 100vh; border: none;"></iframe>
-          </body>
-          </html>
-        `);
-        newWin.document.close();
-        alert("Cloaked tab opened!");
-        menu.style.display = "none"
-        shade.style.display = "none"
-    } else {
-        alert("Popup blocked! Please allow popups for this site.");
-    }
-}
 
 function tabcloaker_apply() {
     const customTitle = document.getElementById("tabcloakertitle").value.trim();
-    const customFavicon = document.getElementById("tabcloakerfavicon").value.trim();
+    const customFavicon = document.getElementById("tabcloakerfavicon").value;
     if (customTitle === "") {
         alert("Title must be filled!");
         return;
     }
     let faviconHtml = '';
-    let changeIcon = true;
     if (customFavicon === "") {
         if (!confirm("Website icon will not change. Ok?")) {
             return;
         }
-        changeIcon = false;
     } else {
         faviconHtml = `<link rel="shortcut icon" href="${customFavicon}" type="image/x-icon">`;
     }
@@ -1249,26 +1188,12 @@ function tabcloaker_apply() {
         `);
         newWin.document.close();
         alert("Cloaked tab opened!");
-        menu.style.display = "none"
-        shade.style.display = "none"
     } else {
         alert("Popup blocked! Please allow popups for this site.");
     }
 }
 
-function tabcloaker_reset() {
-    menu.style.display = "none"
-    shade.style.display = "none"
-}
-
 document.querySelector("#tabcloaker-apply-btn").addEventListener("click", tabcloaker_apply)
-document.querySelector("#tabcloaker-reset-btn").addEventListener("click", tabcloaker_reset)
-
-// Integrate button to open menu
-document.getElementById('open-cloaker-menu').addEventListener('click', () => {
-  menu.style.display = 'block';
-  shade.style.display = 'block';
-});
 
 console.log("Tabcloaker initialized.")
 
