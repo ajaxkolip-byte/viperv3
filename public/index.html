@@ -122,6 +122,15 @@
       text-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
     }
 
+    .search-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      max-width: 600px;
+      width: 100%;
+    }
+
     .pxyinput {
       width: 100%;
       max-width: 500px;
@@ -146,6 +155,58 @@
       box-shadow: 0 0 0 4px rgba(0, 255, 65, 0.2), 0 8px 32px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(0, 255, 0, 0.2);
       transform: translateY(-2px);
       text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .quick-search {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .quick-search-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: rgba(10, 31, 10, 0.8);
+      border: 2px solid rgba(0, 255, 0, 0.2);
+      color: #e0f2e9;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quick-search-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .quick-search-btn:hover::before {
+      left: 100%;
+    }
+
+    .quick-search-btn:hover {
+      background: rgba(0, 255, 0, 0.1);
+      border-color: rgba(0, 255, 0, 0.4);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 30px rgba(0, 255, 0, 0.2), 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+
+    .quick-search-btn:active {
+      transform: translateY(0) scale(0.98);
     }
 
     .frame {
@@ -216,6 +277,115 @@
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
+    }
+
+    /* Search Bar Popup */
+    .search-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: rgba(10, 31, 10, 0.98);
+      border: 2px solid rgba(0, 255, 0, 0.4);
+      border-radius: 20px;
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+      z-index: 1200;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.7), 0 0 50px rgba(0, 255, 0, 0.3);
+    }
+
+    .search-popup.show {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .search-popup h2 {
+      color: #00ff41;
+      font-size: 2rem;
+      margin-bottom: 8px;
+      text-align: center;
+      text-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+      font-weight: 300;
+      letter-spacing: -0.5px;
+    }
+
+    .search-popup p {
+      color: #a8e6cf;
+      text-align: center;
+      margin-bottom: 24px;
+      opacity: 0.8;
+      font-size: 1rem;
+    }
+
+    .search-popup-input {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 1.1rem;
+      background: rgba(10, 31, 10, 0.8);
+      border: 2px solid rgba(0, 255, 0, 0.3);
+      border-radius: 50px;
+      color: #e0f2e9;
+      outline: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 1px 0 rgba(0, 255, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .search-popup-input::placeholder {
+      color: #81c784;
+    }
+
+    .search-popup-input:focus {
+      border-color: #00ff41;
+      box-shadow: 0 0 0 4px rgba(0, 255, 65, 0.2), inset 0 1px 0 rgba(0, 255, 0, 0.2);
+    }
+
+    .popup-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .popup-btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 25px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      min-width: 100px;
+    }
+
+    .popup-btn.primary {
+      background: linear-gradient(135deg, #00ff41, #39ff14);
+      color: #0a1f0a;
+      box-shadow: 0 4px 20px rgba(0, 255, 65, 0.3);
+    }
+
+    .popup-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 255, 65, 0.4);
+    }
+
+    .popup-btn.secondary {
+      background: rgba(168, 230, 207, 0.1);
+      border: 1px solid rgba(0, 255, 0, 0.3);
+      color: #e0f2e9;
+    }
+
+    .popup-btn.secondary:hover {
+      background: rgba(0, 255, 0, 0.1);
+      border-color: rgba(0, 255, 0, 0.5);
+      transform: translateY(-2px);
     }
 
     /* Notification System */
@@ -292,92 +462,6 @@
       opacity: 1;
     }
 
-    /* Search Tab Popup */
-    .search-tab {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      background: rgba(10, 31, 10, 0.98);
-      border: 2px solid rgba(0, 255, 0, 0.4);
-      border-radius: 16px;
-      padding: 24px;
-      max-width: 400px;
-      width: 90%;
-      z-index: 1500;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(20px);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 255, 0, 0.2);
-    }
-
-    .search-tab.show {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .search-tab h3 {
-      color: #00ff41;
-      font-size: 1.3rem;
-      margin-bottom: 16px;
-      text-align: center;
-      text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
-    }
-
-    .search-tab-content {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .search-tab-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px;
-      background: rgba(0, 255, 0, 0.05);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: 1px solid rgba(0, 255, 0, 0.1);
-    }
-
-    .search-tab-item:hover {
-      background: rgba(0, 255, 0, 0.1);
-      border-color: rgba(0, 255, 0, 0.3);
-      transform: translateX(4px);
-    }
-
-    .search-tab-item .icon {
-      width: 20px;
-      height: 20px;
-      color: #00ff41;
-    }
-
-    .search-tab-item .text {
-      flex: 1;
-      font-size: 0.95rem;
-    }
-
-    .search-tab-close {
-      background: rgba(0, 255, 0, 0.1);
-      border: 1px solid rgba(0, 255, 0, 0.3);
-      color: #e0f2e9;
-      padding: 8px 16px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-      align-self: flex-end;
-    }
-
-    .search-tab-close:hover {
-      background: rgba(0, 255, 0, 0.2);
-      transform: scale(1.05);
-    }
-
     @media (max-width: 768px) {
       nav {
         padding: 1rem;
@@ -391,9 +475,19 @@
         font-size: 2.5rem;
       }
 
-      .pxyinput {
+      .pxyinput, .search-popup-input {
         padding: 14px 18px;
         font-size: 1rem;
+      }
+
+      .quick-search {
+        gap: 12px;
+      }
+
+      .quick-search-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
       }
 
       .close-btn {
@@ -410,9 +504,17 @@
         max-width: 300px;
       }
 
-      .search-tab {
+      .search-popup {
         width: 95%;
-        padding: 20px;
+        padding: 24px;
+      }
+
+      .search-popup h2 {
+        font-size: 1.5rem;
+      }
+
+      .popup-buttons {
+        flex-direction: column;
       }
     }
   </style>
@@ -429,57 +531,47 @@
 
   <div class="center-container" id="searchContainer">
     <h1>Search</h1>
-    <input class="pxyinput" type="text" placeholder="Search..." id="searchInput" />
+    <div class="search-section">
+      <input class="pxyinput" type="text" placeholder="Search..." id="searchInput" />
+      <div class="quick-search">
+        <button class="quick-search-btn" data-url="https://www.google.com/search?q=" title="Google">
+          🔍
+        </button>
+        <button class="quick-search-btn" data-url="https://www.youtube.com/results?search_query=" title="YouTube">
+          🎥
+        </button>
+        <button class="quick-search-btn" data-url="https://twitter.com/search?q=" title="Twitter/X">
+          🐦
+        </button>
+        <button class="quick-search-btn" data-url="https://www.wikipedia.org/w/index.php?search=" title="Wikipedia">
+          📚
+        </button>
+        <button class="quick-search-btn" data-url="https://www.reddit.com/search/?q=" title="Reddit">
+          📝
+        </button>
+        <button class="quick-search-btn" data-url="https://duckduckgo.com/?q=" title="DuckDuckGo">
+          🦆
+        </button>
+      </div>
+    </div>
   </div>
 
   <iframe class="frame" id="searchFrame"></iframe>
   <button class="close-btn" id="closeBtn" title="Close">×</button>
 
+  <!-- Search Popup -->
+  <div class="search-popup" id="searchPopup">
+    <h2>🔍 Ready to Search?</h2>
+    <p>What would you like to explore next?</p>
+    <input class="search-popup-input" type="text" placeholder="Enter your search query..." id="popupSearchInput" />
+    <div class="popup-buttons">
+      <button class="popup-btn primary" id="popupSearchBtn">Search Now</button>
+      <button class="popup-btn secondary" id="popupCloseBtn">Skip</button>
+    </div>
+  </div>
+
   <!-- Notification Container -->
   <div class="notification-container" id="notificationContainer"></div>
-
-  <!-- Search Tab Popup -->
-  <div class="search-tab" id="searchTab">
-    <h3>🔍 Quick Search Options</h3>
-    <div class="search-tab-content">
-      <div class="search-tab-item" data-url="https://www.google.com/search?q=">
-        <span class="icon">🔍</span>
-        <div class="text">
-          <div>Google Search</div>
-          <small>Standard web search</small>
-        </div>
-      </div>
-      <div class="search-tab-item" data-url="https://www.youtube.com/results?search_query=">
-        <span class="icon">🎥</span>
-        <div class="text">
-          <div>YouTube</div>
-          <small>Video search</small>
-        </div>
-      </div>
-      <div class="search-tab-item" data-url="https://twitter.com/search?q=">
-        <span class="icon">🐦</span>
-        <div class="text">
-          <div>Twitter/X</div>
-          <small>Social media search</small>
-        </div>
-      </div>
-      <div class="search-tab-item" data-url="https://www.wikipedia.org/w/index.php?search=">
-        <span class="icon">📚</span>
-        <div class="text">
-          <div>Wikipedia</div>
-          <small>Encyclopedia</small>
-        </div>
-      </div>
-      <div class="search-tab-item" data-url="https://www.reddit.com/search/?q=">
-        <span class="icon">📝</span>
-        <div class="text">
-          <div>Reddit</div>
-          <small>Community discussions</small>
-        </div>
-      </div>
-    </div>
-    <button class="search-tab-close" id="searchTabClose">✕ Close</button>
-  </div>
 </body>
 
 <script src="./js/index.js"></script>
@@ -567,105 +659,138 @@
   updateTime();
   setInterval(updateTime, 1000);
 
-  // Search functionality
+  // Elements
   const searchInput = document.getElementById('searchInput');
   const searchFrame = document.getElementById('searchFrame');
   const searchContainer = document.getElementById('searchContainer');
   const closeBtn = document.getElementById('closeBtn');
-  const searchTab = document.getElementById('searchTab');
-  const searchTabClose = document.getElementById('searchTabClose');
+  const searchPopup = document.getElementById('searchPopup');
+  const popupSearchInput = document.getElementById('popupSearchInput');
+  const popupSearchBtn = document.getElementById('popupSearchBtn');
+  const popupCloseBtn = document.getElementById('popupCloseBtn');
 
-  // Search tab items click handlers
-  document.querySelectorAll('.search-tab-item').forEach(item => {
-    item.addEventListener('click', function() {
+  // Quick search buttons functionality
+  document.querySelectorAll('.quick-search-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
       const searchTerm = searchInput.value.trim();
       if (searchTerm) {
         const baseUrl = this.dataset.url;
         const searchUrl = `${baseUrl}${encodeURIComponent(searchTerm)}`;
         
-        searchFrame.src = searchUrl;
-        searchFrame.classList.add('active');
-        searchContainer.classList.add('hidden');
-        closeBtn.classList.add('active');
-        searchTab.classList.remove('show');
-        
-        notificationSystem.success('Search Launched', `Opening ${this.querySelector('.text div').textContent} results for "${searchTerm}"`, 3000);
-        
-        // Focus on iframe
-        searchFrame.focus();
+        performSearch(searchUrl);
+        notificationSystem.success('Quick Search', `Searching ${this.title} for "${searchTerm}"`, 2500);
       } else {
         notificationSystem.error('Empty Search', 'Please enter a search term first');
       }
     });
   });
 
-  // Close search tab
-  searchTabClose.addEventListener('click', () => {
-    searchTab.classList.remove('show');
-  });
-
+  // Search input functionality
   searchInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter' && this.value.trim()) {
       e.preventDefault();
       const searchTerm = this.value.trim();
       const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchTerm)}`;
       
-      searchFrame.src = searchUrl;
-      searchFrame.classList.add('active');
-      searchContainer.classList.add('hidden');
-      closeBtn.classList.add('active');
-      
+      performSearch(searchUrl);
       notificationSystem.success('Search Started', `Loading results for "${searchTerm}"`, 2000);
-      
-      // Focus on iframe
-      searchFrame.focus();
     }
   });
 
-  // Enhanced close functionality with search tab
-  function closeSearch() {
-    searchFrame.classList.remove('active');
-    searchContainer.classList.remove('hidden');
-    closeBtn.classList.remove('active');
-    searchFrame.src = '';
-    searchInput.value = '';
-    searchInput.focus();
-    
-    // Show search tab popup
-    setTimeout(() => {
-      searchTab.classList.add('show');
-      notificationSystem.info('Search Closed', 'Choose a search engine or type your query', 4000);
-    }, 300);
-  }
+  // Popup search functionality
+  popupSearchBtn.addEventListener('click', function() {
+    const searchTerm = popupSearchInput.value.trim();
+    if (searchTerm) {
+      const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(searchTerm)}`;
+      performSearch(searchUrl);
+      notificationSystem.success('Search Launched', `Searching for "${searchTerm}"`, 2000);
+    } else {
+      notificationSystem.error('Empty Search', 'Please enter a search term');
+    }
+  });
 
-  closeBtn.addEventListener('click', closeSearch);
+  // Enter key in popup
+  popupSearchInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      popupSearchBtn.click();
+    }
+  });
 
-  // Close on Escape key
+  // Close popup
+  popupCloseBtn.addEventListener('click', function() {
+    closePopup();
+    returnToMain();
+  });
+
+  // Click outside to close popup
+  searchPopup.addEventListener('click', function(e) {
+    if (e.target === this) {
+      closePopup();
+      returnToMain();
+    }
+  });
+
+  // Escape key handler
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       if (searchFrame.classList.contains('active')) {
         closeSearch();
-      } else if (searchTab.classList.contains('show')) {
-        searchTab.classList.remove('show');
+      } else if (searchPopup.classList.contains('show')) {
+        closePopup();
+        returnToMain();
       }
     }
   });
 
-  // Close search tab on click outside
-  searchTab.addEventListener('click', function(e) {
-    if (e.target === this) {
-      this.classList.remove('show');
-    }
-  });
+  // Main search function
+  function performSearch(url) {
+    searchFrame.src = url;
+    searchFrame.classList.add('active');
+    searchContainer.classList.add('hidden');
+    closeBtn.classList.add('active');
+    searchPopup.classList.remove('show');
+    
+    // Focus on iframe
+    searchFrame.focus();
+  }
+
+  // Close search function with popup
+  function closeSearch() {
+    searchFrame.classList.remove('active');
+    closeBtn.classList.remove('active');
+    searchFrame.src = '';
+    
+    // Show popup after brief delay
+    setTimeout(() => {
+      searchPopup.classList.add('show');
+      popupSearchInput.focus();
+      notificationSystem.info('Search Complete', 'Ready for your next query?', 3000);
+    }, 200);
+  }
+
+  // Close popup function
+  function closePopup() {
+    searchPopup.classList.remove('show');
+  }
+
+  // Return to main interface
+  function returnToMain() {
+    searchContainer.classList.remove('hidden');
+    searchInput.value = '';
+    popupSearchInput.value = '';
+    searchInput.focus();
+  }
+
+  // Close button functionality
+  closeBtn.addEventListener('click', closeSearch);
 
   // Handle iframe load
   searchFrame.addEventListener('load', function() {
     if (searchFrame.classList.contains('active')) {
-      // Add subtle loading animation
       closeBtn.style.transform = 'rotate(90deg)';
       setTimeout(() => {
         closeBtn.style.transform = 'rotate(0deg)';
-        notificationSystem.success('Page Loaded', 'Search results ready!', 1500);
+        notificationSystem.success('Page Loaded', 'Results ready - press X to search again', 2000);
       }, 200);
     }
   });
@@ -677,13 +802,26 @@
 
   // Welcome notification on load
   setTimeout(() => {
-    notificationSystem.info('Viper Ready', 'Press Enter to search or use the quick search tab', 4000);
+    notificationSystem.info('Viper Ready', 'Type to search or click a quick search button', 4000);
   }, 1000);
 
-  // Input focus effect
+  // Input focus effects
   searchInput.addEventListener('focus', function() {
-    notificationSystem.info('Ready to Search', 'Type your query and press Enter', 2000);
+    if (!searchFrame.classList.contains('active')) {
+      notificationSystem.info('Search Ready', 'Press Enter to search or use quick buttons', 2000);
+    }
   });
+
+  popupSearchInput.addEventListener('focus', function() {
+    notificationSystem.info('Quick Search', 'Enter your query and click Search Now', 2000);
+  });
+
+  // Copy search term from main input to popup if available
+  function syncSearchTerms() {
+    if (searchInput.value.trim()) {
+      popupSearchInput.value = searchInput.value;
+    }
+  }
 </script>
 
 </html>
