@@ -294,10 +294,10 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 /* Games Grid */
-.games-grid, .apps-grid {
+.games-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.1rem;
   padding: 1rem 0;
 }
 .game-card {
@@ -305,26 +305,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 140px;
-  height: 140px;
+  width: 180px;
+  height: 180px;
   background: none;
   border: none;
   cursor: pointer;
   transition: var(--transition);
 }
-.app-card {
-  background: var(--bg-secondary);
-  border-radius: var(--radius);
-  padding: 1rem;
-  border: 1px solid var(--border-color);
-  cursor: pointer;
-  transition: var(--transition);
-  position: relative;
-  overflow: hidden;
-}
-.game-icon, .app-icon {
-  width: 140px;
-  height: 140px;
+.game-icon {
+  width: 180px;
+  height: 180px;
   margin: 0;
   display: flex;
   align-items: center;
@@ -334,12 +324,7 @@ body {
   overflow: hidden;
   position: relative;
 }
-.app-icon {
-  width: 70px;
-  height: 70px;
-  background: var(--bg-tertiary);
-}
-.game-icon img, .app-icon img {
+.game-icon img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -368,7 +353,7 @@ body {
   opacity: 1;
 }
 .game-info h3 {
-  font-size: 0.9rem;
+  font-size: 1rem;
   margin-bottom: 0.2rem;
   color: var(--text-primary);
   font-weight: 600;
@@ -376,7 +361,7 @@ body {
   line-height: 1.1;
 }
 .game-info p {
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
   line-height: 1.1;
   margin: 0;
@@ -385,18 +370,6 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-.app-info {
-  text-align: center;
-}
-.app-info h3 {
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-  color: var(--text-primary);
-}
-.app-info p {
-  color: var(--text-secondary);
-  line-height: 1.4;
 }
 /* Settings */
 .settings-container {
@@ -573,8 +546,8 @@ input:checked + .slider:before {
     justify-content: center;
     margin-top: 1rem;
   }
-  .games-grid, .apps-grid {
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  .games-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 0.8rem;
   }
   #notification-container {
@@ -727,58 +700,61 @@ input:checked + .slider:before {
   </section>
   <!-- Apps Tab -->
   <section id="apps" class="tab-content">
-    <h2 style="margin-bottom: 2rem; text-align: center; color: var(--text-primary);">Web Applications</h2>
-    <div class="apps-grid">
-      <div class="app-card" data-url="https://www.youtube.com">
-        <div class="app-icon">
+    <h2 style="margin-bottom: 1rem; text-align: center; color: var(--text-primary);">Featured Apps</h2>
+    <div style="display: flex; justify-content: center; margin-bottom: 2rem;">
+      <input class="pxyinput" type="text" placeholder="Search apps..." id="apps-search-input" />
+    </div>
+    <div class="games-grid">
+      <div class="game-card" data-url="https://www.youtube.com">
+        <div class="game-icon">
           <img src="/uv/proxy/https://img.icons8.com/color/96/000000/youtube-play.png" alt="YouTube" loading="lazy" />
         </div>
-        <div class="app-info">
+        <div class="game-info">
           <h3>YouTube</h3>
           <p>Watch videos and music</p>
         </div>
       </div>
-      <div class="app-card" data-url="https://www.google.com">
-        <div class="app-icon">
+      <div class="game-card" data-url="https://www.google.com">
+        <div class="game-icon">
           <img src="/uv/proxy/https://img.icons8.com/color/96/000000/google-logo.png" alt="Google" loading="lazy" />
         </div>
-        <div class="app-info">
+        <div class="game-info">
           <h3>Google</h3>
           <p>Search the web</p>
         </div>
       </div>
-      <div class="app-card" data-url="https://chat.openai.com">
-        <div class="app-icon">
+      <div class="game-card" data-url="https://chat.openai.com">
+        <div class="game-icon">
           <img src="/uv/proxy/https://img.icons8.com/color/96/000000/chatgpt.png" alt="ChatGPT" loading="lazy" />
         </div>
-        <div class="app-info">
+        <div class="game-info">
           <h3>ChatGPT</h3>
           <p>AI conversation assistant</p>
         </div>
       </div>
-      <div class="app-card" data-url="https://github.com">
-        <div class="app-icon">
+      <div class="game-card" data-url="https://github.com">
+        <div class="game-icon">
           <img src="/uv/proxy/https://img.icons8.com/color/96/000000/github.png" alt="GitHub" loading="lazy" />
         </div>
-        <div class="app-info">
+        <div class="game-info">
           <h3>GitHub</h3>
           <p>Code collaboration platform</p>
         </div>
       </div>
-      <div class="app-card" data-url="https://www.notion.so">
-        <div class="app-icon">
+      <div class="game-card" data-url="https://www.notion.so">
+        <div class="game-icon">
           <img src="/uv/proxy/https://img.icons8.com/color/96/000000/notion.png" alt="Notion" loading="lazy" />
         </div>
-        <div class="app-info">
+        <div class="game-info">
           <h3>Notion</h3>
           <p>All-in-one workspace</p>
         </div>
       </div>
-      <div class="app-card" data-url="https://www.spotify.com">
-        <div class="app-icon">
+      <div class="game-card" data-url="https://www.spotify.com">
+        <div class="game-icon">
           <img src="/uv/proxy/https://img.icons8.com/color/96/000000/spotify.png" alt="Spotify" loading="lazy" />
         </div>
-        <div class="app-info">
+        <div class="game-info">
           <h3>Spotify</h3>
           <p>Music streaming service</p>
         </div>
@@ -855,6 +831,7 @@ const sfxVolumeSlider = document.getElementById('sfx-volume');
 const sfxVolumeValue = document.querySelector('#settings .slider-value');
 const searchInput = document.getElementById('search-input');
 const gamesSearchInput = document.getElementById('games-search-input');
+const appsSearchInput = document.getElementById('apps-search-input');
 // Games and their URLs
 const games = {
   tetris: 'https://tetris.com/play-tetris',
@@ -893,6 +870,7 @@ function init() {
   setupEventListeners();
   setupSearch();
   setupGamesSearch();
+  setupAppsSearch();
   setInterval(updateTime, 1000);
 }
 // Update time display
@@ -961,7 +939,7 @@ function setupEventListeners() {
       closeModal();
     }
   });
-  document.querySelectorAll('.game-card, .app-card').forEach(card => {
+  document.querySelectorAll('.game-card').forEach(card => {
     card.addEventListener('click', () => {
       const rawUrl = card.dataset.url || games[card.dataset.game];
       if (rawUrl) {
@@ -1011,8 +989,27 @@ function setupSearch() {
 function setupGamesSearch() {
   gamesSearchInput.addEventListener('input', (e) => {
     const query = e.target.value.trim().toLowerCase();
-    const gameCards = document.querySelectorAll('.game-card');
+    const gameCards = document.querySelectorAll('#games .game-card');
     gameCards.forEach(card => {
+      const title = card.querySelector('.game-info h3').textContent.toLowerCase();
+      if (query === '' || title.includes(query)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    if (soundEnabled) {
+      initAudioContext();
+      resumeAudioContext();
+      playSound('click');
+    }
+  });
+}
+function setupAppsSearch() {
+  appsSearchInput.addEventListener('input', (e) => {
+    const query = e.target.value.trim().toLowerCase();
+    const appCards = document.querySelectorAll('#apps .game-card');
+    appCards.forEach(card => {
       const title = card.querySelector('.game-info h3').textContent.toLowerCase();
       if (query === '' || title.includes(query)) {
         card.style.display = 'flex';
@@ -1039,8 +1036,14 @@ function switchTab(tabName) {
   }
   if (tabName === 'games') {
     gamesSearchInput.value = ''; // Reset search input
-    document.querySelectorAll('.game-card').forEach(card => {
+    document.querySelectorAll('#games .game-card').forEach(card => {
       card.style.display = 'flex'; // Show all games
+    });
+  }
+  if (tabName === 'apps') {
+    appsSearchInput.value = ''; // Reset search input
+    document.querySelectorAll('#apps .game-card').forEach(card => {
+      card.style.display = 'flex'; // Show all apps
     });
   }
 }
