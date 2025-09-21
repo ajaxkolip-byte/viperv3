@@ -1158,7 +1158,7 @@ function tabcloaker_apply() {
     const customTitle = document.getElementById("tabcloakertitle").value.trim();
     const customFavicon = document.getElementById("tabcloakerfavicon").value;
     if (customTitle === "") {
-        alert("Title must be filled!");
+        showNotification('Title must be filled!', '', 'info');
         return;
     }
     let faviconHtml = '';
