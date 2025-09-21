@@ -465,6 +465,49 @@
       color: var(--accent-primary);
     }
 
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2500;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .loading-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(0, 255, 65, 0.3);
+      border-top: 3px solid var(--accent-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
     @media (max-width: 768px) {
       nav {
         padding: 0.8rem 1rem;
@@ -529,11 +572,14 @@
     <p id="time"></p>
   </nav>
 
-  <!-- Home Tab - Simplified Search Interface -->
+  <!-- Home Tab - Search Interface -->
   <div class="tab-content active" id="homeTab">
     <div class="center-container">
       <h1>Search</h1>
-      <input class="pxyinput" type="text" placeholder="Search or enter URL (e.g., roblox.com)..." id="searchInput" />
+      <input class="pxyinput" type="text" placeholder="Search the web..." id="searchInput" />
+      <div style="font-size: 0.9rem; color: var(--text-muted); text-align: center; opacity: 0.7;">
+        Powered by Viper Proxy
+      </div>
     </div>
   </div>
 
@@ -640,6 +686,12 @@
   <iframe class="frame" id="mainFrame"></iframe>
   <button class="close-btn" id="closeBtn" title="Close">×</button>
 
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading...</div>
+  </div>
+
   <!-- Notification Container -->
   <div class="notification-container" id="notificationContainer"></div>
 </body>
@@ -705,6 +757,31 @@
 
   let currentTheme = 'green';
 
+  // Proxy Configuration
+  const PROXY_CONFIG = {
+    baseUrl: '/uv/',
+    searchEngines: {
+      google: {
+        url: 'http://www.google.com/search',
+        params: {
+          q: 'query',
+          num: '10',
+          ie: 'UTF-8',
+          oe: 'UTF-8'
+        }
+      },
+      bing: {
+        url: 'https://www.bing.com/search',
+        params: {
+          q: 'query',
+          count: '10',
+          setlang: 'en'
+        }
+      }
+    },
+    defaultEngine: 'google'
+  };
+
   // Simplified Notification System
   class NotificationSystem {
     constructor() {
@@ -750,6 +827,17 @@
   }
 
   const notificationSystem = new NotificationSystem();
+  const loadingOverlay = document.getElementById('loadingOverlay');
+
+  // Loading State Management
+  function showLoading(text = 'Loading...') {
+    loadingOverlay.querySelector('.loading-text').textContent = text;
+    loadingOverlay.classList.add('active');
+  }
+
+  function hideLoading() {
+    loadingOverlay.classList.remove('active');
+  }
 
   // Simplified Theme Function
   function applyTheme(themeName) {
@@ -788,30 +876,33 @@
   updateTime();
   setInterval(updateTime, 1000);
 
-  // URL Detection Function
-  function isValidURL(string) {
+  // Proxy Search Function
+  function proxySearch(query, engine = PROXY_CONFIG.defaultEngine) {
     try {
-      const url = new URL(string.startsWith('http') ? string : 'https://' + string);
-      return url.protocol === 'http:' || url.protocol === 'https:';
-    } catch (_) {
-      return false;
-    }
-  }
+      const searchConfig = PROXY_CONFIG.searchEngines[engine];
+      if (!searchConfig) {
+        throw new Error('Search engine not found');
+      }
 
-  function formatURL(input) {
-    let url = input.trim();
-    
-    // If no protocol, add https://
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      url = 'https://' + url;
+      // Build search URL
+      const url = new URL(searchConfig.url);
+      Object.entries(searchConfig.params).forEach(([key, value]) => {
+        if (key === 'query') {
+          url.searchParams.set(key, query);
+        } else {
+          url.searchParams.set(key, value);
+        }
+      });
+
+      // Use UV proxy
+      const proxyUrl = `${PROXY_CONFIG.baseUrl}proxy/${btoa(unescape(encodeURIComponent(url.toString())))}`;
+      
+      return proxyUrl;
+    } catch (error) {
+      console.error('Search error:', error);
+      notificationSystem.error('Search Error', 'Failed to process search request', 3000);
+      return null;
     }
-    
-    // If it's just a domain, ensure it has www or proper format
-    if (!url.includes('/')) {
-      url = url.replace(/^(https?:\/\/)?([^\/]+)/, '$1$2/');
-    }
-    
-    return url;
   }
 
   // Simplified Tab System
@@ -846,14 +937,16 @@
   // Simplified Frame Management
   function loadInFrame(url, isGame = false) {
     tabContents.forEach(content => content.classList.remove('active'));
+    
+    // Show loading
+    showLoading(isGame ? 'Loading game...' : 'Searching...');
+    
     mainFrame.src = url;
     mainFrame.classList.add('active');
     closeBtn.classList.add('active');
     
     if (isGame) {
-      notificationSystem.success('Game Loaded', 'Ready to play!', 1500);
-    } else {
-      notificationSystem.success('Loading', 'Opening website...', 1500);
+      notificationSystem.success('Game', 'Ready to play!', 1500);
     }
   }
 
@@ -861,6 +954,7 @@
     mainFrame.classList.remove('active');
     closeBtn.classList.remove('active');
     mainFrame.src = '';
+    hideLoading();
     
     // Return to home
     tabContents.forEach(content => content.classList.remove('active'));
@@ -874,32 +968,42 @@
   // Close button
   closeBtn.addEventListener('click', closeFrame);
 
-  // Enhanced Search functionality - detects URLs vs search queries
+  // Enhanced Search functionality with proxy
   searchInput.addEventListener('keypress', function(e) {
     if (e.key === 'Enter' && this.value.trim()) {
       e.preventDefault();
-      const input = this.value.trim();
+      const searchTerm = this.value.trim();
       
-      if (isValidURL(input)) {
-        // Direct URL navigation
-        const formattedURL = formatURL(input);
-        loadInFrame(formattedURL);
-        notificationSystem.success('Navigation', `Loading ${input}...`, 2000);
-      } else {
-        // Search query
-        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(input)}`;
-        loadInFrame(searchUrl);
-        notificationSystem.success('Search', `Searching for "${input}"`, 2000);
+      // Use proxy search
+      const proxySearchUrl = proxySearch(searchTerm);
+      if (proxySearchUrl) {
+        loadInFrame(proxySearchUrl);
+        this.value = '';
       }
-      
-      this.value = '';
     }
   });
 
-  // Game functionality
+  // Game functionality with proxy for games that need it
   document.querySelectorAll('.game-card').forEach(card => {
     card.addEventListener('click', function() {
-      const gameUrl = this.dataset.gameUrl;
+      let gameUrl = this.dataset.gameUrl;
+      
+      // Check if game needs proxy (you can add specific games to this list)
+      const proxyNeededGames = [
+        'https://play2048.co',
+        'https://tetris.com/play-tetris',
+        'https://minesweeper.online'
+      ];
+      
+      if (proxyNeededGames.includes(gameUrl)) {
+        try {
+          const proxyUrl = `${PROXY_CONFIG.baseUrl}proxy/${btoa(unescape(encodeURIComponent(gameUrl)))}`;
+          gameUrl = proxyUrl;
+        } catch (error) {
+          console.error('Proxy error for game:', error);
+        }
+      }
+      
       loadInFrame(gameUrl, true);
     });
   });
@@ -930,11 +1034,23 @@
   // Frame load handler
   mainFrame.addEventListener('load', function() {
     if (mainFrame.classList.contains('active')) {
+      hideLoading();
       closeBtn.style.transform = 'rotate(90deg)';
       setTimeout(() => {
         closeBtn.style.transform = 'rotate(0deg)';
       }, 150);
+      
+      // Small delay to ensure content is loaded
+      setTimeout(() => {
+        notificationSystem.success('Loaded', 'Content ready!', 1000);
+      }, 500);
     }
+  });
+
+  // Frame error handler
+  mainFrame.addEventListener('error', function() {
+    hideLoading();
+    notificationSystem.error('Load Error', 'Failed to load content. Try again?', 3000);
   });
 
   // Prevent context menu on frame
@@ -942,9 +1058,9 @@
     e.preventDefault();
   });
 
-  // Welcome message with instructions
+  // Welcome message
   setTimeout(() => {
-    notificationSystem.info('Welcome to Viper', 'Type a URL (roblox.com) or search term and press Enter', 4000);
+    notificationSystem.info('Welcome to Viper', 'Press Enter to search or click Games', 3000);
   }, 800);
 
   // Auto-focus search
