@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="./assets/images/icon.png" type="image/png" />
-  <title>Viper</title>
+  <title>Art Class</title>
   <script src="/uv/uv.bundle.js" charset="UTF-8"></script>
   <script src="/uv/uv.config.js"></script>
   <script src="./js/preload.js"></script>
@@ -209,136 +209,6 @@
       transform: translateY(-1px);
     }
 
-    /* Games Tab - Simplified Grid */
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 1rem 0;
-    }
-
-    .game-card {
-      position: relative;
-      aspect-ratio: 1;
-      border-radius: 12px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--border-color);
-    }
-
-    .game-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px var(--shadow-color);
-      border-color: var(--accent-primary);
-    }
-
-    .game-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: all 0.3s ease;
-    }
-
-    .game-card:hover .game-image {
-      filter: brightness(0.4);
-    }
-
-    .game-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: all 0.3s ease;
-    }
-
-    .game-card:hover .game-overlay {
-      opacity: 1;
-    }
-
-    .game-title {
-      color: var(--accent-primary);
-      font-size: 1.3rem;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 4px;
-    }
-
-    .game-description {
-      color: var(--text-secondary);
-      text-align: center;
-      font-size: 0.8rem;
-    }
-
-    /* Simplified Settings */
-    .settings-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 24px;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    .theme-selector {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-      width: 100%;
-    }
-
-    .theme-card {
-      background: rgba(10, 31, 10, 0.8);
-      border: 2px solid var(--border-color);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .theme-card:hover {
-      border-color: var(--accent-primary);
-      transform: translateY(-2px);
-    }
-
-    .theme-card.active {
-      border-color: var(--accent-primary);
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      color: var(--bg-primary);
-    }
-
-    .theme-card .theme-color {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin: 0 auto 12px;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .theme-card h3 {
-      font-size: 1.1rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .theme-card p {
-      color: var(--text-secondary);
-      font-size: 0.85rem;
-      opacity: 0.8;
-    }
-
     /* Simplified Fullscreen Frame */
     .frame {
       position: fixed;
@@ -534,11 +404,6 @@
         padding: 1rem;
       }
 
-      .games-grid {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 12px;
-      }
-
       .close-btn {
         width: 40px;
         height: 40px;
@@ -558,14 +423,14 @@
 <body>
   <nav>
     <div class="logo">
-      <img src="./assets/images/icon.png" alt="Viper Logo" draggable="false" />
-      <h1>Viper</h1>
+      <img src="./assets/images/icon.png" alt="Art Class Logo" draggable="false" />
+      <h1>Art Class</h1>
     </div>
     
     <div class="tab-nav">
       <button class="tab-btn active" data-tab="home">🏠 Home</button>
-      <button class="tab-btn" data-tab="games">🎮 Games</button>
-      <button class="tab-btn" data-tab="apps">📱 Apps</button>
+      <button class="tab-btn" data-tab="gallery">🎨 Gallery</button>
+      <button class="tab-btn" data-tab="tools">🖌️ Tools</button>
       <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
     </div>
 
@@ -578,111 +443,42 @@
       <h1>Search</h1>
       <input class="pxyinput" type="text" placeholder="Search the web..." id="searchInput" />
       <div style="font-size: 0.9rem; color: var(--text-muted); text-align: center; opacity: 0.7;">
-        Powered by Viper Proxy
+        Powered by Art Class
       </div>
     </div>
   </div>
 
-  <!-- Games Tab -->
-  <div class="tab-content" id="gamesTab">
-    <h2>🎮 Games</h2>
-    <div class="games-grid">
-      <!-- 2048 -->
-      <div class="game-card" data-game-url="https://play2048.co">
-        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=400&fit=crop&crop=face" alt="2048" class="game-image" loading="lazy" />
-        <div class="game-overlay">
-          <div class="game-title">2048</div>
-          <div class="game-description">Slide tiles to reach 2048</div>
-        </div>
-      </div>
-
-      <!-- Tetris -->
-      <div class="game-card" data-game-url="https://tetris.com/play-tetris">
-        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=400&fit=crop&crop=face" alt="Tetris" class="game-image" loading="lazy" />
-        <div class="game-overlay">
-          <div class="game-title">Tetris</div>
-          <div class="game-description">Classic block puzzle game</div>
-        </div>
-      </div>
-
-      <!-- Minesweeper -->
-      <div class="game-card" data-game-url="https://minesweeper.online">
-        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=400&fit=crop&crop=face" alt="Minesweeper" class="game-image" loading="lazy" />
-        <div class="game-overlay">
-          <div class="game-title">Minesweeper</div>
-          <div class="game-description">Find hidden mines</div>
-        </div>
-      </div>
-
-      <!-- Snake -->
-      <div class="game-card" data-game-url="https://www.snake-game.com">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=400&fit=crop&crop=face" alt="Snake" class="game-image" loading="lazy" />
-        <div class="game-overlay">
-          <div class="game-title">Snake</div>
-          <div class="game-description">Classic arcade snake game</div>
-        </div>
-      </div>
-
-      <!-- Pac-Man -->
-      <div class="game-card" data-game-url="https://www.pacman-game.com">
-        <img src="https://images.unsplash.com/photo-1582232816066-0e1806e21241?w=400&h=400&fit=crop&crop=face" alt="Pac-Man" class="game-image" loading="lazy" />
-        <div class="game-overlay">
-          <div class="game-title">Pac-Man</div>
-          <div class="game-description">Eat dots, avoid ghosts</div>
-        </div>
-      </div>
-
-      <!-- Flappy Bird -->
-      <div class="game-card" data-game-url="https://flappybird.io">
-        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=400&fit=crop&crop=face" alt="Flappy Bird" class="game-image" loading="lazy" />
-        <div class="game-overlay">
-          <div class="game-title">Flappy Bird</div>
-          <div class="game-description">Navigate through pipes</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Apps Tab -->
-  <div class="tab-content" id="appsTab">
-    <h2>📱 Apps</h2>
+  <!-- Gallery Tab -->
+  <div class="tab-content" id="galleryTab">
+    <h2>🎨 Gallery</h2>
     <div class="tab-placeholder">
-      <span class="icon">📱</span>
-      <h3>Productivity Suite</h3>
-      <p>Coming soon: Essential web applications and productivity tools integrated seamlessly into your Viper experience.</p>
+      <span class="icon">🎨</span>
+      <h3>Art Gallery</h3>
+      <p>Coming soon: Browse and discover amazing artwork from talented artists around the world.</p>
+    </div>
+  </div>
+
+  <!-- Tools Tab -->
+  <div class="tab-content" id="toolsTab">
+    <h2>🖌️ Tools</h2>
+    <div class="tab-placeholder">
+      <span class="icon">🖌️</span>
+      <h3>Creative Tools</h3>
+      <p>Coming soon: Essential digital art tools and creative applications integrated into your Art Class experience.</p>
     </div>
   </div>
 
   <!-- Settings Tab -->
   <div class="tab-content" id="settingsTab">
     <h2>⚙️ Settings</h2>
-    <div class="settings-container">
-      <div class="theme-selector">
-        <div class="theme-card active" data-theme="dark">
-          <div class="theme-color" style="background: linear-gradient(135deg, #1a1a2e, #16213e);"></div>
-          <h3>Dark</h3>
-          <p>Classic dark interface</p>
-        </div>
-        <div class="theme-card" data-theme="green">
-          <div class="theme-color" style="background: linear-gradient(135deg, #0a1f0a, #1a2b1a);"></div>
-          <h3>Green</h3>
-          <p>Forest cyberpunk</p>
-        </div>
-        <div class="theme-card" data-theme="red">
-          <div class="theme-color" style="background: linear-gradient(135deg, #2c1810, #3d1b13);"></div>
-          <h3>Red</h3>
-          <p>Fiery red theme</p>
-        </div>
-        <div class="theme-card" data-theme="purple">
-          <div class="theme-color" style="background: linear-gradient(135deg, #1a0f2e, #2a1a3e);"></div>
-          <h3>Purple</h3>
-          <p>Mystic purple</p>
-        </div>
-      </div>
+    <div class="tab-placeholder">
+      <span class="icon">⚙️</span>
+      <h3>Settings</h3>
+      <p>Coming soon: Customize your Art Class experience with themes, preferences, and more.</p>
     </div>
   </div>
 
-  <!-- Single Frame for Both Search and Games -->
+  <!-- Single Frame for Both Search and Content -->
   <iframe class="frame" id="mainFrame"></iframe>
   <button class="close-btn" id="closeBtn" title="Close">×</button>
 
@@ -846,19 +642,14 @@
       document.documentElement.style.setProperty(property, value);
     });
     
-    document.querySelectorAll('.theme-card').forEach(card => {
-      card.classList.remove('active');
-    });
-    document.querySelector(`[data-theme="${themeName}"]`).classList.add('active');
-    
     currentTheme = themeName;
-    localStorage.setItem('viper-theme', themeName);
+    localStorage.setItem('artclass-theme', themeName);
     
     notificationSystem.success('Theme', `${themeName.charAt(0).toUpperCase() + themeName.slice(1)} applied`, 2000);
   }
 
   function loadSavedTheme() {
-    const savedTheme = localStorage.getItem('viper-theme') || 'green';
+    const savedTheme = localStorage.getItem('artclass-theme') || 'green';
     applyTheme(savedTheme);
   }
 
@@ -935,18 +726,18 @@
   });
 
   // Simplified Frame Management
-  function loadInFrame(url, isGame = false) {
+  function loadInFrame(url, isSearch = false) {
     tabContents.forEach(content => content.classList.remove('active'));
     
     // Show loading
-    showLoading(isGame ? 'Loading game...' : 'Searching...');
+    showLoading(isSearch ? 'Searching...' : 'Loading...');
     
     mainFrame.src = url;
     mainFrame.classList.add('active');
     closeBtn.classList.add('active');
     
-    if (isGame) {
-      notificationSystem.success('Game', 'Ready to play!', 1500);
+    if (isSearch) {
+      notificationSystem.success('Search', 'Results loading...', 1500);
     }
   }
 
@@ -977,43 +768,10 @@
       // Use proxy search
       const proxySearchUrl = proxySearch(searchTerm);
       if (proxySearchUrl) {
-        loadInFrame(proxySearchUrl);
+        loadInFrame(proxySearchUrl, true);
         this.value = '';
       }
     }
-  });
-
-  // Game functionality with proxy for games that need it
-  document.querySelectorAll('.game-card').forEach(card => {
-    card.addEventListener('click', function() {
-      let gameUrl = this.dataset.gameUrl;
-      
-      // Check if game needs proxy (you can add specific games to this list)
-      const proxyNeededGames = [
-        'https://play2048.co',
-        'https://tetris.com/play-tetris',
-        'https://minesweeper.online'
-      ];
-      
-      if (proxyNeededGames.includes(gameUrl)) {
-        try {
-          const proxyUrl = `${PROXY_CONFIG.baseUrl}proxy/${btoa(unescape(encodeURIComponent(gameUrl)))}`;
-          gameUrl = proxyUrl;
-        } catch (error) {
-          console.error('Proxy error for game:', error);
-        }
-      }
-      
-      loadInFrame(gameUrl, true);
-    });
-  });
-
-  // Theme functionality
-  document.querySelectorAll('.theme-card').forEach(card => {
-    card.addEventListener('click', function() {
-      const themeName = this.dataset.theme;
-      applyTheme(themeName);
-    });
   });
 
   // Keyboard shortcuts
@@ -1060,7 +818,7 @@
 
   // Welcome message
   setTimeout(() => {
-    notificationSystem.info('Welcome to Viper', 'Press Enter to search or click Games', 3000);
+    notificationSystem.info('Welcome to Art Class', 'Press Enter to search or explore tabs', 3000);
   }, 800);
 
   // Auto-focus search
