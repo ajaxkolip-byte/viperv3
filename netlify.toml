@@ -1,5 +1,5 @@
 [build]
-  command = "npm install"
+  command = "npm run build"
   functions = "functions"
   publish = "public"
 
@@ -7,7 +7,3 @@
   from = "/*"
   to = "/.netlify/functions/index"
   status = 200
-  force = true
-
-[functions]
-  node_bundler = "esbuild"
